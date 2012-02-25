@@ -1,8 +1,6 @@
 snptotal = 7724854
 
-CEUvcf <- as.matrix(read.table('~/1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcfmatrixoutput', sep="\t", nrows = snptotal))
-
-Gceu <- CEUvcf[,-61]
+Gceu <- as.matrix(read.table('~/1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcfmatrixoutput', sep="\t", nrows = snptotal))[,-61]
 Sceu <- Gceu/60
 
 lcls <- rep(1/60, 60)
@@ -38,6 +36,14 @@ S <- Gceu %*% L
 
 
 # simulate adding error
+S.error <- S
+for (i in 1:60){
+    error<-rnorm(snptotal, mean = 0, sd=.05)
+    S.error[,i] <- S[,i] + error
+}
+
+
+
 errorsimlen = 10000
 S.error <- S
 for (k in 1:errorsimlen){
