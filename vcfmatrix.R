@@ -9,24 +9,34 @@ lcls.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.uniform)
 
 #generate random test.lcls vectors
 simlen <- 100
-test.lcls <-rep(0, lines)
-for (k in 1:simlen){
-	i = sample(lines,1)
-	test.lcls[i] = sample(lines - sum(test.lcls), 1) 
+linesensitivity <- c()
+for (j in 1:lines){
+    test.lcls <- rep(0,lines)
+    test.lcls[j] = 1/100
+    for (k in 1:simlen){
+	    i = sample(lines,1)
+	    if (i != j){
+            test.lcls[i] = sample(lines - sum(test.lcls), 1) 
 }
+}
+
 test.lcls <- test.lcls/lines
 S.test <- Gceu %*% test.lcls
 test.lcls.dist <- sum((test.lcls - lcls)^2)
 
 # simulate adding error, for each test.lcls
-test.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.test)
-test.residual <- test.beta - test.lcls
-errors <- c()
-for (i in 1:10/50){
-S.error <- S.test + rnorm(snptotal, mean = 0, sd = i)
+#test.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.test)
+#test.residual <- test.beta - test.lcls
+#errors <- c()
+#for (i in 1:10/50){
+std = .05
+S.error <- S.test + rnorm(snptotal, mean = 0, sd = std)
 test.beta.error <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.error)
 test.error.residual <- test.beta.error - test.lcls
-errors <-c(errors, sum(test.error.residual^2))
-} 
+error <- sum(test.error.residual^2)
+linesensitivity[j] <- error
+#errors <-c(errors, sum(test.error.residual^2))
+#}
+}
 
 
