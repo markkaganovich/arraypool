@@ -1,57 +1,32 @@
 snptotal = 7724854
+lines = 60
 
-Gceu <- as.matrix(read.table('~/1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcfmatrixoutput', sep="\t", nrows = snptotal))[,-61]
-Sceu <- Gceu/60
+Gceu <-as.matrix(read.table('~/1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcfmatrixoutput',sep="\t", nrows = snptotal))[,-(lines+1)]
 
-lcls <- rep(1/60, 60)
+lcls.uniform <- rep(1/lines, lines)
+S.uniform <- Gceu %*% lcls.uniform
+lcls.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.uniform)
 
-model <- glm(lcls ~ Sceu)
-
-# check the math, make a simulated genotype matrix that would be measure in a pool, check that the linear regression gives us back the inputed lcl frequency matrix
-
-testlcls <- lcls
-testlcls[1] = 1/120
-testlcls[2] = 1/120
-testlcls[3] = 1/30
-
-testS <- Gceu %*% testlcls
-
-model <- lm(testS ~ Gceu)
-
-beta.hat = solve(t(Gceu) %*% Gceu, t(Gceu) %*% testS)
-beta.hat.new = solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.error)
-
-
-#generate random L vectors
+#generate random test.lcls vectors
 simlen <- 100
-len <- 60
-L <-rep(0, len)
+test.lcls <-rep(0, lines)
 for (k in 1:simlen){
-	i = sample(len,1)
-	L[i] = sample(len - sum(L), 1) 
+	i = sample(lines,1)
+	test.lcls[i] = sample(lines - sum(test.lcls), 1) 
 }
-L <- L/len
+test.lcls <- test.lcls/lines
+S.test <- Gceu %*% test.lcls
+test.lcls.dist <- sum((test.lcls - lcls)^2)
 
-S <- Gceu %*% L
-
-
-# simulate adding error
-S.error <- S
-for (i in 1:60){
-    error<-rnorm(snptotal, mean = 0, sd=.05)
-    S.error[,i] <- S[,i] + error
-}
-
-
-
-errorsimlen = 10000
-S.error <- S
-for (k in 1:errorsimlen){
-e <- sample(100,1)/100
-i = sample(snptotal,1)
-#S.error[i] = e* S[i]
-S.error[i] = 10 * S[i]
-}
- 
+# simulate adding error, for each test.lcls
+test.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.test)
+test.residual <- test.beta - test.lcls
+errors <- c()
+for (i in 1:10/50){
+S.error <- S.test + rnorm(snptotal, mean = 0, sd = i)
+test.beta.error <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.error)
+test.error.residual <- test.beta.error - test.lcls
+errors <-c(errors, sum(test.error.residual^2))
+} 
 
 
