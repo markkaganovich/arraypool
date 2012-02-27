@@ -22,7 +22,7 @@ for (j in 1:lines){
 
 test.lcls <- test.lcls/lines
 S.test <- Gceu %*% test.lcls
-test.lcls.dist <- sum((test.lcls - lcls)^2)
+test.lcls.dist <- sum((test.lcls - lcls.uniform)^2)
 
 # simulate adding error, for each test.lcls
 #test.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.test)
