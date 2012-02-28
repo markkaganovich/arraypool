@@ -23,23 +23,28 @@ for (j in 1:lines){
             }
         }
 
-test.lcls <- test.lcls/lines
-S.test <- G %*% test.lcls
-test.lcls.dist <- sum((test.lcls - lcls.uniform)^2)
+    test.lcls <- test.lcls/lines
+    S.test <- G %*% test.lcls
+    test.lcls.dist <- sum((test.lcls - lcls.uniform)^2)
 
 # simulate adding error, for each test.lcls
 #test.beta <- solve(t(Gceu) %*% Gceu, t(Gceu) %*% S.test)
 #test.residual <- test.beta - test.lcls
 #errors <- c()
 #for (i in 1:10/50){
-std = .05
-S.error <- S.test + rnorm(snptotal, mean = 0, sd = std)
-test.beta.error <- solve(t(G) %*% G, t(G) %*% S.error)
-test.error.residual <- test.beta.error[j] - test.lcls[j]
-errors <- c(errors,abs(test.error.residual)/test.lcls[j])
-linesensitivity[j] <- errors
+    std = .05
+    simerror <- c()
+    for (k in 1:simlen){
+        S.error <- S.test + rnorm(snptotal, mean = 0, sd = std)
+        test.beta.error <- solve(t(G) %*% G, t(G) %*% S.error)
+        test.error.residual <- abs(test.beta.error[j] - test.lcls[j])/test.lcls[j]
+        simerrors <- c(simerrors, test.error.residual)
+    }
+    error = sum(simerrors) / simlen
+    errors <- c(errors,error)
+    linesensitivity[j] <- errors
 #errors <-c(errors, sum(test.error.residual^2))
 #}
-}
+}   
 }
 
