@@ -33,10 +33,10 @@ test.lcls.dist <- sum((test.lcls - lcls.uniform)^2)
 #errors <- c()
 #for (i in 1:10/50){
 std = .05
-S.error <- S.test + rnorm(snptotal, meai = 0, sd = std)
+S.error <- S.test + rnorm(snptotal, mean = 0, sd = std)
 test.beta.error <- solve(t(G) %*% G, t(G) %*% S.error)
-test.error.residual <- test.beta.error - test.lcls
-errors <- c(errors,sum(test.error.residual^2))
+test.error.residual <- test.beta.error[j] - test.lcls[j]
+errors <- c(errors,abs(test.error.residual)/test.lcls[j])
 linesensitivity[j] <- errors
 #errors <-c(errors, sum(test.error.residual^2))
 #}
