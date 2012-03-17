@@ -23,4 +23,13 @@ def getvcfmatrix(filename, genomelist):
     file.close()
     outputfile.close()
 
+def convertIlluminaSNPstoHG18():
+    file = open('./Human1M-SNPlist.txt')
+    lines = file.readlines()
+    outputfile = open('./IlluminaHG19BED','w')
+    lines = lines[1:]
+    for l in lines:
+        t = l.split('\t')
+        outputfile.write('chr'+t[2] + '\t'+t[3].strip('\n').strip('\r')+ '\t' + str(int(t[3]) + 1) + '\n')
+
 
