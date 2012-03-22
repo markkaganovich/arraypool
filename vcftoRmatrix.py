@@ -1,3 +1,7 @@
+def hashvcf(vcffile):
+    file = open(vcffile)
+
+
 def getvcfmatrix(filename, genomelist):
     file = open(filename)
     outputfile = open(filename+'matrixoutput', 'w')
@@ -23,7 +27,7 @@ def getvcfmatrix(filename, genomelist):
     file.close()
     outputfile.close()
 
-def convertIlluminaSNPstoHG18():
+def convertIlluminaSNPstoBED():
     file = open('./Human1M-SNPlist.txt')
     lines = file.readlines()
     outputfile = open('./IlluminaHG19BED','w')
