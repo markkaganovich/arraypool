@@ -1,3 +1,8 @@
+def makematrix(hashes):
+
+
+
+# turn vcf file into a hash (python dictionary)
 def hashvcf(vcffile):
     file = open(vcffile)
     hash = {}
@@ -9,12 +14,13 @@ def hashvcf(vcffile):
                 key = 'chr'+tokens[0]+'pos'+tokens[1]
                 hash[key] = []
                 for t in tokens[9:]:
-                    if t!='.':
+                    if t =='.':
+			matrixentry = 0
+		    else:
                         matrixentry = int(t[0])+int(t[2])
-                        hash[key].append(matrixentry)
+                    hash[key].append(matrixentry)
         lines = file.readlines(10000000)
     return hash
-
 
 def getvcfmatrix(filename, genomelist):
     file = open(filename)

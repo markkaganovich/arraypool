@@ -1,7 +1,7 @@
 import simplejson
 
-file = open('../1000GenomesData/CEU.trio.2010_09.genotypes.vcf')
-output = open('CEUtriohash','w')
+file = open('../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf')
+output = open('CHBJPTlowcovhash','w')
 hash = {}
 lines = file.readlines(1000000)
 while(lines!=[]):
