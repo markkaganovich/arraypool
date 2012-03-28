@@ -1,5 +1,27 @@
-def makematrix(hashes):
+import simplejson
 
+def makematrix(hashes, snps):
+    m = []
+    temphashes = map(lambda x: maketemphash(x, snps), hashes)
+    for s in snps:
+        for h in temphashes:
+            l = []
+            if s in h.keys():
+                l.append(h[s])
+            else:
+                l.append([0]*len(h[h.keys()[0]])) #change this
+        m.append(l)
+
+def maketemphash(hash, snps):
+    temphash = {}
+    file = open(hash)
+    memhash = simplejson.load(file)
+    file.close()
+    for s in filter(lambda y: y in hash.keys(), snps):
+        temphash[x] = hash[x]
+
+    del memhash
+    return temphash
 
 
 # turn vcf file into a hash (python dictionary)
