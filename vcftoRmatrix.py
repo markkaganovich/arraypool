@@ -18,7 +18,8 @@ def maketemphash(hash, snps):
     memhash = simplejson.load(file)
     file.close()
     for s in filter(lambda y: y in hash.keys(), snps):
-        temphash[x] = hash[x]
+        print s
+        temphash[s] = hash[s]
 
     del memhash
     return temphash
