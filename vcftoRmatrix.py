@@ -25,6 +25,29 @@ def maketemphash(hash, snps):
     return temphash
 
 
+def flatfilevcf(vcffile, outputname):
+    file = open(vcffile)
+    outputfile = open(outputname+'Geno', 'w')
+    outputfileLines = open(outputname+'Lines', 'w')
+    snppos = []
+    outputfileSnpPos = open(outputname + 'SnpPos', 'w')
+    lines = file.readlines(1000000)
+    while(lines != []):
+        for l in lines:
+            if l.startswith('#CHROM'):
+                genomenames = l.strip('\n').split('\t')
+                simplejson.dump(genomenames[9:], outputfileLines)
+                outputfileLines.close()
+            if not l.startswith('#'):
+                tokens = l.strip('\n').split('\t')
+                snppos.append(['chr'+tokens[0]+'pos'+tokens[1]])
+                m =''
+                for t in tokens[9:]:
+                    m = m + str(int(t[0]) + int(t[2])) + ','
+                outputfile.write(m.strip(',')+'\n')
+                
+                
+
 # turn vcf file into a hash (python dictionary)
 def hashvcf(vcffile):
     file = open(vcffile)
@@ -38,10 +61,10 @@ def hashvcf(vcffile):
                 hash[key] = []
                 for t in tokens[9:]:
                     if t =='.':
-			matrixentry = 0
-		    else:
+                        matrixentry = 0
+                    else:
                         matrixentry = int(t[0])+int(t[2])
-                    hash[key].append(matrixentry)
+                        hash[key].append(matrixentry)
         lines = file.readlines(10000000)
     return hash
 
