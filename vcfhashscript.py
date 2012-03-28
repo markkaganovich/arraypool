@@ -1,19 +1,9 @@
 import simplejson
+import vcftoRmatrix 
 
-file = open('../1000GenomesData/CEU.trio.2010_09.genotypes.vcf')
-output = open('CEUtriohash','w')
-hash = {}
-lines = file.readlines(1000000)
-while(lines!=[]):
-    for l in lines:
-        if not l.startswith('#'):
-            tokens = l.strip('\n').split('\t')
-            key = 'chr'+tokens[0]+'pos'+tokens[1]
-            hash[key] = []
-            for t in tokens[9:]:
-                if t!= ".":
-                    matrixentry = int(t[0]) + int(t[2])
-                    hash[key].append(matrixentry)
-    lines = file.readlines(1000000)
+vcftoRmatrix.flatfilevcf('../1000Genomes/YRI.low_coverage.2010_09.genotypes.vcf', '../genotypes/YRIlowcov')
+vcftoRmatrix.flatfilevcf('../1000Genomes/CHBJPT.low_coverage.2010_09.genotypes.vcf', '../genotypes/CHBJPTlowcov')
+vcftoRmatrix.flatfilevcf('../1000Genomes/YRI.trio.2010_09.genotypes.vcf', '../genotypes/YRItrio')
+vcftoRmatrix.flatfilevcf('../1000Genomes/CEU.trio.2010_09.genotypes.vcf', '../genotypes/CEUtrio')
 
-simplejson.dump(hash, output)
+
