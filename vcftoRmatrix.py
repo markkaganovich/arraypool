@@ -24,6 +24,9 @@ def maketemphash(hash, snps):
     del memhash
     return temphash
 
+def combineflatgenos(names):
+
+
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
