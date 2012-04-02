@@ -7,8 +7,10 @@ class genotypes:
         self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
 
-    def __selectSNPs__(chosenSNPs):
+    def __selectSNPs__(self, chosenSNPs):
         snps = simplejson.load(self.snpfile)
+        self.csindex = map(lambda x: snps.index(x), filter(lambda y: y in snps, chosenSNPs))
+
 
 
 
@@ -27,6 +29,8 @@ def makematrix(hashes, snps):
 
 def combineflatgenos(names, chosenSNPs):
     files  = map(lambda x: genotypes(x), names)
+
+    return files
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
