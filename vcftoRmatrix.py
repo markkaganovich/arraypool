@@ -1,5 +1,18 @@
 import simplejson
 
+class genotypes:
+    def __init__(self, name):
+        self.name = name
+        self.snpfile = open('./' + name + 'SnpPos')
+        self.linesfile = open('./' + name + 'Lines')
+        self.genofile = open('./' + name + 'Geno')
+
+    def __selectSNPs__(chosenSNPs):
+        snps = simplejson.load(self.snpfile)
+
+
+
+
 def makematrix(hashes, snps):
     m = []
     temphashes = map(lambda x: maketemphash(x, snps), hashes)
@@ -12,21 +25,8 @@ def makematrix(hashes, snps):
                 l.append([0]*len(h[h.keys()[0]])) #change this
         m.append(l)
 
-def maketemphash(hash, snps):
-    temphash = {}
-    file = open(hash)
-    memhash = simplejson.load(file)
-    file.close()
-    for s in filter(lambda y: y in hash.keys(), snps):
-        print s
-        temphash[s] = hash[s]
-
-    del memhash
-    return temphash
-
-def combineflatgenos(names):
-
-
+def combineflatgenos(names, chosenSNPs):
+    files  = map(lambda x: genotypes(x), names)
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
@@ -43,7 +43,7 @@ def flatfilevcf(vcffile, outputname):
                 outputfileLines.close()
             if not l.startswith('#'):
                 tokens = l.strip('\n').split('\t')
-                snppos.append(['chr'+tokens[0]+'pos'+tokens[1]])
+                snppos.append('chr'+tokens[0]+'pos'+tokens[1])
                 m =''
                 for t in tokens[9:]:
                     m = m + str(int(t[0]) + int(t[2])) + ','
