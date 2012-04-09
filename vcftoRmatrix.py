@@ -12,19 +12,15 @@ class genotypes:
         snps = simplejson.load(self.snpfile)
         self.csindex = map(lambda x: snps.index(x), filter(lambda y: y in snps, chosenSNPs))
 
-
-
 def combineflatgenos(names, chosenSNPs):
     files  = map(lambda x: genotypes(x), names)
     for f in files:
         f.__selectSNPs__(chosenSNPs)
         for c in f.csindex:
-            f.genofile.seek((x-1)*59*2)
-            r = f.genofile.read(59*2)
-            print(r)
+            f.genofile.seek((c-1)*60*2)
+            r = f.genofile.read(60*2)
             f.output.write(r)
             f.genofile.seek(0)
-
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
