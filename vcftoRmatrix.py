@@ -21,6 +21,8 @@ def combineflatgenos(names, chosenSNPs):
             r = f.genofile.read(60*2)
             f.output.write(r)
             f.genofile.seek(0)
+        f.output.close()
+
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
