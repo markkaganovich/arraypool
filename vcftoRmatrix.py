@@ -6,22 +6,51 @@ class genotypes:
         self.snpfile = open('./' + name + 'SnpPos')
         self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
-        self.output = open('./'+name+'output', 'w')
+        self.tempoutput = open('./'+name+'tempoutput', 'w')
+        self.__genolen__()
 
     def __selectSNPs__(self, chosenSNPs):
-        snps = simplejson.load(self.snpfile)
-        self.csindex = map(lambda x: snps.index(x), filter(lambda y: y in snps, chosenSNPs))
+        self.snps = simplejson.load(self.snpfile)
+        self.csindex = map(lambda x: self.snps.index(x), filter(lambda y: y in self.snps, chosenSNPs))
+        self.havechosensnps = map(lambda x: self.snps[x], self.csindex)
 
+    def __genolen__(self):
+        l = self.genofile.readline()
+        self.ln = len(l.split(','))
+        self.genofile.seek(0)
+        
 def combineflatgenos(names, chosenSNPs):
     files  = map(lambda x: genotypes(x), names)
     for f in files:
         f.__selectSNPs__(chosenSNPs)
-        for c in f.csindex:
-            f.genofile.seek((c-1)*60*2)
-            r = f.genofile.read(60*2)
-            f.output.write(r)
-            f.genofile.seek(0)
-        f.output.close()
+#ln = f.__genolen__()
+#       for c in f.csindex:
+#           f.genofile.seek((c-1)*ln*2)
+#           r = f.genofile.read(ln*2)
+#           f.tempoutput.write(r)
+#           f.genofile.seek(0)
+#       f.tempoutput.close()
+
+    unionchosensnps = []
+    map(lambda x: unionchosensnps.extend(x.havechosensnps), files) 
+    unionchosensnps = list(set(unionchosensnps))
+   
+    output = open('ceumergetest','w')
+    for s in unionchosensnps:
+        totalr = ''
+        for f in files:
+            if s in f.havechosensnps:
+                c = f.snps.index(s)
+                f.genofile.seek((c-1)*f.ln*2)
+                r = f.genofile.read(f.ln*2)
+                f.genofile.seek(0)
+            else:
+                r = '0,' * f.ln
+            totalr = totalr +r.strip('\n')
+        output.write(totalr.strip(',')+'\n')
+                
+    output.close()
+                
 
 
 def flatfilevcf(vcffile, outputname):
@@ -48,26 +77,6 @@ def flatfilevcf(vcffile, outputname):
     simplejson.dump(snppos, outputfileSnpPos)
                 
 
-# turn vcf file into a hash (python dictionary)
-def hashvcf(vcffile):
-    file = open(vcffile)
-    hash = {}
-    lines = file.readlines(10000000)
-    while(lines!= []):
-        for l in lines:
-            if not l.startswith('#'):
-                tokens = l.strip('\n').split('\t')
-                key = 'chr'+tokens[0]+'pos'+tokens[1]
-                hash[key] = []
-                for t in tokens[9:]:
-                    if t =='.':
-                        matrixentry = 0
-                    else:
-                        matrixentry = int(t[0])+int(t[2])
-                        hash[key].append(matrixentry)
-        lines = file.readlines(10000000)
-    return hash
-
 def getvcfmatrix(filename, genomelist):
     file = open(filename)
     outputfile = open(filename+'matrixoutput', 'w')
@@ -92,14 +101,5 @@ def getvcfmatrix(filename, genomelist):
     print total
     file.close()
     outputfile.close()
-
-def convertIlluminaSNPstoBED():
-    file = open('./Human1M-SNPlist.txt')
-    lines = file.readlines()
-    outputfile = open('./IlluminaHG19BED','w')
-    lines = lines[1:]
-    for l in lines:
-        t = l.split('\t')
-        outputfile.write('chr'+t[2] + '\t'+t[3].strip('\n').strip('\r')+ '\t' + str(int(t[3]) + 1) + '\n')
 
 
