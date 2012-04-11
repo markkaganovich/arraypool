@@ -23,13 +23,6 @@ def combineflatgenos(names, chosenSNPs):
     files  = map(lambda x: genotypes(x), names)
     for f in files:
         f.__selectSNPs__(chosenSNPs)
-#ln = f.__genolen__()
-#       for c in f.csindex:
-#           f.genofile.seek((c-1)*ln*2)
-#           r = f.genofile.read(ln*2)
-#           f.tempoutput.write(r)
-#           f.genofile.seek(0)
-#       f.tempoutput.close()
 
     unionchosensnps = []
     map(lambda x: unionchosensnps.extend(x.havechosensnps), files) 
@@ -50,8 +43,6 @@ def combineflatgenos(names, chosenSNPs):
         output.write(totalr.strip(',')+'\n')
                 
     output.close()
-                
-
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
