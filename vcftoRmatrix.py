@@ -10,9 +10,11 @@ class genotypes:
 
     def __selectSNPs__(self, chosenSNPs):
         self.chosenoutput = open('./' + self.name + 'chosenoutput', 'w')
+        
         self.snps = simplejson.load(self.snpfile)
         self.csindex = map(lambda x: self.snps.index(x), filter(lambda y: y in self.snps, chosenSNPs))
         self.havechosensnps = map(lambda x: self.snps[x], self.csindex)
+        del self.snps
 
     def __genolen__(self):
         l = self.genofile.readline()
