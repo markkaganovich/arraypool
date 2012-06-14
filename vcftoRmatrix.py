@@ -7,54 +7,50 @@ class genotypes:
         self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
         self.__genolen__()
-
+    
     def __selectSNPs__(self, chosenSNPs):
         self.chosenoutput = open('./' + self.name + 'chosenoutput', 'w')
-        
         self.snps = simplejson.load(self.snpfile)
-        self.csindex = map(lambda x: self.snps.index(x), filter(lambda y: y in self.snps, chosenSNPs))
-        self.havechosensnps = map(lambda x: self.snps[x], self.csindex)
+        self.csindex = []
+        for x in chosenSNPs:
+			if x in self.snps:
+				self.csindex.append(self.snps.index(x))
+			else:
+				self.csindex.append('NA')
+			#self.havechosensnps = map(lambda x: self.snps[x], self.csindex)
         del self.snps
-
+    
     def __genolen__(self):
         l = self.genofile.readline()
         self.ln = len(l.split(','))
         self.genofile.seek(0)
-        
-def combineflatgenos(names, chosenSNPs):
-    files  = map(lambda x: genotypes(x), names)
+
+def convertprecombine(files, chosenSNPs):
     for f in files:
         f.__selectSNPs__(chosenSNPs)
-    
-    if chosenSNPs != 'ALL':
-        for f in files:
-            for c in f.csindex:
+    	for c in f.csindex:
+            if c != 'NA':
                 f.genofile.seek((c-1)*f.ln*2)
                 r = f.genofile.read(f.ln*2)
                 f.genofile.seek(0)
                 f.chosenoutput.write(r)
-    f.chosenoutput.close()
-    return files
-
-    unionchosensnps = []
-    map(lambda x: unionchosensnps.extend(x.havechosensnps), files) 
-    unionchosensnps = list(set(unionchosensnps))
-   
-    output = open('ceumergetest','w')
-    for s in unionchosensnps:
-        totalr = ''
-        for f in files:
-            if s in f.havechosensnps:
-                c = f.snps.index(s)
-                f.genofile.seek((c-1)*f.ln*2)
-                r = f.genofile.read(f.ln*2)
-                f.genofile.seek(0)
             else:
                 r = '0,' * f.ln
-            totalr = totalr +r.strip('\n')
-        output.write(totalr.strip(',')+'\n')
-                
-    output.close()
+                f.chosenoutput.write(r.strip(',')+'\n')
+        f.chosenoutput.close()
+
+def combineflatgenos(names, chosenSNPs):
+    files = map(lambda x: genotypes(x), names)
+    convertprecombine(files, chosenSNPs)
+    file = open('mergedoutput','w')
+    for f in files:
+        f.opened = open('./' + f.name + 'chosenoutput')
+    for i in range(0,len(chosenSNPs)):
+        l = ''
+        for f in files:    
+            l = l + f.opened.readline().strip('\n') + ','
+        file.write(l.strip(',')+'\n')
+
 
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
@@ -78,7 +74,7 @@ def flatfilevcf(vcffile, outputname):
                 outputfile.write(m.strip(',')+'\n')
         lines = file.readlines(1000000)
     simplejson.dump(snppos, outputfileSnpPos)
-                
+
 
 def getvcfmatrix(filename, genomelist):
     file = open(filename)
