@@ -9,7 +9,7 @@ class genotypes:
         self.__genolen__()
     
     def __selectSNPs__(self, chosenSNPs):
-        self.chosenoutput = open('./' + self.name + 'chosenoutput', 'w')
+        self.chosenoutput = open('./' + self.name + 'chosenoutput' + str(mapnum), 'w')
         self.snps = simplejson.load(self.snpfile)
         self.csindex = []
         for x in chosenSNPs:
@@ -28,6 +28,22 @@ class genotypes:
 def convertprecombine(files, chosenSNPs):
     for f in files:
         f.__selectSNPs__(chosenSNPs)
+        writeprecombinefile(f, mapnum)
+        
+        #Thread
+        i = 0
+        size = 1000
+        while(i*size < len(chosenSNPs)):
+            if (i+1) * size < len(chosenSNPs)
+                smpl = snps[i*size : (i+1)*size]
+            else:
+                smp= snps[i*size:]
+            Thread(target = writeprecombinefile(f, i)
+            i = i+1
+
+
+def writeprecombinefile(f, mapnum)
+        f.chosenoutput = open('./' + self.name + 'chosenoutout' + str(mapnum), 'w')
     	for c in f.csindex:
             if c != 'NA':
                 f.genofile.seek((c-1)*f.ln*2)
@@ -39,10 +55,10 @@ def convertprecombine(files, chosenSNPs):
                 f.chosenoutput.write(r.strip(',')+'\n')
         f.chosenoutput.close()
 
-def combineflatgenos(names, chosenSNPs, mapnum):
+def combineflatgenos(names, chosenSNPs):
     files = map(lambda x: genotypes(x), names)
     convertprecombine(files, chosenSNPs)
-    file = open(str(mapnum) +'mergedoutput','w')
+    file = open('mergedoutput','w')
     for f in files:
         f.opened = open('./' + f.name + 'chosenoutput')
     for i in range(0,len(chosenSNPs)):
