@@ -39,10 +39,10 @@ def convertprecombine(files, chosenSNPs):
                 f.chosenoutput.write(r.strip(',')+'\n')
         f.chosenoutput.close()
 
-def combineflatgenos(names, chosenSNPs):
+def combineflatgenos(names, chosenSNPs, mapnum):
     files = map(lambda x: genotypes(x), names)
     convertprecombine(files, chosenSNPs)
-    file = open('mergedoutput','w')
+    file = open(str(mapnum) +'mergedoutput','w')
     for f in files:
         f.opened = open('./' + f.name + 'chosenoutput')
     for i in range(0,len(chosenSNPs)):
