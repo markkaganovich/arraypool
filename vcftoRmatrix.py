@@ -38,7 +38,7 @@ def convertprecombine(files, chosenSNPs):
                 smpl = snps[i*size : (i+1)*size]
             else:
                 smp= snps[i*size:]
-            Thread(target = writeprecombinefile(f, i)
+            Thread(target = writeprecombinefile(f, i)).start()
             i = i+1
 
 
