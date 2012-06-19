@@ -9,7 +9,7 @@ class genotypes:
         self.__genolen__()
     
     def __selectSNPs__(self, chosenSNPs):
-        self.chosenoutput = open('./' + self.name + 'chosenoutput', 'w')
+        self.chosenoutput = open('./' + self.name + 'chosenoutput' + str(mapnum), 'w')
         self.snps = simplejson.load(self.snpfile)
         self.csindex = []
         for x in chosenSNPs:
@@ -28,6 +28,22 @@ class genotypes:
 def convertprecombine(files, chosenSNPs):
     for f in files:
         f.__selectSNPs__(chosenSNPs)
+        writeprecombinefile(f, mapnum)
+        
+        #Thread
+        i = 0
+        size = 1000
+        while(i*size < len(chosenSNPs)):
+            if (i+1) * size < len(chosenSNPs)
+                smpl = snps[i*size : (i+1)*size]
+            else:
+                smp= snps[i*size:]
+            Thread(target = writeprecombinefile(f, i)).start()
+            i = i+1
+
+
+def writeprecombinefile(f, mapnum)
+        f.chosenoutput = open('./' + self.name + 'chosenoutout' + str(mapnum), 'w')
     	for c in f.csindex:
             if c != 'NA':
                 f.genofile.seek((c-1)*f.ln*2)
