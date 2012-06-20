@@ -15,18 +15,8 @@ omnisnps = simplejson.load(file)
 file.close()
 snps = omnisnps.keys()
 
-i = 0    
-size = 1000
-while(i*size < len(snps)):
-    if (i+1) * size < len(snps):
-        smpl = snps[i*size : (i+1)*size]
-    else:
-        smpl = snps[i*size:]
-    Thread(target = vcftoRmatrix.combineflatgenos(['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio'], smpl,i)).start()
-    i=i+1
+vcftoRmatrix.combineflatgenos(['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio'], snps)
     
-#files = vcftoRmatrix.combineflatgenos(['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio'], snps)
-#files[0]
 
 
 
