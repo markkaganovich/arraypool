@@ -15,10 +15,9 @@ import simplejson
 
 
 #need to open SnpMap instead of Human1M file
-file = open('snps19IDs')
+file = open('snpmap19')
 snps19IDs = simplejson.load(file)
 file.close()
-snps19 =  snps19IDs.keys()
 
 snps18id = {}
 
