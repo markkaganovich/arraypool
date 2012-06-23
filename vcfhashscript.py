@@ -10,15 +10,14 @@ from threading import Thread
 #vcftoRmatrix.flatfilevcf('../1000GenomesData/CEU.trio.2010_09.genotypes.vcf', '../genotypes/CEUtrio')
 
 
-#file = open('./omnisnpsHASH')
-#omnisnps = simplejson.load(file)
-#file.close()
-#snps = omnisnps.keys()
+file = open('./omnisnpmap18')
+snps = simplejson.load(file)
+file.close()
 
 
 names = ['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio']
 
-#vcftoRmatrix.combineflatgenos(names, snps)
+vcftoRmatrix.combineflatgenos(names, snps)
 
 def getlines(names, genotypefile, chosenlines):
     lines = []
@@ -39,7 +38,10 @@ def getlines(names, genotypefile, chosenlines):
 	newgenofile.write(newl + '\n') 
 
 test = ["NA06985", "NA06986", "NA06994", "NA07000", "NA07037", "NA07051", "NA07346"]
-getlines(names, 'mergedoutput', test)    
+
+file = open('pool1')
+pool1 = simplejson.load(file)
+getlines(names, 'mergedoutput', pool1)    
 	
     
 
