@@ -10,23 +10,40 @@ from threading import Thread
 #vcftoRmatrix.flatfilevcf('../1000GenomesData/CEU.trio.2010_09.genotypes.vcf', '../genotypes/CEUtrio')
 
 
-file = open('./omnisnpsHASH')
-omnisnps = simplejson.load(file)
+file = open('./omnisnpmap18')
+snps = simplejson.load(file)
 file.close()
-snps = omnisnps.keys()
 
-i = 0    
-size = 1000
-while(i*size < len(snps)):
-    if (i+1) * size < len(snps):
-        smpl = snps[i*size : (i+1)*size]
-    else:
-        smpl = snps[i*size:]
-    Thread(target = vcftoRmatrix.combineflatgenos(['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio'], smpl,i)).start()
-    i=i+1
+
+names = ['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio']
+
+vcftoRmatrix.combineflatgenos(names, snps)
+
+def getlines(names, genotypefile, chosenlines):
+    lines = []
+    for n in names:
+	LinesFile = open(n+'Lines')
+	lines.extend(simplejson.load(LinesFile))
+    inds = []
+    for c in chosenlines:
+	inds.append(lines.index(c))
+    inds = map(lambda x: x *2, inds)
+    file = open(genotypefile)
+    newgenofile = open('chosenlinesSfile','w')
+    genolines = file.readlines()
+    print inds
+    for l in genolines:
+	l = l.strip('\n')
+	newl = ','.join(map(lambda x: l[x], inds))
+	newgenofile.write(newl + '\n') 
+
+test = ["NA06985", "NA06986", "NA06994", "NA07000", "NA07037", "NA07051", "NA07346"]
+
+file = open('pool1')
+pool1 = simplejson.load(file)
+getlines(names, 'mergedoutput', pool1)    
+	
     
-#files = vcftoRmatrix.combineflatgenos(['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio'], snps)
-#files[0]
 
 
 
