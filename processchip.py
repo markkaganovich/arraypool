@@ -8,11 +8,12 @@ file.close()
 
 del lines[0:11]
 
-file = open('snps18id')
-snps18id = simplejson.load(file)
+file = open('omni19IDs')
+omni19IDs = simplejson.load(file)
 file.close()
 
-omni18results={}
+
+omni19results={}
 
 for l in lines:
     tokens = l.split(',')
@@ -21,22 +22,24 @@ for l in lines:
         print "WHAT THE HELL"
     else:
         try:
-            omni18results[snps18id[tokens[0]]] = float(tokens[5])
+            omni19results[omni19IDs[tokens[0]]] = float(tokens[5])
         except KeyError:
             print tokens[0]
 
-file = open('omni18results'+reportfile, 'w')
-simplejson.dump(omni18results, file)
+file = open('omni19results'+reportfile, 'w')
+simplejson.dump(omni19results, file)
 file.close()
 
 
-omnisnps = simplejson.load(open('omnisnpmap18'))
+omnisnps = simplejson.load(open('omni19'))
+
+
 arrayfreq= []
 file = open('arrayBfreq'+reportfile, 'w')
 for s in omnisnps:
     try: 
-        arrayfreq.append(omni18results[s])
-        file.write(str(omni18results[s])+',')
+        arrayfreq.append(omni19results[s])
+        file.write(str(omni19results[s])+',')
     except KeyError:
         print "not in array"
         arrayfreq.append(0)
