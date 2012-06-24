@@ -63,7 +63,7 @@ def writeprecombinefile(f):
 def combineflatgenos(names, chosenSNPs):
     files = map(lambda x: genotypes(x), names)
     convertprecombine(files, chosenSNPs)
-    file = open('mergedoutput','w')
+    file = open('mergedoutput19','w')
     for f in files:
         f.opened = open('./' + f.name + 'outputprecombine')
     for i in range(0,len(chosenSNPs)):
@@ -73,6 +73,7 @@ def combineflatgenos(names, chosenSNPs):
         file.write(l.strip(',')+'\n')
 
 ################################################################################################
+#modifyied to the 19 version
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
     outputfile = open(outputname+'Geno', 'w')
@@ -88,11 +89,13 @@ def flatfilevcf(vcffile, outputname):
                 outputfileLines.close()
             if not l.startswith('#'):
                 tokens = l.strip('\n').split('\t')
-                snppos.append('chr'+tokens[0]+'pos'+tokens[1])
-                m =''
-                for t in tokens[9:]:
-                    m = m + str(int(t[0]) + int(t[2])) + ','
-                outputfile.write(m.strip(',')+'\n')
+                f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
+		if f != []:
+		    snppos.append('chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1])
+                    m =''
+                    for t in tokens[9:]:
+                        m = m + str(int(t[0]) + int(t[2])) + ','
+                    outputfile.write(m.strip(',')+'\n')
         lines = file.readlines(1000000)
     simplejson.dump(snppos, outputfileSnpPos)
 
