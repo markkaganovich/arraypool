@@ -9,7 +9,8 @@ class genotypes:
         self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
         self.__genolen__()
-    
+	self.snpdict = open('./'+name+'SnpPosDic')    
+
     def __genolen__(self):
         l = self.genofile.readline()
         self.ln = len(l.split(','))
@@ -17,35 +18,23 @@ class genotypes:
 
 def calccsindex(filestruc, chosenSNPs):
     filestruc.csindex = []
-    snps = simplejson.load(filestruc.snpfile)
-    j = 0
+    #snps = simplejson.load(filestruc.snpfile)
+    snpdic = simplejson.load(filestruc.snpdict)
+    #inboth = set(snps) & set(chosenSNPs)
+    inboth = set(snpdic.keys()) & set(chosenSNPs)
     for x in chosenSNPs:
 	print x
-	for s in range(j, len(snps)):
-	    if x == snps[s]:
-		filestruc.csindex.append(s)
-		j=s
-		break
-	    if s == len(snps)-1:
-		print "break"
-	        filestruc.csindex.append('NA')
+	if x in inboth:
+	    #filestruc.csindex.append(snps.index(x)
+	    filestruc.csindex.append(snpdic[x])
+	else:
+	    filestruc.csindex.append('NA')
 	    
 def convertprecombine(files, chosenSNPs):
     for f in files:
         print f.name
         calccsindex(f, chosenSNPs)
 	writeprecombinefile(f)
-	#Thread
-        #i = 0
-        #size = 100000
-        #while(i*size < len(f.csindex)):
-        #    if (i+1) * size < len(f.csindex):
-        #        smpl = f.csindex[i*size : (i+1)*size]
-        #    else:
-        #        smpl = f.csindex[i*size:]
-        #    Thread(target = writeprecombinefile(f, i, smpl)).start()
-        #    i = i+size
-	#    print i
 
 def writeprecombinefile(f):
         chosenoutput = open('./' + f.name + 'outputprecombine', 'w')
