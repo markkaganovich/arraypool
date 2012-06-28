@@ -18,14 +18,11 @@ class genotypes:
 
 def calccsindex(filestruc, chosenSNPs):
     filestruc.csindex = []
-    #snps = simplejson.load(filestruc.snpfile)
     snpdic = simplejson.load(filestruc.snpdict)
-    #inboth = set(snps) & set(chosenSNPs)
     inboth = set(snpdic.keys()) & set(chosenSNPs)
     for x in chosenSNPs:
 	print x
 	if x in inboth:
-	    #filestruc.csindex.append(snps.index(x)
 	    filestruc.csindex.append(snpdic[x])
 	else:
 	    filestruc.csindex.append('NA')
@@ -87,6 +84,25 @@ def flatfilevcf(vcffile, outputname):
                     outputfile.write(m.strip(',')+'\n')
         lines = file.readlines(1000000)
     simplejson.dump(snppos, outputfileSnpPos)
+
+#add on
+def getrefalt(vcffile, outputname):
+    file = open(vcffile)
+    outputfilerefalt = open(outputname+'RefAlt','w')
+    lines = file.readlines(1000000)
+    refalt=[]
+    while(lines!=[]):
+	for l in lines:
+	    if not l.startswith('#'):
+		tokens = l.strip('\n')
+		ref = tokens[3]
+		alt = tokens[4]
+		refalt.append({'ref':ref, 'alt':alt}]
+i	lines = file.readlines(1000000)
+    simplejson.dump(refalt, outputfilerefalt)
+
+
+
 
 
 def getvcfmatrix(filename, genomelist):
