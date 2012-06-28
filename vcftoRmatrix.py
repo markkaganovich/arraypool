@@ -94,11 +94,11 @@ def getrefalt(vcffile, outputname):
     while(lines!=[]):
 	for l in lines:
 	    if not l.startswith('#'):
-		tokens = l.strip('\n')
+		tokens = l.strip('\n').split('\t')
 		ref = tokens[3]
 		alt = tokens[4]
-		refalt.append({'ref':ref, 'alt':alt}]
-i	lines = file.readlines(1000000)
+		refalt.append({'ref':ref, 'alt':alt})
+	lines = file.readlines(1000000)
     simplejson.dump(refalt, outputfilerefalt)
 
 
