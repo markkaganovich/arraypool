@@ -5,7 +5,7 @@ arraylines = file.readlines()
 file.close()
 
 
-file = open('./omniIDs')
+file = open('./omni19IDs')
 omniIDs = simplejson.load(file)
 file.close()
 
@@ -28,16 +28,24 @@ file.close()
 for l in arraylines[11:]:
     t = l.split(',')
     id = t[0]
-    if t[9] != '-' and t[10] != '-':
-	alleleA = t[9]
-	alleleB = t[10]
-	if refalt[omniIDs[id]]['ref'] == alleleA and refalt[omniIDs[id]]['alt'] == alleleB:
+    if t[9] != '-' and t[10] != '-':
+	    alleleA = t[9]
+	    alleleB = t[10]
+    if refalt[omniIDs[id]]['ref'] == alleleA and refalt[omniIDs[id]]['alt'] == alleleB:
 	    correctedarraylines.append(l)
-	elif refalt[omniIDs[id]]['ref'] == alleleB and refalt[omniIDs[id]]['alt'] == alleleA:
+    elif refalt[omniIDs[id]]['ref'] == alleleB and refalt[omniIDs[id]]['alt'] == alleleA:
 	    flipped.append(l)
-	elif refalt[omniIDs[id]]['ref'] == complement[alleleB] and refalt[omniIDs[id]]['alt'] == complement[alleleA]:
+    elif refalt[omniIDs[id]]['ref'] == complement[alleleB] and refalt[omniIDs[id]]['alt'] == complement[alleleA]:
 	    correctedcompl.append(l)
-	elif refalt[omniIDs[id]]['ref'] == complement[alleleA] and refalt[omniIDs[id]]['alt'] == complement[alleleB]:
+    elif refalt[omniIDs[id]]['ref'] == complement[alleleA] and refalt[omniIDs[id]]['alt'] == complement[alleleB]:
 	    flipcompl.append(l)
-	else:
+    else:
 	    notyet.append(l)
+
+simplejson.dump(correctedarraylines, open('corrected','w'))
+simplejson.dump(flipped, open('flipped','w'))
+simplejson.dump(correctedcompl, open('correctedcompl','w'))
+simplejson.dump(flipcompl, open('flippedcoml','w'))
+smplejson.dump(notyet, open('notyet','w'))
+
+
