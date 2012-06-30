@@ -25,27 +25,67 @@ flipcompl = []
 file = open(names[0]+'RefAlt')
 refalt = simplejson.load(file)
 file.close()
+#dic = set(refalt.keys())
 for l in arraylines[11:]:
     t = l.split(',')
     id = t[0]
+    print id
     if t[9] != '-' and t[10] != '-':
-	    alleleA = t[9]
-	    alleleB = t[10]
-    if refalt[omniIDs[id]]['ref'] == alleleA and refalt[omniIDs[id]]['alt'] == alleleB:
-	    correctedarraylines.append(l)
-    elif refalt[omniIDs[id]]['ref'] == alleleB and refalt[omniIDs[id]]['alt'] == alleleA:
-	    flipped.append(l)
-    elif refalt[omniIDs[id]]['ref'] == complement[alleleB] and refalt[omniIDs[id]]['alt'] == complement[alleleA]:
-	    correctedcompl.append(l)
-    elif refalt[omniIDs[id]]['ref'] == complement[alleleA] and refalt[omniIDs[id]]['alt'] == complement[alleleB]:
-	    flipcompl.append(l)
-    else:
-	    notyet.append(l)
-
+	alleleA = t[9]
+	alleleB = t[10]
+	pos = omniIDs[id]
+	print pos
+	try:
+	    ra = refalt[pos]
+	    if ra['ref'] == alleleA and ra['alt'] == alleleB:
+		    correctedarraylines.append(l)
+	    elif ra['ref'] == alleleB and ra['alt'] == alleleA:
+		    flipped.append(l)
+	    elif ra['ref'] == complement[alleleB] and ra['alt'] == complement[alleleA]:
+		    correctedcomp.append(l)
+	    elif ra['ref'] == complement[alleleA] and ra['alt'] == complement[alleleB]:
+		    flipcompl.append(l)
+	    else:
+		    notyet.append(l)
+	except KeyError:
+	    print "error"
+'''
 simplejson.dump(correctedarraylines, open('corrected','w'))
 simplejson.dump(flipped, open('flipped','w'))
-simplejson.dump(correctedcompl, open('correctedcompl','w'))
+simplejson.dump(correctedcomp, open('correctedcompl','w'))
 simplejson.dump(flipcompl, open('flippedcoml','w'))
-smplejson.dump(notyet, open('notyet','w'))
-
+simplejson.dump(notyet, open('notyet','w'))
+'''
+for name in names[1:]:
+    if notyet == []:
+	break
+    else:
+	refalt = simplejson.load(open(name+'RefAlt'))
+        dic = set(refalt.keys())
+    for ny in notyet:
+	t = ny.split(',')
+	id = t[0]
+	print id
+	alleleA = t[9]
+	alleleB = t[10]
+	pos = omniIDs[id]
+	if pos in dic:
+	    if refalt[pos]['ref'] == alleleA and refalt[pos]['alt'] == alleleB:
+		    correctedarraylines.append(l)
+	    elif refalt[pos]['ref'] == alleleB and refalt[pos]['alt'] == alleleA:
+		    flipped.append(l)
+	    elif refalt[pos]['ref'] == complement[alleleB] and refalt[pos]['alt'] == complement[alleleA]:
+		    correctedcompl.append(l)
+	    elif refalt[pos]['ref'] == complement[alleleA] and refalt[pos]['alt'] == complement[alleleB]:
+		    flipcompl.append(l)
+	    else:
+		newny.append(l)
+	
+    notyet = newny
+	    
+simplejson.dump(correctedarraylines, open('corrected','w'))
+simplejson.dump(flipped, open('flipped','w'))
+simplejson.dump(correctedcomp, open('correctedcompl','w'))
+simplejson.dump(flipcompl, open('flippedcoml','w'))
+simplejson.dump(notyet, open('notyet','w'))
 
