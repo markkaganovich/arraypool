@@ -10,6 +10,7 @@ class genotypes:
         self.genofile = open('./' + name + 'Geno')
         self.__genolen__()
 	self.snpdict = open('./'+name+'SnpPosDic')    
+	self.refalt = open('./'+name+ 'RefAlt')
 
     def __genolen__(self):
         l = self.genofile.readline()
@@ -35,7 +36,8 @@ def convertprecombine(files, chosenSNPs):
 
 def writeprecombinefile(f):
         chosenoutput = open('./' + f.name + 'outputprecombine', 'w')
-    	for c in f.csindex:
+    	refaltoutput = open('./' + f.name + 'refalt', 'w')
+	for c in f.csindex:
             if c != 'NA':
                 f.genofile.seek((c-1)*f.ln*2)
                 r = f.genofile.read(f.ln*2)
@@ -62,28 +64,36 @@ def combineflatgenos(names, chosenSNPs):
 #modifyied to the 19 version
 def flatfilevcf(vcffile, outputname):
     file = open(vcffile)
-    outputfile = open(outputname+'Geno', 'w')
-    outputfileLines = open(outputname+'Lines', 'w')
+    #outputfile = open(outputname+'Geno', 'w')
+    #outputfileLines = open(outputname+'Lines', 'w')
     snppos = []
-    outputfileSnpPos = open(outputname + 'SnpPos', 'w')
+    refalt = {}
+    #outputfileSnpPos = open(outputname + 'SnpPos', 'w')
     lines = file.readlines(1000000)
+    outputrefalt = open(outputname + 'flatRefAlt','w')
     while(lines != []):
         for l in lines:
-            if l.startswith('#CHROM'):
-                genomenames = l.strip('\n').split('\t')
-                simplejson.dump(genomenames[9:], outputfileLines)
-                outputfileLines.close()
+            #if l.startswith('#CHROM'):
+                #genomenames = l.strip('\n').split('\t')
+                #simplejson.dump(genomenames[9:], outputfileLines)
+                #outputfileLines.close()
             if not l.startswith('#'):
                 tokens = l.strip('\n').split('\t')
                 f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
 		if f != []:
-		    snppos.append('chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1])
-                    m =''
-                    for t in tokens[9:]:
-                        m = m + str(int(t[0]) + int(t[2])) + ','
-                    outputfile.write(m.strip(',')+'\n')
+		    pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
+                    #snppos.append(pos)    
+		    ref = tokens[3]
+		    alt = tokens[4]
+		    #refalt[pos]={'ref':ref, 'alt':alt}
+		    outputrefalt.write(pos +'\t' + ref + '\t' + alt + '\n')
+		    #m =''
+                    #for t in tokens[9:]:
+                    #    m = m + str(int(t[0]) + int(t[2])) + ','
+                    #outputfile.write(m.strip(',')+'\n')
         lines = file.readlines(1000000)
-    simplejson.dump(snppos, outputfileSnpPos)
+    #simplejson.dump(snppos, outputfileSnpPos)
+    #simplejson.dump(refalt, open(outputname+'RefAlt','w'))
 
 #add on
 def getrefalt(vcffile, outputname):
@@ -100,9 +110,6 @@ def getrefalt(vcffile, outputname):
 		refalt.append({'ref':ref, 'alt':alt})
 	lines = file.readlines(1000000)
     simplejson.dump(refalt, outputfilerefalt)
-
-
-
 
 
 def getvcfmatrix(filename, genomelist):
