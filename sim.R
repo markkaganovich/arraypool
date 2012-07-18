@@ -1,35 +1,28 @@
-G <- as.matrix(read.table('./Gnotrios', sep=',', nrows = 473822))
+#G <- as.matrix(read.table('./Gnotrios', sep=',', nrows = 473822))
 
-topten.score <- rep(0:9)
-topten.inds <- c()
+topten.score <- rep(0:10)
 topten.id <- c()
 topten.lcls <- c()
 
 sim=0
-while(sim < 10000){
+while(sim < 100){
 lcls<-c()
 while(sum(lcls) < 90 | sum(lcls) > 110){
-  lcls.id <- sample(1:179,sample(2:179))
+  lcls.id <- sample(1:179,sample(2:179,1))
   lcls <- sample(1:100, length(lcls.id), replace=TRUE)
 }
 
 S.sim <- (G[, lcls.id] %*% (lcls/100))/(length(lcls) *2)
+v <- as.matrix(c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1))
+S.goodsnps <- apply(v, 1, function(x) length(which(S.sim > (x-.01) & S.sim < (x+.01))))
+index = S.goodsnps > topten.score
 
-S.goodsnps <- which((S.sim <.11 & S.sim >.09) | (S.sim < .21 &  S.sim > .19) | (S.sim < .31 & S.sim > .29) |
-  (S.sim < .41 & S.sim > .39) | (S.sim < .51 & S.sim > .49) | (S.sim < .61 & S.sim > .59) |
-  (S.sim < .71 & S.sim > .69) | (S.sim < .81 & S.sim > .79) | (S.sim < .91 & S.sim > .89)
-)
+#keep lcls that score the highest in each dimension
+topten.score[index] = S.goodsnps[index]
+topten.id[index] = as.data.frame(lcls.id)
+topten.lcls[index] = as.data.frame(lcls)
 
-#keep top 10 of these numbers
-# also calc dist to maximize dist among the top 10 or don't include those with indeces already covered
-if (length(S.goodsnps) > min(topten.score)){
-  index = which(topten.score == min(topten.score))
-  topten.score[index] = length(S.goodsnps)
-  topten.inds[index] = as.data.frame(S.goodsnps)
-  topten.id[index] = as.data.frame(lcls.id)
-  topten.lcls[index] = as.data.frame(lcls)
-}
- 
 sim = sim +1
 }
-  
+
+sink('./simulationoutput')
