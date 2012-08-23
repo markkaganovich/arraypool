@@ -12,7 +12,7 @@ complement=  {'A':'T', 'T':'A', 'C':'G', 'G':'C'}
 # run through each snp on array, only keep the good ones, correct all the possible REF:ALT ones, 
 refalt = simplejson.load(open('refalt'))
 
-output = open(report.strip('.txt') + 'corrected','w')
+output = open(report.strip('.txt') + 'correctedYR','w')
 for l in arraylines[11:]:
     t = l.split('\t')
     id = t[0]
@@ -29,9 +29,11 @@ for l in arraylines[11:]:
 	print ra
 	print t[18]
         if ra['ref'] == alleleA and ra['alt'] == alleleB and t[18]!='-' and t[18]!='+':  
-	    output.write('chr'+t[12]+'pos'+t[13] + '\t' +t[18]+'\n')
+	    output.write('chr'+t[12]+'pos'+t[13] + '\t' +str(float(t[21])/float(t[19])) +'\n')
+#t[18]+'\n')
 	elif ra['ref'] == alleleB and ra['alt'] == alleleA and t[18]!='-' and t[18]!='+':
-	    output.write('chr'+t[12]+'pos'+t[13]+'\t'+str(1-float(t[18])) +'\n')
+	    output.write('chr'+t[12]+'pos'+t[13]+'\t'+ str(1-float(t[21])/float(t[19]))+'\n' )
+#str(1-float(t[18])) +'\n')
 	#elif ra['ref'] == complement[alleleB] and ra['alt'] == complement[alleleA]:
 	 #   correctedcomp.append(l)
 	#elif ra['ref'] == complement[alleleA] and ra['alt'] == complement[alleleB]:
