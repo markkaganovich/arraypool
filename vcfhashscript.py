@@ -1,7 +1,5 @@
 import simplejson
 import vcftoRmatrix 
-import threading
-from threading import Thread
 '''
 vcftoRmatrix.flatfilevcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf', '../genotypes/19CEUlowcov')
 print "1"
@@ -16,7 +14,7 @@ file = open('./omni19snps')
 snps = simplejson.load(file)
 file.close()
 '''
-file = open('./correctedSNPs')
+file = open('./omniexpresssnps')
 lines = file.readlines()
 file.close()
 snps = []
@@ -25,7 +23,7 @@ for l in lines:
 
 names = ['../genotypes/19CEUlowcov','../genotypes/19CHBJPTlowcov', '../genotypes/19YRIlowcov', '../genotypes/19CEUtrio', '../genotypes/19YRItrio']
 
-#vcftoRmatrix.combineflatgenos(names, snps)
+vcftoRmatrix.combineflatgenos(names, snps)
 
 def getlines(names, genotypefile, chosenlines):
     lines = []
@@ -37,8 +35,8 @@ def getlines(names, genotypefile, chosenlines):
 	inds.append(lines.index(c))
     inds = map(lambda x: x *2, inds)
     file = open(genotypefile)
-    #newgenofile = open('chosenlinesSfile19corrected','w')
-    newgenofile = open('testlinesS','w')
+    newgenofile = open('chosenlinesSfile19correctedomniexpress','w')
+    #newgenofile = open('testlinesS','w')
     genolines = file.readlines()
     print inds
     for l in genolines:
@@ -63,13 +61,13 @@ def getridofzero(genotypefile):
     file.close()
     
 		
-test = ["NA06985", "NA06986", "NA06994", "NA07000", "NA07037", "NA07051", "NA07346"]
+#test = ["NA06985", "NA06986", "NA06994", "NA07000", "NA07037", "NA07051", "NA07346"]
 
-file = open('testpool')
+file = open('pool2')
 pool = simplejson.load(file)
-getlines(names, 'mergedoutput19', pool)
-#getridofzero('chosenlinesSfile19corrected')    	
-getridofzero('testlinesS')    	
+getlines(names, 'mergedoutput19oe', pool)
+getridofzero('chosenlinesSfile19corrected')    	
+#getridofzero('testlinesS')    	
     
 
 
