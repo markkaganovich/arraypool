@@ -1,7 +1,7 @@
 import simplejson
 
 def parsehapmapchrom(chrom):
-	people = ['NA19140','NA19154', 'NA19145','NA19173'.'NA19203','NA19206','NA19211','NA19222']
+	people = ['NA19140','NA19154', 'NA19145','NA19173','NA19203','NA19206','NA19211','NA19222']
 	filename = '../genotypes/hapmapchr'+str(chrom)
 	hf = open(filename)
 	lines = hf.readlines()
@@ -12,7 +12,9 @@ def parsehapmapchrom(chrom):
 	chromi = header.index('chrom')
 	posi = header.index('pos')	
 	snpi = header.index('alleles')
-	peoplei = map(lambda x: header.index(x), people)
+	peoplewithgenos = filter(lambda x: x in header, people)
+	print peoplewithgenos
+	peoplei = map(lambda x: header.index(x), peoplewithgenos)
 	for l in lines[1:]:
 		t = l.split(' ')
 		rsid = t[rsidi]
@@ -25,10 +27,9 @@ def parsehapmapchrom(chrom):
 			t[p]
 			genotypes = map(lambda x: t[x], peoplei)
 			genocount = map(lambda x: len(filter(lambda y: alt == y, x)), genotypes)	
-			print genocount
 			map(lambda x: out.write(str(x)+','), genocount[:-1])
 			out.write(str(genocount[-1])+'\n')
-			rsidout.write(rsid)
+			rsidout.write(rsid+'\n')
 	
 for c in range(1,23):
 	parsehapmapchrom(c)
