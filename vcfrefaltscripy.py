@@ -15,9 +15,9 @@ while(lines != []):
 			tokens = l.strip('\n').split('\t')
 			f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
 			if f != []:
-		    	pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]               
-		    	ref = tokens[3]
-		    	alt = tokens[4]
+				pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
+				ref = tokens[3]
+				alt = tokens[4]
 		    	ref[pos] = ref
 				alt[pos] = alt
 	lines = file.readlines(1000000)
