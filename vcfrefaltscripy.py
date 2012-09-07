@@ -1,7 +1,7 @@
 import simplejson
 
 outputname ='testceu'
-vcffile = '../genotypes/19CEUlowcov'
+vcffile = '../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf'
 
 file = open(vcffile)
 ref = {}
