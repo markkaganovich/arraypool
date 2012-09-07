@@ -18,7 +18,7 @@ while(lines != []):
 				pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
 				ref = tokens[3]
 				alt = tokens[4]
-		    	ref[pos] = ref
+				ref[pos] = ref
 				alt[pos] = alt
 	lines = file.readlines(1000000)
 simplejson.dump(ref, outputref)
