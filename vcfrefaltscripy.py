@@ -58,8 +58,8 @@ def revgeno(chrom, reversematch):
 		output.write('\n')
 	output.close()	
 	
-for c in range(1,23):
-	revgeno(c)
+#for c in range(1,23):
+#	revgeno(c)
 
 def calcmatches(vcfinputgroup, outputname):
 	vcffile = '../1000GenomesData/' + vcfinputgroup + '.low_coverage.2010_09.genotypes.vcf'
