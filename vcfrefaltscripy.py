@@ -10,11 +10,11 @@ omniexpresssnps = map(lambda x: eval(x), l[1:].split(',')[0:-1])
 
 #one chr at a time
 def revgeno(chrom, reversematch):
-	SnpPos = map(lambda x: x.strip('\n'), open('hapmapchr'+str(chrom)+'SnpPos').readlines())
+	SnpPos = map(lambda x: x.strip('\n'), open('../genotypes/hapmapchr'+str(chrom)+'SnpPos').readlines())
 	SnpPosset = set(SnpPos)
-	geno = map(lambda x: x.strip('\n'), open('hapmapchr'+str(chrom)+'genotype').readlines())
+	geno = map(lambda x: x.strip('\n'), open('../genotypes/hapmapchr'+str(chrom)+'genotype').readlines())
 	posi = []
-	for s in reversematchset:
+	for s in reversematch:
 		if s in SnpPosset:
 			posi.append(SnpPos.index(s))
 	posiset = set(posi)
@@ -29,14 +29,12 @@ def revgeno(chrom, reversematch):
 			newgeno.append(ng.strip(','))
 		else:
 			newgeno.append(geno[i])
-	output = open('hapmapchr'+str(chrom)+'genotype','w')
+	output = open('../genotypes/hapmapchr'+str(chrom)+'genotype','w')
 	for n in newgeno:
 		output.write(n)
 		output.write('\n')
 	output.close()	
 	
-#for c in range(1,23):
-#	revgeno(c)
 
 def calcmatches(vcfinputgroup, outputname):
 	vcffile = '../1000GenomesData/' + vcfinputgroup + '.2010_09.genotypes.vcf'
@@ -74,6 +72,8 @@ alt2kg = simplejson.load(open('../genotypes/YRIAlt'))
 
 '''
 def calcreversals(omniexpresssnps, ref1, alt1, ref2, alt2):
+	Ref = {}
+	Alt = {}
 	mat = []
 	reversemat = []
 	inhapmap = []
@@ -88,10 +88,54 @@ def calcreversals(omniexpresssnps, ref1, alt1, ref2, alt2):
 		try:
 			if ref1[k] == ref2[k] and alt1[k] == alt2[k]:
 				mat.append(k)
+				Ref[k] = ref1[k]
+				Alt[k] = alt1[k]
 			elif ref1[k] == alt2[k] and alt1[k] == ref2[k]:
 				reversemat.append(k)
+				Ref[k] = ref1[k]
+				Alt[k] = alt1[k]
 		except KeyError:
 			pass
-	return [mat, reversemat]
+	return [Ref, Alt, mat, reversemat]
 	
 #r = calcreversals(omniexpresssnps, ref1kg, alt1kg, ref2kg, alt2kg)
+
+#Ref = {}
+#Alt = {}	
+def mdic(n):
+	# type can be 'Ref' or 'Alt'
+	# this function opens dictionaries
+	print n
+	f = open(n+'Alt')
+	ref = simplejson.load(f)
+	f.close()
+	return ref
+#names = ['testceu', 'YRI', 'CHBJPT', 'CEUtrio', 'YRItrio']
+#l = map(mdic, names)
+#for n in l:
+#	Ref.update(n)
+# save as 1kgRef and 1kgAlt
+
+# add hapmap to Ref and Alt and flip genotypes for each chrom
+# aggregate all hapmap chroms
+
+'''
+Ref = {}
+Alt = {}
+for c in range(1,23):
+	f = open('../genotypes/hapmapchr'+str(c)+'RefAlt')
+	refaltdic = simplejson.load(f)
+	f.close()
+	keys = refaltdic.keys()
+	for k in keys:
+		Ref[k] = refaltdic[k]['ref']
+		Alt[k]  = refaltdic[k]['alt']
+'''
+#r = calcreversals(omniexpresssnps, ref1kg, alt1kg, hapmapRef, hapmapAlt)
+	
+#for c in range(1,23):
+#	revgeno(c, reversematches)	
+		
+	
+	
+
