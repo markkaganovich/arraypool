@@ -1,7 +1,7 @@
 import simplejson
 import vcftoRmatrix 
 '''
-vcftoRmatrix.flatfilevcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf', '../genotypes/19CEUlowcov')
+vcftoRmatrix.flatfilevcf(`'../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf', '../genotypes/19CEUlowcov')
 print "1"
 vcftoRmatrix.flatfilevcf('../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../genotypes/19YRIlowcov')
 print "2"
@@ -21,7 +21,7 @@ snps = []
 for l in lines:
     snps.append(l.strip('\n'))
 
-names = ['../genotypes/19CEUlowcov','../genotypes/19CHBJPTlowcov', '../genotypes/19YRIlowcov', '../genotypes/19CEUtrio', '../genotypes/19YRItrio']
+names = ['../genotypes/19CEUlowcov','../genotypes/19CHBJPTlowcov', '../genotypes/19YRIlowcov', '../genotypes/19CEUtrio', '../genotypes/19YRItrio', '../genotypes/hapmap']
 
 vcftoRmatrix.combineflatgenos(names, snps)
 
