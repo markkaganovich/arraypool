@@ -83,13 +83,13 @@ def flatfilevcf(vcffile, outputname):
 		    pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
 		    r = tokens[3]
 		    a = tokens[4]
-		    ref[pos] = r
+			ref[pos] = r
 			alt[pos] = a
-		    outputref.write(pos +'\t' + ref + '\n')
-		 	outputalt.write(pos + '\t' + alt + '\n')
-		    m=pos +'\t'
-            	for t in tokens[9:]:
-                	m = m + str(int(t[0]) + int(t[2])) + ','
-                    outputfile.write(m.strip(',')+'\n')
-        lines = file.readlines(1000000)
+			outputref.write(pos +'\t' + ref + '\n')
+			outputalt.write(pos + '\t' + alt + '\n')
+			m=pos +'\t'
+			for t in tokens[9:]:
+				m = m + str(int(t[0]) + int(t[2])) + ','
+				outputfile.write(m.strip(',')+'\n')
+		lines = file.readlines(1000000)
 
