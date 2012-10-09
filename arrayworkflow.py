@@ -80,9 +80,9 @@ def flatfilevcf(vcffile, outputname):
 				tokens = l.strip('\n').split('\t')
 				f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
 		if f != []:
-		    pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
-		    r = tokens[3]
-		    a = tokens[4]
+			pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
+			r = tokens[3]
+			a = tokens[4]
 			ref[pos] = r
 			alt[pos] = a
 			outputref.write(pos +'\t' + ref + '\n')
