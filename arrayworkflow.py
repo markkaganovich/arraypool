@@ -37,7 +37,7 @@ class genotypes:
 		self.name = name
 		self.genofile = open('./' + name + 'Geno')
 		self.__genolen__()
-
+		
 	def __genolen__(self):
 		l = self.genofile.readline()
 		self.ln = len(l.split(','))
