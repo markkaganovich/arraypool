@@ -42,20 +42,20 @@ class genotypes:
 	self.snpdict = open('./'+name+'SnpPosDic')    
 
 	def __genolen__(self):
-       l = self.genofile.readline()
-       self.ln = len(l.split(','))
-       self.genofile.seek(0)
+		l = self.genofile.readline()
+		self.ln = len(l.split(','))
+		self.genofile.seek(0)
 
 def calccsindex(filestruc, chosenSNPs):
-    filestruc.csindex = []
+	filestruc.csindex = []
     snpdic = simplejson.load(filestruc.snpdict)
     inboth = set(snpdic.keys()) & set(chosenSNPs)
-    for x in chosenSNPs:
+	for x in chosenSNPs:
 		print x
 		if x in inboth:
-	    	filestruc.csindex.append(snpdic[x])
+			filestruc.csindex.append(snpdic[x])
 		else:
-	    	filestruc.csindex.append('NA')
+			filestruc.csindex.append('NA')
 	
 	
 	
