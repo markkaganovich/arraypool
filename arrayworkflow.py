@@ -1,6 +1,6 @@
 import simplejson
 
-def getarraysnps()::
+def getarraysnps():
 	report = 'Array25M1'
 	file = open(report)
 	lines = file.readlines()
