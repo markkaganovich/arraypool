@@ -63,7 +63,7 @@ def getsnpgenos(filestruc, chosenSNPs, genos = {}):
 			except KeyError:
 				genos[snp] = '0,' * filestruc.ln
 			
-def combinegenos():			
+def combinegenos(names):			
 	genos = {}
 	files = map(lambda x: genotypes(x), names)
 	map(lambda x: getsnpgenos(x, chosenSNPs, genos), files)
