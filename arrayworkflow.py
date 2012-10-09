@@ -39,7 +39,7 @@ class genotypes:
         self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
         self.__genolen__()
-	self.snpdict = open('./'+name+'SnpPosDic')    
+		self.snpdict = open('./'+name+'SnpPosDic')    
 
 	def __genolen__(self):
 		l = self.genofile.readline()
