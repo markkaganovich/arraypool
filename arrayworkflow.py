@@ -62,9 +62,9 @@ def calccsindex(filestruc, chosenSNPs):
 	
 #modifyied to the 19 version
 def flatfilevcf(vcffile, outputname):
-    file = open(vcffile)
-    outputfile = open(outputname+'Geno', 'w')
-    snppos = []
+	file = open(vcffile)
+	outputfile = open(outputname+'Geno', 'w')
+	snppos = []
 	ref = {}
 	alt = {}
 	lines = file.readlines(1000000)
