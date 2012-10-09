@@ -74,7 +74,7 @@ def flatfilevcf(vcffile, outputname):
 		for l in lines:
 			if l.startswith('#CHROM'):
 				genomenames = l.strip('\n').split('\t')
-				g = [',' if x == '\t' for x in genomenames[9:]]
+				g = [',' if x == '\t' else x for x in genomenames[9:]]
 				outputfile.write('\t'+g +'\n')
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
