@@ -75,7 +75,7 @@ def flatfilevcf(vcffile, outputname):
 			if l.startswith('#CHROM'):
 				genomenames = l.strip('\n').split('\t')
 				g = [',' if x == '\t' else x for x in genomenames[9:]]
-				outputfile.write('\t'+g +'\n')
+				outputfile.write('\t'+str(g) +'\n')
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
 				f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
