@@ -39,7 +39,7 @@ class genotypes:
         self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
         self.__genolen__()
-		self.snpdict = open('./'+name+'SnpPosDic')    
+	self.snpdict = open('./'+name+'SnpPosDic')    
 
 	def __genolen__(self):
 		l = self.genofile.readline()
@@ -48,8 +48,8 @@ class genotypes:
 
 def calccsindex(filestruc, chosenSNPs):
 	filestruc.csindex = []
-    snpdic = simplejson.load(filestruc.snpdict)
-    inboth = set(snpdic.keys()) & set(chosenSNPs)
+	snpdic = simplejson.load(filestruc.snpdict)
+	inboth = set(snpdic.keys()) & set(chosenSNPs)
 	for x in chosenSNPs:
 		print x
 		if x in inboth:
