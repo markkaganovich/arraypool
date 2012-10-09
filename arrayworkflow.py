@@ -48,7 +48,7 @@ def getsnpgenos(filestruc, chosenSNPs, genos = {}):
 	genos = {}
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
-	notingeno = set([x if x not in inboth for x in chosenSNPs])
+	notingeno - set(filter(lambda x: x not in inboth, chosenSNPs))
 	for l in lines[1:]:
 		t = l.split('\t')
 		snp = t[0]
