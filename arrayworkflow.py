@@ -34,8 +34,8 @@ def getarraysnps():
 ### get genotype
 class genotypes:
     def __init__(self, name):
-        self.name = name
-        self.genofile = open('./' + name + 'Geno')
+		self.name = name
+		self.genofile = open('./' + name + 'Geno')
 		self.__genolen__()
 
 	def __genolen__(self):
