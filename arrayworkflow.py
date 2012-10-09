@@ -35,36 +35,51 @@ def getarraysnps():
 class genotypes:
     def __init__(self, name):
         self.name = name
-        self.snpfile = open('./' + name + 'SnpPos')
-        self.linesfile = open('./' + name + 'Lines')
         self.genofile = open('./' + name + 'Geno')
-        self.__genolen__()
-	self.snpdict = open('./'+name+'SnpPosDic')    
+		self.__genolen__()
 
 	def __genolen__(self):
 		l = self.genofile.readline()
 		self.ln = len(l.split(','))
 		self.genofile.seek(0)
 
-def calccsindex(filestruc, chosenSNPs):
-	filestruc.csindex = []
-	snpdic = simplejson.load(filestruc.snpdict)
-	inboth = set(snpdic.keys()) & set(chosenSNPs)
-	for x in chosenSNPs:
-		print x
-		if x in inboth:
-			filestruc.csindex.append(snpdic[x])
-		else:
-			filestruc.csindex.append('NA')
-	
-	
+def getsnpgenos(filestruc, chosenSNPs, genos = {}):
+	lines = filestruc.genofile.readlines()
+	genos = {}
+	snppos = map(lambda x: x.split('\t')[0], lines[1:])
+	inboth = set(snppos) & set(chosenSNPs)
+	notingeno = set([x if x not in inboth for x in chosenSNPs])
+	for l in lines[1:]:
+		t = l.split('\t')
+		snp = t[0]
+		if snp in inboth:
+			try:
+				genos[snp] = genos[snp] + t[1].strip('\n')
+			except KeyError:
+				genos[snp] = t[1].strip('\n')
+		elif snp in notingeno:
+			try:
+				genos[snp] = genos[snp] + '0,' * filestruc.ln
+			except KeyError:
+				genos[snp] = '0,' * filestruc.ln
+			
+def combinegenos()			
+	genos = {}
+	files = map(lambda x: genotypes(x), names)
+	map(lambda x: getsnpgenos(x, chosenSNPs, genos), files)
+	file = open('tempdic','w')
+	simplejson.dump(genos, file)
+	file.close()
+			
+		
+		
+		
 	
 	
 #modifyied to the 19 version
 def flatfilevcf(vcffile, outputname):
 	file = open(vcffile)
 	outputfile = open(outputname+'Geno', 'w')
-	snppos = []
 	ref = {}
 	alt = {}
 	lines = file.readlines(1000000)
@@ -81,10 +96,8 @@ def flatfilevcf(vcffile, outputname):
 				f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
 		if f != []:
 			pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
-			r = tokens[3]
-			a = tokens[4]
-			ref[pos] = r
-			alt[pos] = a
+			ref[pos] = tokens[3]
+			alt[pos] = tokens[4]
 			m=pos +'\t'
 			for t in tokens[9:]:
 				m = m + str(int(t[0]) + int(t[2])) + ','
