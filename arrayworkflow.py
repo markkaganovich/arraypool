@@ -67,18 +67,18 @@ def flatfilevcf(vcffile, outputname):
     snppos = []
 	ref = {}
 	alt = {}
-    lines = file.readlines(1000000)
-    outputref = open(outputname + 'Ref','w')
+	lines = file.readlines(1000000)
+	outputref = open(outputname + 'Ref','w')
 	outputalt = open(outputname + 'Alt', 'w')
-    while(lines != []):
-        for l in lines:
-            if l.startswith('#CHROM'):
-                genomenames = l.strip('\n').split('\t')
+	while(lines != []):
+		for l in lines:
+			if l.startswith('#CHROM'):
+				genomenames = l.strip('\n').split('\t')
 				g = [',' if x == '\t' for x in genomenames[9:]]
 				outputfile.write('\t'+g +'\n')
-            if not l.startswith('#'):
-                tokens = l.strip('\n').split('\t')
-                f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
+			if not l.startswith('#'):
+				tokens = l.strip('\n').split('\t')
+				f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
 		if f != []:
 		    pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
 		    r = tokens[3]
