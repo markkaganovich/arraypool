@@ -71,8 +71,11 @@ def combinegenos(names):
 	simplejson.dump(genos, file)
 	file.close()
 			
-		
-		
+names = ['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio']		
+
+vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
+'../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
+map(lambda x,y: flatfilevcf(x, y), vcffiles, names)	
 		
 	
 	
