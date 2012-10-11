@@ -112,7 +112,8 @@ def initgenofiles():
 	map(lambda x,y: flatfilevcf(x, y), vcffiles, names)
 
 file = open('./omni25Msnpssorted')
-snps = simplejson.load(file)
+line = file.readline()
+snps = map(lambda x: x, line)
 file.close()
 print len(snps)
 #combinegenos(names, snps)
