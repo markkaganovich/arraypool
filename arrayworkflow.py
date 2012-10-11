@@ -59,15 +59,11 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 				genos[snp] = genos[snp] + t[1].strip('\n')
 			except KeyError:
 				genos[snp] = t[1].strip('\n')
-		elif snp in notingeno:
-			print snp
-			try:
-				genos[snp] = genos[snp] + '0,' * filestruc.ln
-			except KeyError:
-				genos[snp] = '0,' * filestruc.ln
-	tempfile = open(filestruc.name+'tempdic','w')
-	simplejson.dump(genos, tempfile)
-	tempfile.close()
+	for s in notingeno:
+		try:
+			genos[s] = genos[s] + '0,' * filestruc.ln
+		except KeyError:
+			genos[s] = '0,' * filestruc.ln
 	return genos
 			
 def combinegenos(names, chosenSNPs):			
