@@ -62,7 +62,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 				genos[snp] = genos[snp] + '0,' * filestruc.ln
 			except KeyError:
 				genos[snp] = '0,' * filestruc.ln
-	tempfile = open('./temp'+filestruc.name)
+	tempfile = open(filestruc.name+'tempdic','w')
 	simplejson.dump(genos, tempfile)
 	return genos
 			
