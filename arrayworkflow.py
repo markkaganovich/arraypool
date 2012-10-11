@@ -44,7 +44,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 	lines = filestruc.genofile.readlines()
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
-	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs
+	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs))
 	try:
 		genos[lines] = genos[lines] + lines[0].split('\t')[1])
 	except KeyError:
