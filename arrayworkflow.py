@@ -46,9 +46,9 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 	inboth = set(snppos) & set(chosenSNPs)
 	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs))
 	try:
-		genos[lines] = genos[lines] + lines[0].split('\t')[1]
+		genos['lines'] = genos['lines'] + lines[0].split('\t')[1]
 	except KeyError:
-		genos[lines] = lines[0].split('\t')[1]
+		genos['lines'] = lines[0].split('\t')[1]
 	for l in lines[1:]:
 		t = l.split('\t')
 		snp = t[0]
