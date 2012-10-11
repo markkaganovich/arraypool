@@ -59,6 +59,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 			except KeyError:
 				genos[snp] = t[1].strip('\n')
 		elif snp in notingeno:
+			print snp
 			try:
 				genos[snp] = genos[snp] + '0,' * filestruc.ln
 			except KeyError:
