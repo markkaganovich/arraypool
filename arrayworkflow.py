@@ -87,7 +87,7 @@ def flatfilevcf(vcffile, outputname):
 			if l.startswith('#CHROM'):
 				genomenames = l.strip('\n').split('\t')
 				#g = [',' if x == '\t' else x for x in genomenames[9:]]
-				g = reduce(lambda x,y: x+','+y, ['']+genomenames[9:].split('\t'))
+				g = reduce(lambda x,y: x+','+y, ['']+genomenames[9:])
 				outputfile.write('\t'+str(g) +'\n')
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
@@ -118,5 +118,5 @@ lines = file.readlines()
 file.close()
 snps = map(lambda x: x.strip('\n'), lines)
 print len(snps)
-combinegenos(names, snps)
+#combinegenos(names, snps)
 
