@@ -107,7 +107,7 @@ def flatfilevcf(vcffile, outputname):
 	simplejson.dump(alt, outputalt)
 	
 
-names = ['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRIlowcov', '../genotypes/CEUtrio', '../genotypes/YRItrio']		
+names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']		
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
@@ -119,5 +119,5 @@ file = open('./omniexpresssnps')
 lines = file.readlines()
 file.close()
 snps = map(lambda x: x.strip('\n'), lines)
-#combinegenos(names, snps)
+combinegenos(names, snps)
 
