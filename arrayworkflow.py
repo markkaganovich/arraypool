@@ -44,7 +44,11 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 	lines = filestruc.genofile.readlines()
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
-	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs))
+	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs
+	try:
+		genos[lines] = genos[lines] + lines[0].split('\t')[1])
+	except KeyError:
+		genos[lines] = lines[0].split('\t')[1]
 	for l in lines[1:]:
 		t = l.split('\t')
 		snp = t[0]
@@ -58,6 +62,8 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 				genos[snp] = genos[snp] + '0,' * filestruc.ln
 			except KeyError:
 				genos[snp] = '0,' * filestruc.ln
+	tempfile = open('./temp'+filestruc.name)
+	simplejson.dump(genos, tempfile)
 	return genos
 			
 def combinegenos(names, chosenSNPs):			
