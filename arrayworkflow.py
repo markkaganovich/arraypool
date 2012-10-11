@@ -55,12 +55,12 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 		snp = t[0]
 		if snp in inboth:
 			try:
-				genos[snp] = genos[snp] + ','+t[1].strip('\n')
+				genos[snp] = genos[snp].strip(',') + ','+t[1].strip('\n')
 			except KeyError:
 				genos[snp] = t[1].strip('\n')
 	for s in notingeno:
 		try:
-			genos[s] = genos[s] + ','+('0,' * filestruc.ln)
+			genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
 		except KeyError:
 			genos[s] = '0,' * filestruc.ln
 	return genos
