@@ -46,9 +46,10 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 	inboth = set(snppos) & set(chosenSNPs)
 	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs))
 	try:
-		genos['lines'] = genos['lines'] + lines[0].split('\t')[1]
+		genos['lines'] = genos['lines'] + lines[0].split('\t')[1][0]
 	except KeyError:
-		genos['lines'] = lines[0].split('\t')[1]
+		genos['lines'] = lines[0].split('\t')[1][0]
+	print(len(lines))
 	for l in lines[1:]:
 		t = l.split('\t')
 		snp = t[0]
@@ -64,6 +65,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 				genos[snp] = '0,' * filestruc.ln
 	tempfile = open(filestruc.name+'tempdic','w')
 	simplejson.dump(genos, tempfile)
+	tempfile.close()
 	return genos
 			
 def combinegenos(names, chosenSNPs):			
