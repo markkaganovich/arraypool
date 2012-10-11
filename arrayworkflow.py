@@ -45,7 +45,7 @@ def getsnpgenos(filestruc, chosenSNPs, genos = {}):
 	genos = {}
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
-	notingeno - set(filter(lambda x: x not in inboth, chosenSNPs))
+	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs))
 	for l in lines[1:]:
 		t = l.split('\t')
 		snp = t[0]
@@ -103,13 +103,13 @@ names = ['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRI
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
-map(lambda x,y: flatfilevcf(x, y), vcffiles, names)
+
+def initgenofiles():
+	map(lambda x,y: flatfilevcf(x, y), vcffiles, names)
 
 file = open('./omniexpresssnps')
 lines = file.readlines()
 file.close()
-snps = []
-for l in lines:
-    snps.append(l.strip('\n'))
+snps = map(lambda x: x.strip('\n'), lines)
 combinegenos(names, snps)
 
