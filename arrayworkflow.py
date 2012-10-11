@@ -40,9 +40,8 @@ class genotypes:
 		self.ln = len(l.split(','))
 		self.genofile.seek(0)
 
-def getsnpgenos(filestruc, chosenSNPs, genos = {}):
+def getsnpgenos(genos, filestruc, chosenSNPs):
 	lines = filestruc.genofile.readlines()
-	genos = {}
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
 	notingeno = set(filter(lambda x: x not in inboth, chosenSNPs))
@@ -59,11 +58,12 @@ def getsnpgenos(filestruc, chosenSNPs, genos = {}):
 				genos[snp] = genos[snp] + '0,' * filestruc.ln
 			except KeyError:
 				genos[snp] = '0,' * filestruc.ln
+	return genos
 			
 def combinegenos(names, chosenSNPs):			
 	genos = {}
 	files = map(lambda x: genotypes(x), names)
-	map(lambda x: getsnpgenos(x, chosenSNPs, genos), files)
+	map(lambda x: getsnpgenos(x, y, chosenSNPs), [genos,files])
 	file = open('tempdic','w')
 	simplejson.dump(genos, file)
 	file.close()
