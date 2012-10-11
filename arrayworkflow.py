@@ -85,9 +85,7 @@ def flatfilevcf(vcffile, outputname):
 	while(lines != []):
 		for l in lines:
 			if l.startswith('#CHROM'):
-				genomenames = l.strip('\n').split('\t')
-				#g = [',' if x == '\t' else x for x in genomenames[9:]]
-				g = reduce(lambda x,y: x+','+y, ['']+genomenames[9:])
+				g = reduce(lambda x,y: x+','+y, l.strip('\n').split('\t')[9:])
 				outputfile.write('\t'+str(g) +'\n')
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
@@ -113,10 +111,9 @@ vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000
 def initgenofiles():
 	map(lambda x,y: flatfilevcf(x, y), vcffiles, names)
 
-file = open('./omniexpresssnps')
-lines = file.readlines()
+file = open('./omni25Msnpssorted')
+snps = simplejson.load(file)
 file.close()
-snps = map(lambda x: x.strip('\n'), lines)
 print len(snps)
 #combinegenos(names, snps)
 
