@@ -63,7 +63,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 def combinegenos(names, chosenSNPs):			
 	genos = {}
 	files = map(lambda x: genotypes(x), names)
-	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files])
+	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	file = open('tempdic','w')
 	simplejson.dump(genos, file)
 	file.close()
