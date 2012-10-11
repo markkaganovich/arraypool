@@ -16,8 +16,6 @@ def getarraysnps():
 	for l in lines:
 		t = l.split('\t')
 		snplist.append('chr'+t[chri]+'pos'+t[posi])
-	
-
 	#sortedsnpschr = sorted(snplist, key=lambda snp: snp.split('pos')[0].split('chr')[1])
 	sortedsnps = []
 	for c in range(1,23):
@@ -30,7 +28,6 @@ def getarraysnps():
 	output = open('omni25Msnpssorted','w')
 	simplejson.dump(sortedsnps, output)
 
-	
 ### get genotype
 class genotypes:
     def __init__(self, name):
@@ -63,16 +60,15 @@ def getsnpgenos(filestruc, chosenSNPs, genos = {}):
 			except KeyError:
 				genos[snp] = '0,' * filestruc.ln
 			
-def combinegenos(names):			
+def combinegenos(names, chosenSNPs):			
 	genos = {}
 	files = map(lambda x: genotypes(x), names)
 	map(lambda x: getsnpgenos(x, chosenSNPs, genos), files)
 	file = open('tempdic','w')
 	simplejson.dump(genos, file)
 	file.close()
-	
-	
-#modifyied to the 19 version
+		
+#modified to the 19 version
 def flatfilevcf(vcffile, outputname):
 	file = open(vcffile)
 	outputfile = open(outputname+'Geno', 'w')
@@ -108,3 +104,12 @@ names = ['../genotypes/CEUlowcov','../genotypes/CHBJPTlowcov', '../genotypes/YRI
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 map(lambda x,y: flatfilevcf(x, y), vcffiles, names)
+
+file = open('./omniexpresssnps')
+lines = file.readlines()
+file.close()
+snps = []
+for l in lines:
+    snps.append(l.strip('\n'))
+combinegenos(names, snps)
+
