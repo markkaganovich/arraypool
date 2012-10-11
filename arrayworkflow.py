@@ -94,15 +94,15 @@ def flatfilevcf(vcffile, outputname):
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
 				f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
-		if f != []:
-			pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
-			ref[pos] = tokens[3]
-			alt[pos] = tokens[4]
-			m=pos +'\t'
-			for t in tokens[9:]:
-				m = m + str(int(t[0]) + int(t[2])) + ','
-			outputfile.write(m.strip(',')+'\n')
-	lines = file.readlines(1000000)
+			if f != []:
+				pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
+				ref[pos] = tokens[3]
+				alt[pos] = tokens[4]
+				m=pos +'\t'
+				for t in tokens[9:]:
+					m = m + str(int(t[0]) + int(t[2])) + ','
+				outputfile.write(m.strip(',')+'\n')
+		lines = file.readlines(1000000)
 	simplejson.dump(ref, outputref)
 	simplejson.dump(alt, outputalt)
 	
