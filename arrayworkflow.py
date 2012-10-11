@@ -119,5 +119,5 @@ file = open('./omniexpresssnps')
 lines = file.readlines()
 file.close()
 snps = map(lambda x: x.strip('\n'), lines)
-combinegenos(names, snps)
+#combinegenos(names, snps)
 
