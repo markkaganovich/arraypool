@@ -102,7 +102,7 @@ def flatfilevcf(vcffile, outputname):
 			for t in tokens[9:]:
 				m = m + str(int(t[0]) + int(t[2])) + ','
 			outputfile.write(m.strip(',')+'\n')
-		lines = file.readlines(1000000)
+	lines = file.readlines(1000000)
 	simplejson.dump(ref, outputref)
 	simplejson.dump(alt, outputalt)
 	
