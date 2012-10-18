@@ -63,6 +63,9 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 			genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
 		except KeyError:
 			genos[s] = '0,' * filestruc.ln
+	file = open(filestruc.name+'tempgenos','w')
+	simplejson.dump(genos, file)
+	file.close()		
 	return genos
 			
 def combinegenos(names, chosenSNPs):			
