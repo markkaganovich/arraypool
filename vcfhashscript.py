@@ -14,6 +14,7 @@ file = open('./omni19snps')
 snps = simplejson.load(file)
 file.close()
 '''
+arrayworkflow.flatfilevcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf', '../genotypes/CEUlowcov')
 file = open('./omniexpresssnps')
 lines = file.readlines()
 file.close()

@@ -25,4 +25,5 @@ topten.lcls[index] = as.data.frame(lcls)
 sim = sim +1
 }
 
-sink('./simulationoutput')
+#write(topten.score, './simulationoutputScore')
+#write(topten.lcls, './simulationoutputLcls')

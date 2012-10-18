@@ -116,5 +116,5 @@ line = file.readline()
 snps = map(lambda x: x, line)
 file.close()
 print len(snps)
-#combinegenos(names, snps)
+combinegenos(names, snps)
 
