@@ -1,4 +1,13 @@
 import simplejson
+from pygr import worldbase
+
+
+def checkRef(genos, Ref, Alt):
+	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = TRUE)
+	for snppos in Ref.keys():
+		t = snppos.split('pos')
+		hg19snp = hg19[t[0]][t[1]]
+	
 
 
 #modified to the 19 version
