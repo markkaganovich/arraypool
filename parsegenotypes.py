@@ -2,8 +2,10 @@ import simplejson
 from pygr import worldbase
 
 
-def checkRef(Ref, Alt):
+def checkRef(Reffile, Altfile):
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
+	Ref = simplejson.load(open(Reffile))
+	Alt = simplejson.load(open(Altfile))
 	Refcorrected = {}
 	Altcorrected = {}
 	flip = []
