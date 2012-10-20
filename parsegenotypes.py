@@ -15,6 +15,7 @@ def checkRef(Reffile, Altfile):
 		if hg19snp == Ref[snppos]:
 			Refcorrected[snppos] = Ref[snppos]
 			Altcorrected[snppos] = Alt[snppos]
+			print "working: Ref \n"
 		elif hg19snp == Alt[snppos]:
 			Refcorrected[snppos] = Alt[snppos]
 			Altcorrected[snppos] = Ref[snppos]
