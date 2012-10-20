@@ -13,7 +13,7 @@ def checkRef(Ref, Alt):
 		if hg19snp == Ref[snppos]:
 			Refcorrected[snppos] = Ref[snppos]
 			Altcorrected[snppos] = Alt[snppos]
-		elif hg19snp = Alt[snppos]:
+		elif hg19snp == Alt[snppos]:
 			Refcorrected[snppos] = Alt[snppos]
 			Altcorrected[snppos] = Ref[snppos]
 			flip.append(snppos)
