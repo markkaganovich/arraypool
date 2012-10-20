@@ -2,12 +2,26 @@ import simplejson
 from pygr import worldbase
 
 
-def checkRef(genos, Ref, Alt):
+def checkRef(Ref, Alt):
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = TRUE)
+	Refcorrected = {}
+	Altcorrected = {}
+	flip = []
 	for snppos in Ref.keys():
 		t = snppos.split('pos')
-		hg19snp = hg19[t[0]][t[1]]
-	
+		hg19snp = str(hg19[t[0]][int(t[1])-1])
+		if hg19snp == Ref[snppos]:
+			Refcorrected[snppos] = Ref[snppos]
+			Altcorrected[snppos] = Alt[snppos]
+		elif hg19snp = Alt[snppos]:
+			Refcorrected[snppos] = Alt[snppos]
+			Altcorrected[snppos] = Ref[snppos]
+			flip.append(snppos)
+		else:
+			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
+	return [Refcorrected, Altcorrected, flip]
+			
+a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
 
 
 #modified to the 19 version
