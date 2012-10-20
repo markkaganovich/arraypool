@@ -21,6 +21,8 @@ def checkRef(Reffile, Altfile):
 			flip.append(snppos)
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
+			print snppos
+			print hg19snp
 	return [Refcorrected, Altcorrected, flip]
 			
 a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
