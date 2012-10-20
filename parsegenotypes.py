@@ -3,7 +3,7 @@ from pygr import worldbase
 
 
 def checkRef(Ref, Alt):
-	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = TRUE)
+	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
 	Refcorrected = {}
 	Altcorrected = {}
 	flip = []
