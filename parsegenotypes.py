@@ -9,21 +9,19 @@ def checkRef(Reffile, Altfile):
 	Refcorrected = {}
 	Altcorrected = {}
 	flip = []
-	for snppos in Ref.keys():
+	keys = Ref.keys()
+	for snppos in keys:
 		t = snppos.split('pos')
-		hg19snp = str(hg19[t[0]][int(t[1])-1])
-		if hg19snp == Ref[snppos]:
+		hg19snp = str(hg19[t[0]][int(t[1])-1]).upper()
+		if hg19snp == Ref[snppos].upper():
 			Refcorrected[snppos] = Ref[snppos]
 			Altcorrected[snppos] = Alt[snppos]
-			print "working: Ref \n"
-		elif hg19snp == Alt[snppos]:
+		elif hg19snp == Alt[snppos].upper():
 			Refcorrected[snppos] = Alt[snppos]
 			Altcorrected[snppos] = Ref[snppos]
 			flip.append(snppos)
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
-			print snppos
-			print hg19snp
 	return [Refcorrected, Altcorrected, flip]
 			
 a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
