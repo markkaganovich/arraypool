@@ -2,7 +2,9 @@ import simplejson
 from pygr import worldbase
 
 
-def checkRef(Reffile, Altfile):
+def checkRef(name):
+	Reffile = name +'Ref'
+	Altfile = name + 'Alt'
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
 	Ref = simplejson.load(open(Reffile))
 	Alt = simplejson.load(open(Altfile))
@@ -28,6 +30,12 @@ def checkRef(Reffile, Altfile):
 	file.close()
 	file = open(Altfile+'flipped','w')
 	simplejson.dump(Alt, file)
+	file.close()
+	file = open(name+'flips','w')
+	simplejson.dump(flip, file)
+	file.close()
+	file = open(nam+'errors', 'w')
+	simplejson.dump(errors, file)
 	file.close()
 	return [flip, errors]
 	
@@ -62,6 +70,8 @@ def flipGeno(genofile, flip):
 			
 #a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
 #flipGeno('../genotypes/CEUlowcovGeno', a[0])
+names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']		
+
 
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
