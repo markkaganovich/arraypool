@@ -33,7 +33,7 @@ def checkRef(Reffile, Altfile):
 	
 def test():
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
-	for i in 1:1000000:
+	for i in range(1:1000000):
 		b = str(hg19['chr1'][i])
 	
 	
