@@ -1,13 +1,15 @@
 import simplejson
 from pygr import worldbase
 
-
 def checkRef(name):
 	Reffile = name +'Ref'
 	Altfile = name + 'Alt'
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
+	print "Loaded hg19"
 	Ref = simplejson.load(open(Reffile))
+	print "Loaded Ref"
 	Alt = simplejson.load(open(Altfile))
+	print "Loaded Alt"
 	flip = []
 	errors = []
 	keys = Ref.keys()
@@ -68,7 +70,7 @@ def flipGeno(genofile, flip):
 		else:
 			newgeno.write(l)
 			
-#a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
+#a = checkRef('../genotypes/CEUlowcov')
 #flipGeno('../genotypes/CEUlowcovGeno', a[0])
 names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']		
 
