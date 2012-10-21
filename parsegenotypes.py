@@ -31,6 +31,13 @@ def checkRef(Reffile, Altfile):
 	file.close()
 	return [flip, errors]
 	
+def test():
+	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
+	for i in 1:1000000:
+		b = str(hg19['chr1'][i])
+	
+	
+	
 def flipGeno(genofile, flip):
 	lines = open(genofile).readlines()
 	newgeno = open(genofile+'flipped', 'w')
@@ -43,7 +50,7 @@ def flipGeno(genofile, flip):
 			map(lambda x: newl + str(x) + ',')
 			newgeno.write(newl.strip('\n'))
 		else:
-			newgono.write(l)
+			newgeno.write(l)
 			
 a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
 flipGeno('../genotypes/CEUlowcovGeno', a[0])
