@@ -47,7 +47,7 @@ def flipGeno(genofile, flip):
 		if t[0] in flip:
 			newg = map(lambda x: 2-int(x), t[1].split(','))
 			newl = t[0] +'\t' 
-			map(lambda x: newl + str(x) + ',')
+			newl = reduce(lambda x,y: x+str(y) + ',', [newl].append(newg))
 			newgeno.write(newl.strip('\n'))
 		else:
 			newgeno.write(l)
