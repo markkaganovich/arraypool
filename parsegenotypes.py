@@ -35,6 +35,14 @@ def test():
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
 	for i in range(1,1000000):
 		b = str(hg19['chr1'][i])
+		
+def testRef():
+	Reffile = '../genotypes/CEUlowcovRef'
+	Ref = simplejson.load(open(Reffile))
+	keys = Ref.keys()
+	for snppos in keys:
+		continue
+	
 	
 	
 	
