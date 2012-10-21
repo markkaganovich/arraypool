@@ -13,7 +13,7 @@ def checkRef(Reffile, Altfile):
 		t = snppos.split('pos')
 		hg19snp = str(hg19[t[0]][int(t[1])-1]).upper()
 		refsnp = Ref[snppos].upper()
-		altnsp = Alt[snppos].upper()
+		altsnp = Alt[snppos].upper()
 		if hg19snp == refsnp:
 			continue
 		elif hg19snp == altsnp:
