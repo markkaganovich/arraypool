@@ -52,8 +52,8 @@ def flipGeno(genofile, flip):
 		else:
 			newgeno.write(l)
 			
-a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
-flipGeno('../genotypes/CEUlowcovGeno', a[0])
+#a = checkRef('../genotypes/CEUlowcovRef', '../genotypes/CEUlowcovAlt')
+#flipGeno('../genotypes/CEUlowcovGeno', a[0])
 
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
