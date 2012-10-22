@@ -36,7 +36,7 @@ def checkRef(name):
 	file = open(name+'flips','w')
 	simplejson.dump(flip, file)
 	file.close()
-	file = open(nam+'errors', 'w')
+	file = open(name+'errors', 'w')
 	simplejson.dump(errors, file)
 	file.close()
 	return [flip, errors]
