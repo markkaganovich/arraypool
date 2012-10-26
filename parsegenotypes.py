@@ -1,6 +1,34 @@
 import simplejson
 from pygr import worldbase
+import hashes
 
+def filterSNPs(name):
+	Reffile = name +'Ref'
+	Altfile = name + 'Alt'
+	Ref = simplejson.load(open(Reffile))
+	print "Loaded Ref"
+	print len(Ref)
+	Alt = simplejson.load(open(Altfile))
+	print "Loaded Alt"
+	print len(Alt)
+	keys = Ref.keys()
+	complsnps = []
+	for snppos in keys:
+		if hashes.compl[Ref[snppos].upper()] == Alt[snppos].upper():
+			complsnps.append(snppos)
+		del Ref[snppos]
+		del Alt[snppos]
+	print len(Ref)
+	print len(Alt)
+	file = open(Reffile,'w')
+	simplejson.dump(Ref, file)
+	file.close()
+	file = open(Altfile,'w')
+	simplejson.dump(Alt, file)
+	file.close()
+	return complsnps
+
+	
 def checkRef(name):
 	Reffile = name +'Ref'
 	Altfile = name + 'Alt'
@@ -52,10 +80,7 @@ def testRef():
 	keys = Ref.keys()
 	for snppos in keys:
 		continue
-	
-	
-	
-	
+		
 def flipGeno(genofile, flip):
 	lines = open(genofile).readlines()
 	newgeno = open(genofile+'flipped', 'w')
