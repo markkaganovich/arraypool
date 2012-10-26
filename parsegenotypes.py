@@ -20,10 +20,10 @@ def filterSNPs(name):
 			del Alt[snppos]
 	print len(Ref)
 	print len(Alt)
-	file = open(Reffile,'w')
+	file = open(Reffile+'T','w')
 	simplejson.dump(Ref, file)
 	file.close()
-	file = open(Altfile,'w')
+	file = open(Altfile+'T','w')
 	simplejson.dump(Alt, file)
 	file.close()
 	return complsnps
