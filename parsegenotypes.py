@@ -16,8 +16,8 @@ def filterSNPs(name):
 	for snppos in keys:
 		if hashes.compl[Ref[snppos].upper()] == Alt[snppos].upper():
 			complsnps.append(snppos)
-		del Ref[snppos]
-		del Alt[snppos]
+			del Ref[snppos]
+			del Alt[snppos]
 	print len(Ref)
 	print len(Alt)
 	file = open(Reffile,'w')

@@ -1,4 +1,5 @@
 import simplejson
+import parsegenotypes
 
 def getarraysnps():
 	report = 'Array25M1'
@@ -30,11 +31,10 @@ def getarraysnps():
 
 ### get genotype
 class genotypes:
-    def __init__(self, name):
+	def __init__(self, name):
 		self.name = name
 		self.genofile = open('./' + name + 'Geno')
 		self.__genolen__()
-		
 	def __genolen__(self):
 		l = self.genofile.readline()
 		self.ln = len(l.split(','))
@@ -81,8 +81,15 @@ names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTl
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 
-def initgenofiles():
-	map(lambda x,y: parse1KGvcf(x, y), vcffiles, names)
+""" 
+parse genotype files and flip them around according to hg19
+
+parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
+c = parsegenotypes.filterSNPs(names[i])
+f = parsegenotypes.checkRef(names[i])
+parsegenotypes.flipGeno(names[i]+'Geno', f[0])
+
+""" 
 
 file = open('./omni25Msnpssorted')
 snps = simplejson.load(file)
