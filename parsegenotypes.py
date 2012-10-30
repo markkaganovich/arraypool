@@ -1,31 +1,36 @@
 import simplejson
 from pygr import worldbase
-import hashes
+import globals
 
 def filterSNPs(name):
-	Reffile = name +'Ref'
-	Altfile = name + 'Alt'
-	Ref = simplejson.load(open(Reffile))
+	reffile = name +'Ref'
+	altfile = name + 'Alt'
+	[ref, alt] = map(lambda x: globals.json(x, ''), [reffile, altfile])
 	print "Loaded Ref"
-	print len(Ref)
-	Alt = simplejson.load(open(Altfile))
+	print len(ref)
 	print "Loaded Alt"
-	print len(Alt)
-	keys = Ref.keys()
+	print len(alt)
+	keys = ref.keys()
 	complsnps = []
 	for snppos in keys:
-		if hashes.compl[Ref[snppos].upper()] == Alt[snppos].upper():
+		if globals.compl[ref[snppos].upper()] == alt[snppos].upper():
 			complsnps.append(snppos)
-			del Ref[snppos]
-			del Alt[snppos]
-	print len(Ref)
-	print len(Alt)
-	file = open(Reffile+'T','w')
-	simplejson.dump(Ref, file)
-	file.close()
-	file = open(Altfile+'T','w')
-	simplejson.dump(Alt, file)
-	file.close()
+			del ref[snppos]
+			del alt[snppos]
+	print len(ref)
+	print len(alt)
+	map(lambda x: globals.dump(x, y+'T'), [ref,alt], [reffile, altfile])
+	
+#	for fn,d in [Reffile, Altfile],[Ref, Alt]:
+#		with open(fn+'T','w') as f:
+#			simplejson.dump(d, f)
+			
+	#file = open(Reffile+'T','w')
+	#simplejson.dump(Ref, file)
+	#file.close()
+	#file = open(Altfile+'T','w')
+	#simplejson.dump(Alt, file)
+	#file.close()
 	return complsnps
 
 	
@@ -68,18 +73,6 @@ def checkRef(name):
 	simplejson.dump(errors, file)
 	file.close()
 	return [flip, errors]
-	
-def test():
-	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
-	for i in range(1,1000000):
-		b = str(hg19['chr1'][i])
-		
-def testRef():
-	Reffile = '../genotypes/CEUlowcovRef'
-	Ref = simplejson.load(open(Reffile))
-	keys = Ref.keys()
-	for snppos in keys:
-		continue
 		
 def flipGeno(genofile, flip):
 	lines = open(genofile).readlines()
@@ -128,3 +121,18 @@ def parse1KGvcf(vcffile, outputname):
 		lines = file.readlines(1000000)
 	simplejson.dump(ref, outputref)
 	simplejson.dump(alt, outputalt)
+	
+	
+	
+# Tests
+def test():
+	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
+	for i in range(1,1000000):
+		b = str(hg19['chr1'][i])
+		
+def testRef():
+	Reffile = '../genotypes/CEUlowcovRef'
+	Ref = simplejson.load(open(Reffile))
+	keys = Ref.keys()
+	for snppos in keys:
+		continue
