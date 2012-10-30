@@ -15,6 +15,10 @@ def dump(data, filename, datasource = ''):
     file = open(datasource + filename,'w')
     simplejson.dump(data, file)
     file.close()
+
+compl = {'G' :'C', 'C' : 'G', 'A' : 'T', 'T':'A'}
+
+
 '''
 def addfeatures(classname, feature, hash, fun, args = None, data = None):
     methods = getattr(classname, hash)
