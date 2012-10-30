@@ -81,9 +81,9 @@ vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000
 for i in range(0, len(names)):
 	parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
 	b = parsegenotypes.filterSNPs(names[i])
-	print "%r SNPs filtered out" % len(b)
+	print "{0} SNPs filtered out".format(len(b))
 	c = parsegenotypes.checkRef(names[i])
-	print "%r errors and %r flipped" % len(c[1]) % len(c[0])
+	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
 	parsegenotypes.flipGeno(names[i]+'Geno', c[0])
 
 
@@ -93,7 +93,7 @@ print len(snps)
 combinegenos(names, snps)
 """
 #b = parsegenotypes.filterSNPs('../genotypes/hapmap')
-#print "{} SNPs filtered out".format(len(b))
+#print "{0} SNPs filtered out".format(len(b))
 c = parsegenotypes.checkRef('../genotypes/hapmap')
 print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
 parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
