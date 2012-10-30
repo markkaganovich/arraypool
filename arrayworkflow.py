@@ -92,9 +92,9 @@ snps = globals.json('omni25Msnpssorted')
 print len(snps)
 combinegenos(names, snps)
 """
-b = parsegenotypes.filterSNPs('hapmap')
+b = parsegenotypes.filterSNPs('../genotypes/hapmap')
 print "%r SNPs filtered out" % len(b)
-c = parsegenotypes.checkRef('hapmap')
+c = parsegenotypes.checkRef('../genotypes/hapmap')
 print "%r errors and %r flipped" % len(c[1]) % len(c[0])
-parsegenotypes.flipGeno('hapmapgenotype', c[0])
+parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
 
