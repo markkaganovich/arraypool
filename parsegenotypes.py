@@ -1,4 +1,3 @@
-import simplejson
 from pygr import worldbase
 import globals
 
