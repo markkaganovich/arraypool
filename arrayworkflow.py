@@ -30,7 +30,7 @@ def getarraysnps():
 	simplejson.dump(sortedsnps, output)
 
 ### get genotype
-class genotypes:
+class Genotypes:
 	def __init__(self, name):
 		self.name = name
 		self.genofile = open('./' + name + 'Geno')
@@ -70,7 +70,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 			
 def combinegenos(names, chosenSNPs):			
 	genos = {}
-	files = map(lambda x: genotypes(x), names)
+	files = map(lambda x: Genotypes(x), names)
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	file = open('Genos','w')
 	simplejson.dump(genos, file)

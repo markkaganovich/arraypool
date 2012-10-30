@@ -23,43 +23,35 @@ def filterSNPs(name):
 
 	
 def checkRef(name):
-	Reffile = name +'Ref'
-	Altfile = name + 'Alt'
+	reffile = name +'RefT'
+	altfile = name + 'AltT'
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
 	print "Loaded hg19"
-	Ref = simplejson.load(open(Reffile))
+	ref = globals.json(reffile)
 	print "Loaded Ref"
-	Alt = simplejson.load(open(Altfile))
+	alt = globals.json(altfile)
 	print "Loaded Alt"
 	flip = []
 	errors = []
-	keys = Ref.keys()
+	keys = ref.keys()
 	for snppos in keys:
 		t = snppos.split('pos')
 		hg19snp = str(hg19[t[0]][int(t[1])-1]).upper()
-		refsnp = Ref[snppos].upper()
-		altsnp = Alt[snppos].upper()
+		refsnp = ref[snppos].upper()
+		altsnp = alt[snppos].upper()
 		if hg19snp == refsnp:
 			continue
 		elif hg19snp == altsnp:
-			Ref[snppos] = hg19snp
-			Alt[snppos] = Ref[snppos]
+			ref[snppos] = hg19snp
+			alt[snppos] = ref[snppos]
 			flip.append(snppos)
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
 			errors.append(snppos)
-	file = open(Reffile+'flipped','w')
-	simplejson.dump(Ref, file)
-	file.close()
-	file = open(Altfile+'flipped','w')
-	simplejson.dump(Alt, file)
-	file.close()
-	file = open(name+'flips','w')
-	simplejson.dump(flip, file)
-	file.close()
-	file = open(name+'errors', 'w')
-	simplejson.dump(errors, file)
-	file.close()
+	globals.dump(ref, reffile+'flipped')
+	globals.dump(alt, altfile+'flipped')
+	globals.dump(flip, name+'flips')
+	globals.dump(errors, name+'errors')
 	return [flip, errors]
 		
 def flipGeno(genofile, flip):
