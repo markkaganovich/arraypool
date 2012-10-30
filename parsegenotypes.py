@@ -5,9 +5,7 @@ def filterSNPs(name):
 	reffile = name +'Ref'
 	altfile = name + 'Alt'
 	[ref, alt] = map(lambda x: globals.json(x, ''), [reffile, altfile])
-	print "Loaded Ref, Alt"
-	print len(ref)
-	print len(alt)
+	print "Loaded Ref %r, Alt %r " %len(ref) %len(alt)
 	keys = ref.keys()
 	complsnps = []
 	for snppos in keys:
@@ -17,7 +15,8 @@ def filterSNPs(name):
 			del alt[snppos]
 	print len(ref)
 	print len(alt)
-	map(lambda x,y: globals.dump(x, y+'T'), [ref,alt], [reffile, altfile])
+	globals.dump(ref, reffile+'T')
+	globals.dump(alt, altfile+'T')
 	return complsnps
 
 	
@@ -103,15 +102,6 @@ def parse1KGvcf(vcffile, outputname):
 	globals.dump(ref, outputname+'Ref')
 	globals.dump(alt, outputname+'Alt')
 	
-# Tests
-def test():
-	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
-	for i in range(1,1000000):
-		b = str(hg19['chr1'][i])
-		
-def testRef():
-	Reffile = '../genotypes/CEUlowcovRef'
-	Ref = simplejson.load(open(Reffile))
-	keys = Ref.keys()
-	for snppos in keys:
-		continue
+def parsehapmap():
+	execfile('parsehapmapgenotypes.py')
+	

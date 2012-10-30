@@ -1,21 +1,22 @@
-import simplejson
+import os
 import globals
 
 def parsehapmapchrom(chrom):
 	""" inputs: rsid hash (hash of snp positions and rsIDs)
 				hapmapchrN downloaded from hapmap3 site
+				people: list of cell line IDs that we are looking for
 	"""
+	
 	hapmapfile = '../genotypes/hapmapchr'+str(chrom)
-	rshash = globals.json('rsid2poshash')
-	
+	if 'rsid2poshash' not in os.listdir('./'):
+		makerhash()
+	else:
+		rshash = globals.json('rsid2poshash')	
 	people = ['NA19140','NA19154','NA19173','NA19203','NA19206','NA19211','NA19222']
-	
+		
 	with open(hapmapfile) as f:
-		lines = f.readlines()
-	
+		lines = f.readlines()	
 	header = lines[0].split(' ')
-	
-	out = open(hapmapfile+'genotype','w')
 	
 	rsidi = header.index('rs#')
 	snpi = header.index('alleles')
@@ -26,6 +27,7 @@ def parsehapmapchrom(chrom):
 	
 	refhash = {}
 	althash = {}
+	out = open(hapmapfile+'genotype','w')
 	
 	for l in lines[1:]:
 		t = l.split(' ')
@@ -51,18 +53,18 @@ def parsehapmapchrom(chrom):
 	return [refhash, althash]
 
 def makerhash():
-	rsid2pos = {}			
+	rsid2pos = {}
+	hapmaprsidfile = 'hapmap_rsid_hash_lines'
+	assert hapmaprsidfile in os.listdir('./') "Need this file %r" % hapmaprsidfile			
 	file = open('./hapmap_rsid_hash_lines')
 	with open('./hapmap_rsid_hash_lines') as f:
 		rlines = f.readlines()
-
 	for r in rlines:
 		t = r.split('\t')
-		rsid2pos[t[0]] = t[1].strip('\n')
-	
+		rsid2pos[t[0]] = t[1].strip('\n')	
 	globals.dump(rsid2pos, 'rsid2poshash')
+
 	
-makerhash()
 ref = {}
 alt = {}	
 genotype = open('hapmapGeno','w')

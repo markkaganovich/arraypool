@@ -77,15 +77,24 @@ vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 
 """ 
-parse genotype files and flip them around according to hg19
+#parse genotype files and flip them around according to hg19
+for i in range(0, len(names)):
+	parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
+	b = parsegenotypes.filterSNPs(names[i])
+	print "%r SNPs filtered out" % len(b)
+	c = parsegenotypes.checkRef(names[i])
+	print "%r errors and %r flipped" % len(c[1]) % len(c[0])
+	parsegenotypes.flipGeno(names[i]+'Geno', c[0])
 
-parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
-c = parsegenotypes.filterSNPs(names[i])
-f = parsegenotypes.checkRef(names[i])
-parsegenotypes.flipGeno(names[i]+'Geno', f[0])
 
 
 snps = globals.json('omni25Msnpssorted')
 print len(snps)
 combinegenos(names, snps)
 """
+b = parsegenotypes.filterSNPs('hapmap')
+print "%r SNPs filtered out" % len(b)
+c = parsegenotypes.checkRef('hapmap')
+print "%r errors and %r flipped" % len(c[1]) % len(c[0])
+parsegenotypes.flipGeno('hapmapgenotype', c[0])
+
