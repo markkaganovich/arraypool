@@ -5,7 +5,7 @@ def filterSNPs(name):
 	reffile = name +'Ref'
 	altfile = name + 'Alt'
 	[ref, alt] = map(lambda x: globals.json(x, ''), [reffile, altfile])
-	print "Loaded Ref {}, Alt {}".format(len(ref),len(alt))
+	print "Loaded Ref {0}, Alt {1}".format(len(ref),len(alt))
 	keys = ref.keys()
 	complsnps = []
 	for snppos in keys:
