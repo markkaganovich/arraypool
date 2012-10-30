@@ -9,7 +9,7 @@ def json(filename, datasource = ''):
     file.close()
     return result
 
-def dump(data, filename, datasource = ''):
+def dump(data, filename, datasource = './'):
     if filename in os.listdir(datasource): 
         os.rename(datasource +filename, datasource +'temp/' +filename+'2')
     file = open(datasource + filename,'w')
