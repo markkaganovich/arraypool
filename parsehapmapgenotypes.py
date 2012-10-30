@@ -1,4 +1,5 @@
 import simplejson
+import globals
 
 def parsehapmapchrom(chrom, rshash):
 	people = ['NA19140','NA19154','NA19173','NA19203','NA19206','NA19211','NA19222']
