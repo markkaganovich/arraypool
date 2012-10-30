@@ -6,9 +6,8 @@ def filterSNPs(name):
 	reffile = name +'Ref'
 	altfile = name + 'Alt'
 	[ref, alt] = map(lambda x: globals.json(x, ''), [reffile, altfile])
-	print "Loaded Ref"
+	print "Loaded Ref, Alt"
 	print len(ref)
-	print "Loaded Alt"
 	print len(alt)
 	keys = ref.keys()
 	complsnps = []
@@ -19,18 +18,7 @@ def filterSNPs(name):
 			del alt[snppos]
 	print len(ref)
 	print len(alt)
-	map(lambda x: globals.dump(x, y+'T'), [ref,alt], [reffile, altfile])
-	
-#	for fn,d in [Reffile, Altfile],[Ref, Alt]:
-#		with open(fn+'T','w') as f:
-#			simplejson.dump(d, f)
-			
-	#file = open(Reffile+'T','w')
-	#simplejson.dump(Ref, file)
-	#file.close()
-	#file = open(Altfile+'T','w')
-	#simplejson.dump(Alt, file)
-	#file.close()
+	map(lambda x,y: globals.dump(x, y+'T'), [ref,alt], [reffile, altfile])
 	return complsnps
 
 	
