@@ -1,5 +1,6 @@
 import simplejson
 import parsegenotypes
+import globals
 
 def getarraysnps():
 	report = 'Array25M1'
@@ -25,9 +26,7 @@ def getarraysnps():
 			if str(c) == s.split('pos')[0].split('chr')[1]:
 				temp.append(s)
 		sortedsnps.extend(sorted(temp, key=lambda snp: int(snp.split('pos')[1])))
-			
-	output = open('omni25Msnpssorted','w')
-	simplejson.dump(sortedsnps, output)
+	globals.dump(sortedsnps, 'omni25Msnpssorted')
 
 ### get genotype
 class Genotypes:
@@ -49,7 +48,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 		genos['lines'] = genos['lines'] +lines[0].split('\t')[1].split(',')
 	except KeyError:
 		genos['lines'] = lines[0].split('\t')[1].split(',')
-	print(len(lines))
+	print("Number of Lines in Genotype:" + str(len(lines)))
 	for l in lines[1:]:
 		t = l.split('\t')
 		snp = t[0]
@@ -63,18 +62,14 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 			genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
 		except KeyError:
 			genos[s] = '0,' * filestruc.ln
-	file = open(filestruc.name+'tempgenos','w')
-	simplejson.dump(genos, file)
-	file.close()		
+	globals.dump(genos, 'tempgenos')				
 	return genos
 			
 def combinegenos(names, chosenSNPs):			
 	genos = {}
 	files = map(lambda x: Genotypes(x), names)
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
-	file = open('Genos','w')
-	simplejson.dump(genos, file)
-	file.close()
+	globals.dump(genos, 'Genos')
 		
 names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']		
 
@@ -89,11 +84,8 @@ c = parsegenotypes.filterSNPs(names[i])
 f = parsegenotypes.checkRef(names[i])
 parsegenotypes.flipGeno(names[i]+'Geno', f[0])
 
-""" 
 
-file = open('./omni25Msnpssorted')
-snps = simplejson.load(file)
-file.close()
+snps = globals.json('omni25Msnpssorted')
 print len(snps)
 combinegenos(names, snps)
-
+"""

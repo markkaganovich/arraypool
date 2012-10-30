@@ -70,8 +70,12 @@ def flipGeno(genofile, flip):
 			
 #a = checkRef('../genotypes/CEUlowcov')
 #flipGeno('../genotypes/CEUlowcovGeno', a[0])
-names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']		
-
+names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']	
+"""
+for n in names:
+	flips = globals.json(n+'flips')
+	flipGeno(n, flips)	
+"""
 
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
@@ -80,8 +84,6 @@ def parse1KGvcf(vcffile, outputname):
 	ref = {}
 	alt = {}
 	lines = file.readlines(1000000)
-	outputref = open(outputname + 'Ref','w')
-	outputalt = open(outputname + 'Alt', 'w')
 	while(lines != []):
 		for l in lines:
 			if l.startswith('#CHROM'):
@@ -99,10 +101,8 @@ def parse1KGvcf(vcffile, outputname):
 						m = m + str(int(t[0]) + int(t[2])) + ','
 					outputfile.write(m.strip(',')+'\n')
 		lines = file.readlines(1000000)
-	simplejson.dump(ref, outputref)
-	simplejson.dump(alt, outputalt)
-	
-	
+	globals.dump(ref, outputname+'Ref')
+	globals.dump(alt, outputname+'Alt')
 	
 # Tests
 def test():
