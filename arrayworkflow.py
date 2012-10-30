@@ -93,8 +93,8 @@ print len(snps)
 combinegenos(names, snps)
 """
 b = parsegenotypes.filterSNPs('../genotypes/hapmap')
-print "%r SNPs filtered out" % len(b)
+print "{} SNPs filtered out".format(len(b))
 c = parsegenotypes.checkRef('../genotypes/hapmap')
-print "%r errors and %r flipped" % len(c[1]) % len(c[0])
+print "{} errors and {} flipped".format(len(c[1]),len(c[0]))
 parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
 
