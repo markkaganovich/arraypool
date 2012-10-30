@@ -5,7 +5,7 @@ def filterSNPs(name):
 	reffile = name +'Ref'
 	altfile = name + 'Alt'
 	[ref, alt] = map(lambda x: globals.json(x, ''), [reffile, altfile])
-	print "Loaded Ref %r, Alt %r " %len(ref) %len(alt)
+	print "Loaded Ref {}, Alt {}".format(len(ref),len(alt))
 	keys = ref.keys()
 	complsnps = []
 	for snppos in keys:
@@ -74,6 +74,7 @@ for n in names:
 	flips = globals.json(n+'flips')
 	flipGeno(n, flips)	
 """
+
 
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
