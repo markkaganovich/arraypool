@@ -72,7 +72,7 @@ def combinegenos(names, chosenSNPs):
 	globals.dump(genos, 'Genos')
 		
 homedir = '/srv/gs1/projects/snyder/mark'
-names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',hoemdir+'/genotypes/CHBJPTlowcov',homedir+'/genotypes/YRItrio', homedir+'/genotypes/CEUtrio']	
+names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',homedir+'/genotypes/CHBJPTlowcov',homedir+'/genotypes/YRItrio', homedir+'/genotypes/CEUtrio']	
 	
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
