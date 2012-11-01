@@ -120,7 +120,7 @@ def testRef():
 	print "loaded ref"
 	alt = simplejson.load(open(altfile))
 	print "all loaded"
-	keys = Ref.keys()
+	keys = ref.keys()
 	for snppos in keys:
 		continue
 	
