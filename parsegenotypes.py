@@ -33,6 +33,7 @@ def checkRef(name):
 	errors = []
 	keys = ref.keys()
 	for snppos in keys:
+		print snppos
 		t = snppos.split('pos')
 		hg19snp = str(hg19[t[0]][int(t[1])-1]).upper()
 		refsnp = ref[snppos].upper()
@@ -40,8 +41,8 @@ def checkRef(name):
 		if hg19snp == refsnp:
 			continue
 		elif hg19snp == altsnp:
-			ref[snppos] = hg19snp
-			alt[snppos] = ref[snppos]
+			#ref[snppos] = hg19snp
+			#alt[snppos] = ref[snppos]
 			flip.append(snppos)
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
@@ -123,4 +124,5 @@ def testRef():
 	keys = ref.keys()
 	for snppos in keys:
 		continue
+	
 	
