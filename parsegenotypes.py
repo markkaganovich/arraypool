@@ -117,7 +117,9 @@ def testRef():
 	reffile = '../genotypes/CEUlowcovRef'
 	altfile = '../genotypes/CEUlowcovAlt'
 	ref = simplejson.load(open(reffile))
-	alt = simpeljson.load(open(altfile))
+	print "loaded ref"
+	alt = simplejson.load(open(altfile))
+	print "all loaded"
 	keys = Ref.keys()
 	for snppos in keys:
 		continue
