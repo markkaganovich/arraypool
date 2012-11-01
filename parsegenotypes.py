@@ -107,3 +107,18 @@ def parse1KGvcf(vcffile, outputname):
 def parsehapmap():
 	execfile('parsehapmapgenotypes.py')
 	
+# Tests
+def test():
+	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
+	for i in range(1,1000000):
+		b = str(hg19['chr1'][i])
+
+def testRef():
+	reffile = '../genotypes/CEUlowcovRef'
+	altfile = '../genotypes/CEUlowcovAlt'
+	ref = simplejson.load(open(reffile))
+	alt = simpeljson.load(open(altfile))
+	keys = Ref.keys()
+	for snppos in keys:
+		continue
+	
