@@ -71,7 +71,9 @@ def combinegenos(names, chosenSNPs):
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	globals.dump(genos, 'Genos')
 		
-names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']		
+homedir = '/srv/gs1/projects/snyder/mark'
+names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',hoemdir+'/genotypes/CHBJPTlowcov',homedir+'/genotypes/YRItrio', homedir+'/genotypes/CEUtrio']	
+	
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']

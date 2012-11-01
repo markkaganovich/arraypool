@@ -68,7 +68,8 @@ def flipGeno(genofile, flip):
 			
 #a = checkRef('../genotypes/CEUlowcov')
 #flipGeno('../genotypes/CEUlowcovGeno', a[0])
-names = ['../genotypes/CEUlowcov','../genotypes/YRIlowcov','../genotypes/CHBJPTlowcov','../genotypes/YRItrio', '../genotypes/CEUtrio']	
+homedir = '/srv/gs1/projects/snyder/mark'
+names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',hoemdir+'/genotypes/CHBJPTlowcov',homedir+'/genotypes/YRItrio', homedir+'/genotypes/CEUtrio']	
 """
 for n in names:
 	flips = globals.json(n+'flips')
