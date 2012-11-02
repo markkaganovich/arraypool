@@ -33,7 +33,7 @@ def checkRef(name):
 	errors = []
 	keys = ref.keys()
 	for snppos in keys:
-		print snppos
+		print snppos + '\t' + name
 		t = snppos.split('pos')
 		hg19snp = str(hg19[t[0]][int(t[1])-1]).upper()
 		refsnp = ref[snppos].upper()
@@ -47,11 +47,19 @@ def checkRef(name):
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
 			errors.append(snppos)
-	globals.dump(ref, reffile+'flipped')
-	globals.dump(alt, altfile+'flipped')
 	globals.dump(flip, name+'flips')
 	globals.dump(errors, name+'errors')
 	return [flip, errors]
+	
+def corrRef(flip, name):
+	reffile = name +'RefT'
+	altfile = name + 'AltT'
+	for snp in flip:
+		t = ref[snp]
+		ref[snp] = alt[snp]
+		alt[snp] = t
+	globals.dump(ref, reffile+'flipped')
+	globals.dump(alt, altfile+'flipped')
 		
 def flipGeno(genofile, flip):
 	lines = open(genofile).readlines()

@@ -10,9 +10,9 @@ def json(filename, datasource = ''):
     return result
 
 def dump(data, filename, datasource = './'):
-    if filename in os.listdir(datasource): 
-        os.rename(datasource +filename, datasource +'temp/' +filename+'2')
-    file = open(datasource + filename,'w')
+    #if filename in os.listdir(datasource): 
+    #    os.rename(datasource +filename, datasource +'temp/' +filename+'2')
+    file = open(filename,'w')
     simplejson.dump(data, file)
     file.close()
 
