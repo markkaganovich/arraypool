@@ -78,16 +78,17 @@ names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',homedir+'
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 
-""" 
+
 #parse genotype files and flip them around according to hg19
 for i in range(0, len(names)):
-	parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
-	b = parsegenotypes.filterSNPs(names[i])
-	print "{0} SNPs filtered out".format(len(b))
+	#parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
+	#b = parsegenotypes.filterSNPs(names[i])
+	#print "{0} SNPs filtered out".format(len(b))
 	c = parsegenotypes.checkRef(names[i])
 	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
+	corrRef(c[0], names[i])
 	parsegenotypes.flipGeno(names[i]+'Geno', c[0])
-
+"""
 
 
 snps = globals.json('omni25Msnpssorted')
@@ -98,6 +99,6 @@ combinegenos(names, snps)
 #print "{0} SNPs filtered out".format(len(b))
 #c = parsegenotypes.checkRef('../genotypes/hapmap')
 #print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-c = globals.json('../genotypes/hapmapflips')
-parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
+#c = globals.json('../genotypes/hapmapflips')
+#parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
 
