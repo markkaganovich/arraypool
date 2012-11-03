@@ -86,8 +86,8 @@ def combinegenos(names, chosenSNPs):
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	globals.dump(genos, 'Genos')
 		
-homedir = '/srv/gs1/projects/snyder/mark'
-names = ['/genotypes/CEUlowcov','/genotypes/YRIlowcov','/genotypes/CHBJPTlowcov','/genotypes/YRItrio', '/genotypes/CEUtrio']	
+homedir = '/srv/gs1/projects/snyder/mark/genotypes/'
+names = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
 homedirnames = map(lambda x: homedir+x, names)	
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
@@ -95,7 +95,7 @@ vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000
 
 
 #parse genotype files and flip them around according to hg19
-for i in range(0, len(names)):
+for i in range(0, len(homedirnames)):
 	#parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
 	#b = parsegenotypes.filterSNPs(names[i])
 	#print "{0} SNPs filtered out".format(len(b))
