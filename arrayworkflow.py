@@ -8,17 +8,28 @@ def getarraysnps():
 	lines = file.readlines()
 	file.close()
 	header = "SNP Name,Sample ID,Allele1 - Top,Allele2 - Top,GC Score,Allele1 - Plus,Allele2 - Plus,Chr,Position,SNP,Theta,R,X,Y,X Raw,Y Raw,B Allele Freq"
-	t = header.split(',')
-	snpi = t.index("SNP")
-	chri = t.index("Chr")
-	posi = t.index("Position")
-	Yi = t.index("Y")
-	Ri = t.index("R")
+	h = header.split(',')
+	snpi = h.index("SNP")
+	chri = h.index("Chr")
+	posi = h.index("Position")
+	Yi = h.index("Y")
+	Ri = h.index("R")
 	snplist = []
+	ref = {}
+	alt = {}
+	freq = {}
 	for l in lines:
 		t = l.split('\t')
-		snplist.append('chr'+t[chri]+'pos'+t[posi])
+		snppos = 'chr'+t[chri]+'pos'+t[posi]
+		snplist.append(snppos)
+		ref[snppos] = t[snpi].split('/')[0][1] 
+		alt[snppos] = t[snpi].split('/')[1][0]
+		freq[snppos] = float(t[Yi])/float(t[Ri])
+		
 	#sortedsnpschr = sorted(snplist, key=lambda snp: snp.split('pos')[0].split('chr')[1])
+	"""
+	don't think they need to be sorted
+	
 	sortedsnps = []
 	for c in range(1,23):
 		temp = []
@@ -27,7 +38,11 @@ def getarraysnps():
 				temp.append(s)
 		sortedsnps.extend(sorted(temp, key=lambda snp: int(snp.split('pos')[1])))
 	globals.dump(sortedsnps, 'omni25Msnpssorted')
-
+	"""
+	globals.dump(snplist, report+'snps')
+	globals.dump(ref, report+'ref')
+	globals.dump(alt, report+'alt')
+	globals.dump(freq, report+'freq')
 ### get genotype
 class Genotypes:
 	def __init__(self, name):
@@ -72,8 +87,8 @@ def combinegenos(names, chosenSNPs):
 	globals.dump(genos, 'Genos')
 		
 homedir = '/srv/gs1/projects/snyder/mark'
-names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',homedir+'/genotypes/CHBJPTlowcov',homedir+'/genotypes/YRItrio', homedir+'/genotypes/CEUtrio']	
-	
+names = ['/genotypes/CEUlowcov','/genotypes/YRIlowcov','/genotypes/CHBJPTlowcov','/genotypes/YRItrio', '/genotypes/CEUtrio']	
+homedirnames = map(lambda x: homedir+x, names)	
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
@@ -86,7 +101,7 @@ for i in range(0, len(names)):
 	#print "{0} SNPs filtered out".format(len(b))
 	c = parsegenotypes.checkRef(names[i])
 	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-	corrRef(c[0], names[i])
+	parsegenotypes.corrRef(c[0], names[i])
 	parsegenotypes.flipGeno(names[i]+'Geno', c[0])
 """
 

@@ -9,10 +9,11 @@ def filterSNPs(name):
 	keys = ref.keys()
 	complsnps = []
 	for snppos in keys:
-		if globals.compl[ref[snppos].upper()] == alt[snppos].upper():
+		if globals.compl[ref[snppos].upper()] == alt[snppos].upper() or ref[snppos].upper() == alt[snppos].upper():
 			complsnps.append(snppos)
 			del ref[snppos]
 			del alt[snppos]
+
 	print len(ref)
 	print len(alt)
 	globals.dump(ref, reffile+'T')
@@ -59,9 +60,15 @@ def corrRef(flip, name):
 		ref[snp] = alt[snp]
 		alt[snp] = t
 	globals.dump(ref, reffile+'flipped')
-	globals.dump(alt, altfile+'flipped')
+	globals.dump(alt, altfile+'flipped')	
 		
 def flipGeno(genofile, flip):
+	"""flip genotypes based on new ref and alt,
+	the new genotype allele frequencies are 
+	flipped 0->2, 2->0 based on list of snp positions 
+	inputed as flip list
+	"""	
+	
 	lines = open(genofile).readlines()
 	newgeno = open(genofile+'flipped', 'w')
 	newgeno.write(lines[0])
@@ -74,6 +81,30 @@ def flipGeno(genofile, flip):
 			newgeno.write(newl.strip('\n'))
 		else:
 			newgeno.write(l)
+		
+def flipArray(arrayname, flip):
+	"""flip array snp frequencies (hash)
+	1-freq for those in snp list inputed as flip
+	input is constructed in the original getarraysnps() function
+	""" 
+	
+	try:
+		arrayfreq = globals.load(arrayname+'freq')
+	except:
+		"No array snp frequency file"
+	for snp in flip:
+		arrayfreq[flip] = 1 - arrayfreq[flip]
+	globals.dump(arrayfreq, arrayname+'freq')
+	
+def printtabarray(arrayname):
+	"""output will be analyzed by R to find cell line frequencies
+	"""
+	
+	output = open(arrayname+'Rinput', 'w')
+	freq = globals.load(arrayname+'freq')
+	for snp in freq.keys():
+		output.write(snp + '\t')
+		output.write(str(freq[snp]) + '\n') 
 			
 #a = checkRef('../genotypes/CEUlowcov')
 #flipGeno('../genotypes/CEUlowcovGeno', a[0])
