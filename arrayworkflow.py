@@ -1,9 +1,18 @@
-import simplejson
 import parsegenotypes
+import sys, getopt
 import globals
 
-def getarraysnps():
-	report = 'Array25M1'
+def printarrayS(report):
+	"""print output of getarraysnps() in format readable by R
+	
+	"""
+	freq = globals.json(report+'freq')
+	output = open(report+'freq.tsv', 'w')
+	for snp in freq.keys():
+		output.write(snp + '\t' + str(freq[snp]) + '\n')
+		
+def getarraysnps(report):
+	print report
 	file = open(report)
 	lines = file.readlines()
 	file.close()
@@ -26,23 +35,13 @@ def getarraysnps():
 		alt[snppos] = t[snpi].split('/')[1][0]
 		freq[snppos] = float(t[Yi])/float(t[Ri])
 		
-	#sortedsnpschr = sorted(snplist, key=lambda snp: snp.split('pos')[0].split('chr')[1])
-	"""
-	don't think they need to be sorted
-	
-	sortedsnps = []
-	for c in range(1,23):
-		temp = []
-		for s in snplist:
-			if str(c) == s.split('pos')[0].split('chr')[1]:
-				temp.append(s)
-		sortedsnps.extend(sorted(temp, key=lambda snp: int(snp.split('pos')[1])))
-	globals.dump(sortedsnps, 'omni25Msnpssorted')
-	"""
 	globals.dump(snplist, report+'snps')
 	globals.dump(ref, report+'ref')
 	globals.dump(alt, report+'alt')
 	globals.dump(freq, report+'freq')
+	
+	printarrayS(report)
+	
 ### get genotype
 class Genotypes:
 	def __init__(self, name):
@@ -94,18 +93,7 @@ vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 
 
-#parse genotype files and flip them around according to hg19
-for i, n in enumerate(homedirnames):
-	parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
-	b = parsegenotypes.filterSNPs(names[i])
-	print "{0} SNPs filtered out".format(len(b))
-	c = parsegenotypes.checkRef(n)
-	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-	#parsegenotypes.corrRef(c[0], n)
-	parsegenotypes.flipGeno(n+'Geno', c[0])
 """
-
-
 snps = globals.json('omni25Msnpssorted')
 print len(snps)
 combinegenos(names, snps)
@@ -116,4 +104,31 @@ combinegenos(names, snps)
 #print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
 #c = globals.json('../genotypes/hapmapflips')
 #parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
+
+def processgenotypes():
+	#parse genotype files and flip them around according to hg19
+	for i, n in enumerate(homedirnames):
+		parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
+		b = parsegenotypes.filterSNPs(names[i])
+		print "{0} SNPs filtered out".format(len(b))
+		c = parsegenotypes.checkRef(n)
+		print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
+		#parsegenotypes.corrRef(c[0], n)
+		parsegenotypes.flipGeno(n+'Geno', c[0])
+			
+def main(argv):
+	opts, args = getopt.getopt(argv,"a:g",["report="])
+	for opt, arg in opts:
+		if opt == '-a':
+			report = arg
+			print "processing array, getting snps {0}".format(report)
+			getarraysnps(arg)
+		elif opt == '-g':
+			processgenotypes()
+			
+if __name__ == "__main__":
+	args = sys.argv[1:]
+	if len(args) > 0:
+		main(args)
+	
 
