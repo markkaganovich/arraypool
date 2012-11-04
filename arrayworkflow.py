@@ -101,7 +101,7 @@ for i, n in enumerate(homedirnames):
 	print "{0} SNPs filtered out".format(len(b))
 	c = parsegenotypes.checkRef(n)
 	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-	parsegenotypes.corrRef(c[0], n)
+	#parsegenotypes.corrRef(c[0], n)
 	parsegenotypes.flipGeno(n+'Geno', c[0])
 """
 

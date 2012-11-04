@@ -55,6 +55,10 @@ def checkRef(name):
 def corrRef(flip, name):
 	reffile = name +'RefT'
 	altfile = name + 'AltT'
+	ref = globals.json(reffile)
+	print "Loaded Ref"
+	alt = globals.json(altfile)
+	print "Loaded Alt"
 	for snp in flip:
 		t = ref[snp]
 		ref[snp] = alt[snp]
