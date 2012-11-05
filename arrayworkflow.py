@@ -1,15 +1,6 @@
 import parsegenotypes
 import sys, getopt
 import globals
-
-def printarrayS(report):
-	"""print output of getarraysnps() in format readable by R
-	
-	"""
-	freq = globals.json(report+'freq')
-	output = open(report+'freq.tsv', 'w')
-	for snp in freq.keys():
-		output.write(snp + '\t' + str(freq[snp]) + '\n')
 		
 def getarraysnps(report):
 	print report
@@ -29,18 +20,19 @@ def getarraysnps(report):
 	freq = {}
 	for l in lines:
 		t = l.split('\t')
-		snppos = 'chr'+t[chri]+'pos'+t[posi]
-		snplist.append(snppos)
-		ref[snppos] = t[snpi].split('/')[0][1] 
-		alt[snppos] = t[snpi].split('/')[1][0]
-		freq[snppos] = float(t[Yi])/float(t[Ri])
+		if t[chri] not in map(lambda x: str(x), range(1,23)):
+			continue
+		else:
+			snppos = 'chr'+t[chri]+'pos'+t[posi]
+			snplist.append(snppos)
+			ref[snppos] = t[snpi].split('/')[0][1] 
+			alt[snppos] = t[snpi].split('/')[1][0]
+			freq[snppos] = float(t[Yi])/float(t[Ri])
 		
 	globals.dump(snplist, report+'snps')
-	globals.dump(ref, report+'ref')
-	globals.dump(alt, report+'alt')
+	globals.dump(ref, report+'RefT')
+	globals.dump(alt, report+'AltT')
 	globals.dump(freq, report+'freq')
-	
-	printarrayS(report)
 	
 ### get genotype
 class Genotypes:
@@ -123,6 +115,11 @@ def main(argv):
 			report = arg
 			print "processing array, getting snps {0}".format(report)
 			getarraysnps(arg)
+			[f, e] = parsegenotypes.checkRef(report)
+			parsegenotypes.flipArray(report, f)
+			parsegenotypes.filterzeros(report)
+			parsegenotypes.printtabarray(report)
+			
 		elif opt == '-g':
 			processgenotypes()
 			
