@@ -20,11 +20,15 @@ def getarraysnps():
 	freq = {}
 	for l in lines:
 		t = l.split('\t')
-		snppos = 'chr'+t[chri]+'pos'+t[posi]
-		snplist.append(snppos)
-		ref[snppos] = t[snpi].split('/')[0][1] 
-		alt[snppos] = t[snpi].split('/')[1][0]
-		freq[snppos] = float(t[Yi])/float(t[Ri])
+		if t[chri] not in map(lambda x: str(x), range(1,23)):
+			print t[chri]
+			continue
+		else:
+			snppos = 'chr'+t[chri]+'pos'+t[posi]
+			snplist.append(snppos)
+			ref[snppos] = t[snpi].split('/')[0][1] 
+			alt[snppos] = t[snpi].split('/')[1][0]
+			freq[snppos] = float(t[Yi])/float(t[Ri])
 		
 	#sortedsnpschr = sorted(snplist, key=lambda snp: snp.split('pos')[0].split('chr')[1])
 	"""
@@ -93,7 +97,7 @@ homedirnames = map(lambda x: homedir+x, names)
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 
-
+"""
 #parse genotype files and flip them around according to hg19
 for i, n in enumerate(homedirnames):
 	parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
@@ -105,7 +109,7 @@ for i, n in enumerate(homedirnames):
 	parsegenotypes.flipGeno(n+'Geno', c[0])
 """
 
-
+"""
 snps = globals.json('omni25Msnpssorted')
 print len(snps)
 combinegenos(names, snps)
