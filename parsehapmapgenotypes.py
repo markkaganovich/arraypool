@@ -1,4 +1,5 @@
 import os
+import glob
 
 def parsehapmapchrom(chrom):
 	""" inputs: rsid hash (hash of snp positions and rsIDs)
