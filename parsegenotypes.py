@@ -1,23 +1,23 @@
 from pygr import worldbase
-import globals
+import glob
 
 def filterSNPs(name):
 	reffile = name +'Ref'
 	altfile = name + 'Alt'
-	[ref, alt] = map(lambda x: globals.json(x, ''), [reffile, altfile])
+	[ref, alt] = map(lambda x: glob.json(x, ''), [reffile, altfile])
 	print "Loaded Ref {0}, Alt {1}".format(len(ref),len(alt))
 	keys = ref.keys()
 	complsnps = []
 	for snppos in keys:
-		if globals.compl[ref[snppos].upper()] == alt[snppos].upper() or ref[snppos].upper() == alt[snppos].upper():
+		if glob.compl[ref[snppos].upper()] == alt[snppos].upper() or ref[snppos].upper() == alt[snppos].upper():
 			complsnps.append(snppos)
 			del ref[snppos]
 			del alt[snppos]
 
 	print len(ref)
 	print len(alt)
-	globals.dump(ref, reffile+'T')
-	globals.dump(alt, altfile+'T')
+	glob.dump(ref, reffile+'T')
+	glob.dump(alt, altfile+'T')
 	return complsnps
 
 	
@@ -26,9 +26,9 @@ def checkRef(name):
 	altfile = name + 'AltT'
 	hg19 = worldbase.Bio.Seq.Genome.HUMAN.hg19(download = True)
 	print "Loaded hg19"
-	ref = globals.json(reffile)
+	ref = glob.json(reffile)
 	print "Loaded Ref"
-	alt = globals.json(altfile)
+	alt = glob.json(altfile)
 	print "Loaded Alt"
 	flip = []
 	errors = []
@@ -46,8 +46,8 @@ def checkRef(name):
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
 			errors.append(snppos)
-	globals.dump(flip, name+'flips')
-	globals.dump(errors, name+'errors')
+	glob.dump(flip, name+'flips')
+	glob.dump(errors, name+'errors')
 	return [flip, errors]
 	
 def corrRef(flip, name):
@@ -57,8 +57,8 @@ def corrRef(flip, name):
 		t = ref[snp]
 		ref[snp] = alt[snp]
 		alt[snp] = t
-	globals.dump(ref, reffile+'flipped')
-	globals.dump(alt, altfile+'flipped')	
+	glob.dump(ref, reffile+'flipped')
+	glob.dump(alt, altfile+'flipped')	
 		
 def flipGeno(genofile, flip):
 	"""flip genotypes based on new ref and alt,
@@ -87,19 +87,19 @@ def flipArray(arrayname, flip):
 	""" 
 	
 	try:
-		arrayfreq = globals.load(arrayname+'freq')
+		arrayfreq = glob.load(arrayname+'freq')
 	except:
 		"No array snp frequency file"
 	for snp in flip:
 		arrayfreq[flip] = 1 - arrayfreq[flip]
-	globals.dump(arrayfreq, arrayname+'freq')
+	glob.dump(arrayfreq, arrayname+'freq')
 	
 def printtabarray(arrayname):
 	"""output will be analyzed by R to find cell line frequencies
 	"""
 	
 	output = open(arrayname+'Rinput', 'w')
-	freq = globals.load(arrayname+'freq')
+	freq = glob.load(arrayname+'freq')
 	for snp in freq.keys():
 		output.write(snp + '\t')
 		output.write(str(freq[snp]) + '\n') 
@@ -128,8 +128,8 @@ def parse1KGvcf(vcffile, outputname):
 						m = m + str(int(t[0]) + int(t[2])) + ','
 					outputfile.write(m.strip(',')+'\n')
 		lines = file.readlines(1000000)
-	globals.dump(ref, outputname+'Ref')
-	globals.dump(alt, outputname+'Alt')
+	glob.dump(ref, outputname+'Ref')
+	glob.dump(alt, outputname+'Alt')
 	
 def parsehapmap():
 	execfile('parsehapmapgenotypes.py')

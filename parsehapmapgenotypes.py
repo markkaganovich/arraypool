@@ -1,5 +1,5 @@
 import os
-import globals
+import glob
 
 def parsehapmapchrom(chrom):
 	""" inputs: rsid hash (hash of snp positions and rsIDs)
@@ -11,7 +11,7 @@ def parsehapmapchrom(chrom):
 	if 'rsid2poshash' not in os.listdir('./'):
 		makerhash()
 	else:
-		rshash = globals.json('rsid2poshash')	
+		rshash = glob.json('rsid2poshash')	
 	people = ['NA19140','NA19154','NA19173','NA19203','NA19206','NA19211','NA19222']
 		
 	with open(hapmapfile) as f:
@@ -62,7 +62,7 @@ def makerhash():
 	for r in rlines:
 		t = r.split('\t')
 		rsid2pos[t[0]] = t[1].strip('\n')	
-	globals.dump(rsid2pos, 'rsid2poshash')
+	glob.dump(rsid2pos, 'rsid2poshash')
 
 	
 ref = {}
@@ -76,6 +76,6 @@ for c in range(1,23):
 		lines = g.readlines()
 		map(lambda l: genotype.write(l), lines)
 genotype.close()
-globals.dump(ref, '../genotypes/hapmapRef')
-globals.dump(alt, '../genotypes/hapmapAlt')
+glob.dump(ref, '../genotypes/hapmapRef')
+glob.dump(alt, '../genotypes/hapmapAlt')
 

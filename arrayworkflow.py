@@ -1,6 +1,6 @@
 import parsegenotypes
 import sys, getopt
-import globals
+import glob
 
 homedir = '/srv/gs1/projects/snyder/mark/genotypes/'
 names = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
