@@ -84,18 +84,14 @@ def combinegenos(names, chosenSNPs):
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	globals.dump(genos, 'Genos')
 		
-
-"""
-snps = globals.json('omni25Msnpssorted')
-print len(snps)
-combinegenos(names, snps)
-"""
 def processhapmap():
+	parsegenotypes.parsehapmap()
 	b = parsegenotypes.filterSNPs('../genotypes/hapmap')
 	print "{0} SNPs filtered out".format(len(b))
 	c = parsegenotypes.checkRef('../genotypes/hapmap')
 	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-	parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
+	#flips = globals.json('../genotypes/hapmapflips')
+	parsegenotypes.flipGeno('hapmapGeno', c[0])
 
 def processgenotypes():
 	"""parse genotype files and flip them around according to hg19
@@ -128,6 +124,8 @@ def main(argv):
 			processhapmap()
 		elif opt == '-c':
 			genofiles = names.append('hapmap')
+			snps = globals.json('Array251Msnps')
+			combinegenos(genofiles, snps)
 			
 if __name__ == "__main__":
 	args = sys.argv[1:]
