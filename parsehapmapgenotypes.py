@@ -55,7 +55,7 @@ def parsehapmapchrom(chrom):
 def makerhash():
 	rsid2pos = {}
 	hapmaprsidfile = 'hapmap_rsid_hash_lines'
-	assert hapmaprsidfile in os.listdir('./') "Need this file {0}".format(hapmaprsidfile)			
+	assert hapmaprsidfile in os.listdir('./'), "Need this file {0}".format(hapmaprsidfile)			
 	file = open('./hapmap_rsid_hash_lines')
 	with open('./hapmap_rsid_hash_lines') as f:
 		rlines = f.readlines()
