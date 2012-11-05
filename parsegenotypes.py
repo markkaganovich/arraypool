@@ -74,6 +74,7 @@ def flipGeno(genofile, flip):
 	for l in lines[1:]:
 		t = l.split('\t')
 		if t[0] in flip:
+			print t[1]
 			newg = map(lambda x: 2-int(x), t[1].split(','))
 			newl = t[0] +'\t' 
 			newl = reduce(lambda x,y: x+str(y) + ',', [newl]+newg)
