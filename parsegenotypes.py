@@ -53,10 +53,6 @@ def checkRef(name):
 def corrRef(flip, name):
 	reffile = name +'RefT'
 	altfile = name + 'AltT'
-	ref = globals.json(reffile)
-	print "Loaded Ref"
-	alt = globals.json(altfile)
-	print "Loaded Alt"
 	for snp in flip:
 		t = ref[snp]
 		ref[snp] = alt[snp]
@@ -88,48 +84,26 @@ def flipArray(arrayname, flip):
 	"""flip array snp frequencies (hash)
 	1-freq for those in snp list inputed as flip
 	input is constructed in the original getarraysnps() function
-
 	""" 
 	
 	try:
-		arrayfreq = globals.json(arrayname+'freq')
+		arrayfreq = globals.load(arrayname+'freq')
 	except:
 		"No array snp frequency file"
 	for snp in flip:
-		arrayfreq[snp] = 1 - arrayfreq[snp]
+		arrayfreq[flip] = 1 - arrayfreq[flip]
 	globals.dump(arrayfreq, arrayname+'freq')
-	
-def filterzeros(arrayname):
-	"""take out those that are 0
-	
-	"""
-	
-	freq = globals.json(arrayname+'freq')
-	for snp in freq.keys():
-		if freq[snp] == 0:
-			del freq[snp]
-	globals.dump(freq, arrayname+'freq')
 	
 def printtabarray(arrayname):
 	"""output will be analyzed by R to find cell line frequencies
 	"""
 	
 	output = open(arrayname+'Rinput', 'w')
-	freq = globals.json(arrayname+'freq')
+	freq = globals.load(arrayname+'freq')
 	for snp in freq.keys():
-		output.write(snp + '\t'+ str(freq[snp]) + '\n') 
+		output.write(snp + '\t')
+		output.write(str(freq[snp]) + '\n') 
 			
-#a = checkRef('../genotypes/CEUlowcov')
-#flipGeno('../genotypes/CEUlowcovGeno', a[0])
-homedir = '/srv/gs1/projects/snyder/mark'
-names = [homedir+'/genotypes/CEUlowcov',homedir+'/genotypes/YRIlowcov',homedir+'/genotypes/CHBJPTlowcov',homedir+'/genotypes/YRItrio', homedir+'/genotypes/CEUtrio']	
-"""
-for n in names:
-	flips = globals.json(n+'flips')
-	flipGeno(n, flips)	
-"""
-
-
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
 	file = open(vcffile)

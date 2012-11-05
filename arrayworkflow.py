@@ -1,7 +1,14 @@
 import parsegenotypes
 import sys, getopt
 import globals
-		
+
+homedir = '/srv/gs1/projects/snyder/mark/genotypes/'
+names = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
+homedirnames = map(lambda x: homedir+x, names)	
+
+vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
+'../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
+
 def getarraysnps(report):
 	print report
 	file = open(report)
@@ -77,29 +84,23 @@ def combinegenos(names, chosenSNPs):
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	globals.dump(genos, 'Genos')
 		
-homedir = '/srv/gs1/projects/snyder/mark/genotypes/'
-names = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
-homedirnames = map(lambda x: homedir+x, names)	
-
-vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
-'../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
-
-
 
 """
 snps = globals.json('omni25Msnpssorted')
 print len(snps)
 combinegenos(names, snps)
 """
-#b = parsegenotypes.filterSNPs('../genotypes/hapmap')
-#print "{0} SNPs filtered out".format(len(b))
-#c = parsegenotypes.checkRef('../genotypes/hapmap')
-#print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-#c = globals.json('../genotypes/hapmapflips')
-#parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
+def processhapmap():
+	b = parsegenotypes.filterSNPs('../genotypes/hapmap')
+	print "{0} SNPs filtered out".format(len(b))
+	c = parsegenotypes.checkRef('../genotypes/hapmap')
+	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
+	parsegenotypes.flipGeno('../genotypes/hapmapgenotype', c[0])
 
 def processgenotypes():
-	#parse genotype files and flip them around according to hg19
+	"""parse genotype files and flip them around according to hg19
+	
+	"""
 	for i, n in enumerate(homedirnames):
 		parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
 		b = parsegenotypes.filterSNPs(names[i])
@@ -110,7 +111,7 @@ def processgenotypes():
 		parsegenotypes.flipGeno(n+'Geno', c[0])
 			
 def main(argv):
-	opts, args = getopt.getopt(argv,"a:g",["report="])
+	opts, args = getopt.getopt(argv,"a:gh",["report="])
 	for opt, arg in opts:
 		if opt == '-a':
 			report = arg
@@ -123,6 +124,8 @@ def main(argv):
 			
 		elif opt == '-g':
 			processgenotypes()
+		elif opt == '-h':
+			processhapmap()
 			
 if __name__ == "__main__":
 	args = sys.argv[1:]
