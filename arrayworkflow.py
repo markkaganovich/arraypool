@@ -126,6 +126,8 @@ def main(argv):
 			processgenotypes()
 		elif opt == '-h':
 			processhapmap()
+		elif opt == '-c':
+			genofiles = names.append('hapmap')
 			
 if __name__ == "__main__":
 	args = sys.argv[1:]

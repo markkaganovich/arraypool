@@ -72,7 +72,7 @@ for c in range(1,23):
 	[r,a] = parsehapmapchrom(c)
 	ref.update(r)
 	alt.update(a)
-	with open('../genotypes/hapmapchr'+str(c)) as g:
+	with open('../genotypes/hapmapchr'+str(c)+'genotype') as g:
 		lines = g.readlines()
 		map(lambda l: genotype.write(l), lines)
 genotype.close()
