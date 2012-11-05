@@ -36,10 +36,10 @@ def getarraysnps(report):
 			alt[snppos] = t[snpi].split('/')[1][0]
 			freq[snppos] = float(t[Yi])/float(t[Ri])
 		
-	globals.dump(snplist, report+'snps')
-	globals.dump(ref, report+'RefT')
-	globals.dump(alt, report+'AltT')
-	globals.dump(freq, report+'freq')
+	glob.dump(snplist, report+'snps')
+	glob.dump(ref, report+'RefT')
+	glob.dump(alt, report+'AltT')
+	glob.dump(freq, report+'freq')
 	
 ### get genotype
 class Genotypes:
@@ -75,22 +75,24 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 			genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
 		except KeyError:
 			genos[s] = '0,' * filestruc.ln
-	globals.dump(genos, 'tempgenos')				
+	glob.dump(genos, 'tempgenos')				
 	return genos
 			
 def combinegenos(names, chosenSNPs):			
 	genos = {}
 	files = map(lambda x: Genotypes(x), names)
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
-	globals.dump(genos, 'Genos')
+	glob.dump(genos, 'Genos')
 		
 def processhapmap():
+	print "parsing hapmap genotypes chrom files"
 	parsegenotypes.parsehapmap()
+	print "now filtering SNPs"
 	b = parsegenotypes.filterSNPs('../genotypes/hapmap')
 	print "{0} SNPs filtered out".format(len(b))
 	c = parsegenotypes.checkRef('../genotypes/hapmap')
 	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
-	#flips = globals.json('../genotypes/hapmapflips')
+	#flips = glob.json('../genotypes/hapmapflips')
 	parsegenotypes.flipGeno('hapmapGeno', c[0])
 
 def processgenotypes():
@@ -124,7 +126,7 @@ def main(argv):
 			processhapmap()
 		elif opt == '-c':
 			genofiles = names.append('hapmap')
-			snps = globals.json('Array251Msnps')
+			snps = glob.json('Array251Msnps')
 			combinegenos(genofiles, snps)
 			
 if __name__ == "__main__":

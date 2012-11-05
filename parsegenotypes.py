@@ -1,5 +1,6 @@
 from pygr import worldbase
 import glob
+import os
 
 def filterSNPs(name):
 	reffile = name +'Ref'
@@ -132,7 +133,21 @@ def parse1KGvcf(vcffile, outputname):
 	glob.dump(alt, outputname+'Alt')
 	
 def parsehapmap():
-	execfile('parsehapmapgenotypes.py')
+	import parsehapmapgenotypes
+	ref = {}
+	alt = {}	
+	genotype = open('hapmapGeno','w')
+	for c in range(1,23):
+		"here"
+		[r,a] = parsehapmapgenotypes.parsehapmapchrom(c)
+		ref.update(r)
+		alt.update(a)
+		with open('../genotypes/hapmapchr'+str(c)+'genotype') as g:
+			lines = g.readlines()
+			map(lambda l: genotype.write(l), lines)
+	genotype.close()
+	glob.dump(ref, '../genotypes/hapmapRef')
+	glob.dump(alt, '../genotypes/hapmapAlt')
 	
 # Tests
 def test():

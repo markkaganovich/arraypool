@@ -1,5 +1,4 @@
 import os
-import glob
 
 def parsehapmapchrom(chrom):
 	""" inputs: rsid hash (hash of snp positions and rsIDs)
@@ -65,17 +64,4 @@ def makerhash():
 	glob.dump(rsid2pos, 'rsid2poshash')
 
 	
-ref = {}
-alt = {}	
-genotype = open('hapmapGeno','w')
-for c in range(1,23):
-	[r,a] = parsehapmapchrom(c)
-	ref.update(r)
-	alt.update(a)
-	with open('../genotypes/hapmapchr'+str(c)+'genotype') as g:
-		lines = g.readlines()
-		map(lambda l: genotype.write(l), lines)
-genotype.close()
-glob.dump(ref, '../genotypes/hapmapRef')
-glob.dump(alt, '../genotypes/hapmapAlt')
 
