@@ -42,8 +42,6 @@ def checkRef(name):
 		if hg19snp == refsnp:
 			continue
 		elif hg19snp == altsnp:
-			#ref[snppos] = hg19snp
-			#alt[snppos] = ref[snppos]
 			flip.append(snppos)
 		else:
 			print "Error: Neither Ref nor Alt of SNP corresponds to hg19 sequence"
@@ -55,6 +53,10 @@ def checkRef(name):
 def corrRef(flip, name):
 	reffile = name +'RefT'
 	altfile = name + 'AltT'
+	ref = globals.json(reffile)
+	print "Loaded Ref"
+	alt = globals.json(altfile)
+	print "Loaded Alt"
 	for snp in flip:
 		t = ref[snp]
 		ref[snp] = alt[snp]
@@ -86,25 +88,36 @@ def flipArray(arrayname, flip):
 	"""flip array snp frequencies (hash)
 	1-freq for those in snp list inputed as flip
 	input is constructed in the original getarraysnps() function
+
 	""" 
 	
 	try:
-		arrayfreq = globals.load(arrayname+'freq')
+		arrayfreq = globals.json(arrayname+'freq')
 	except:
 		"No array snp frequency file"
 	for snp in flip:
-		arrayfreq[flip] = 1 - arrayfreq[flip]
+		arrayfreq[snp] = 1 - arrayfreq[snp]
 	globals.dump(arrayfreq, arrayname+'freq')
+	
+def filterzeros(arrayname):
+	"""take out those that are 0
+	
+	"""
+	
+	freq = globals.json(arrayname+'freq')
+	for snp in freq.keys():
+		if freq[snp] == 0:
+			del freq[snp]
+	globals.dump(freq, arrayname+'freq')
 	
 def printtabarray(arrayname):
 	"""output will be analyzed by R to find cell line frequencies
 	"""
 	
 	output = open(arrayname+'Rinput', 'w')
-	freq = globals.load(arrayname+'freq')
+	freq = globals.json(arrayname+'freq')
 	for snp in freq.keys():
-		output.write(snp + '\t')
-		output.write(str(freq[snp]) + '\n') 
+		output.write(snp + '\t'+ str(freq[snp]) + '\n') 
 			
 #a = checkRef('../genotypes/CEUlowcov')
 #flipGeno('../genotypes/CEUlowcovGeno', a[0])
