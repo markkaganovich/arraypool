@@ -100,7 +100,7 @@ def processhapmap():
 	c = parsegenotypes.checkRef('../genotypes/hapmap')
 	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
 	#flips = glob.json('../genotypes/hapmapflips')
-	parsegenotypes.flipGeno('hapmapGeno', c[0])
+	parsegenotypes.flipGeno('hapmapGeno', c[0], c[1])
 
 def processgenotypes():
 	"""parse genotype files and flip them around according to hg19
@@ -113,7 +113,7 @@ def processgenotypes():
 		c = parsegenotypes.checkRef(n)
 		print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
 		#parsegenotypes.corrRef(c[0], n)
-		parsegenotypes.flipGeno(n+'Geno', c[0])
+		parsegenotypes.flipGeno(n+'Geno', c[0], c[1])
 			
 def main(argv):
 	opts, args = getopt.getopt(argv,"a:ghc:i",["report=", "genonames="])
@@ -162,7 +162,7 @@ if __name__ == "__main__":
 		report = args.a
 		getarraysnps(report)
 		[f, e] = parsegenotypes.checkRef(report)
-		parsegenotypes.flipArray(report, f)
+		parsegenotypes.flipArray(report, f, e)
 		parsegenotypes.filterzeros(report)
 		parsegenotypes.printtabarray(report)
 	if args.g:
