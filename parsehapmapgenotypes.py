@@ -33,22 +33,21 @@ def parsehapmapchrom(chrom):
 		t = l.split(' ')
 		rsid = t[rsidi]
 		snps = t[snpi].split('/')
-		ref = snps[0]
-		alt = snps[1]
+		ref = snps[0].upper()
+		alt = snps[1].upper()
 				
-		for p in peoplei:
-			genotypes = map(lambda x: t[x], peoplei)
-			genocount = map(lambda x: len(filter(lambda y: alt == y, x)), genotypes)
-			try:
-				snppos = rshash[rsid]
-				newline = snppos + '\t'
-				newline = reduce(lambda x,y: x+str(y) + ',', [newline] + genocount)
-				out.write(newline+'\n')
+		genotypes = map(lambda x: t[x], peoplei)
+		genocount = map(lambda x: len(filter(lambda y: alt == y, x.upper())), genotypes)
+		try:
+			snppos = rshash[rsid]
+			newline = snppos + '\t'
+			newline = reduce(lambda x,y: x+str(y) + ',', [newline] + genocount)
+			out.write(newline+'\n')
 
-				refhash[snppos] = ref
-				althash[snppos] = alt
-			except KeyError:
-				pass
+			refhash[snppos] = ref
+			althash[snppos] = alt
+		except KeyError:
+			pass
 	out.close()
 	return [refhash, althash]
 
