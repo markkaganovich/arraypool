@@ -159,6 +159,11 @@ if __name__ == "__main__":
 	
 	if args.a:
 		print "processing array, getting snps {0}".format(args.a)
+		getarraysnps(arg)
+		[f, e] = parsegenotypes.checkRef(report)
+		parsegenotypes.flipArray(report, f)
+		parsegenotypes.filterzeros(report)
+		parsegenotypes.printtabarray(report)
 	if args.g:
 		processgenotypes()
 	if args.hapmap:
