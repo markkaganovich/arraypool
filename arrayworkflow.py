@@ -78,12 +78,18 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 	glob.dump(genos, 'tempgenos')				
 	return genos
 			
-def combinegenos(names, chosenSNPs):			
+def combinegenos(names, chosenSNPs, out = 'combGenosfile'):			
 	genos = {}
 	files = map(lambda x: Genotypes(x), names)
 	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
 	glob.dump(genos, 'Genos')
 		
+	output = open(out, 'w')
+	output.write(genos['lines']+ '\n')
+	for g in genos.keys():
+		if g != 'lines':
+			output.write(g + '\t' + genos[g] + '\n')				
+	
 def processhapmap():
 	print "parsing hapmap genotypes chrom files"
 	parsegenotypes.parsehapmap()
@@ -109,7 +115,7 @@ def processgenotypes():
 		parsegenotypes.flipGeno(n+'Geno', c[0])
 			
 def main(argv):
-	opts, args = getopt.getopt(argv,"a:gh",["report="])
+	opts, args = getopt.getopt(argv,"a:ghc",["report="])
 	for opt, arg in opts:
 		if opt == '-a':
 			report = arg
@@ -128,6 +134,10 @@ def main(argv):
 			genofiles = names.append('hapmap')
 			snps = glob.json('Array251Msnps')
 			combinegenos(genofiles, snps)
+			
+		elif opt == "-i":
+			genofiles = names.append('hapmap')
+			
 			
 if __name__ == "__main__":
 	args = sys.argv[1:]
