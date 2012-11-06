@@ -94,7 +94,18 @@ def flipArray(arrayname, flip):
 	for snp in flip:
 		arrayfreq[flip] = 1 - arrayfreq[flip]
 	glob.dump(arrayfreq, arrayname+'freq')
+
+def filterzeros(arrayname):
+	"""take out those that are 0
+		
+	"""
 	
+	freq = globals.json(arrayname+'freq')
+	for snp in freq.keys():
+		if freq[snp] == 0:
+			del freq[snp]
+	globals.dump(freq, arrayname+'freq')
+
 def printtabarray(arrayname):
 	"""output will be analyzed by R to find cell line frequencies
 	"""
