@@ -132,7 +132,7 @@ def main(argv):
 			processhapmap()
 		elif opt == '-c':
 			snps = glob.json('Array251Msnps')
-			if arg ='':
+			if arg == '':
 				genofiles = names
 			else:
 				genofiles = arg
