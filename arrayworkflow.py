@@ -115,7 +115,7 @@ def processgenotypes():
 		parsegenotypes.flipGeno(n+'Geno', c[0])
 			
 def main(argv):
-	opts, args = getopt.getopt(argv,"a:ghc:",["report=", "genonames="])
+	opts, args = getopt.getopt(argv,"a:ghc:i",["report=", "genonames="])
 	for opt, arg in opts:
 		if opt == '-a':
 			report = arg
