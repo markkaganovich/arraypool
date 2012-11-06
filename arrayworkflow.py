@@ -1,5 +1,6 @@
 import parsegenotypes
 import sys, getopt
+import argparse
 import glob
 
 homedir = '/srv/gs1/projects/snyder/mark/genotypes/'
@@ -143,8 +144,36 @@ def main(argv):
 			
 			
 if __name__ == "__main__":
-	args = sys.argv[1:]
-	if len(args) > 0:
-		main(args)
+	#args = sys.argv[1:]
+	#if len(args) > 0:
+	#	main(args)
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-a', action = 'store_true', help='Extract snps from this Array')
+	parser.add_argument('-g', action='store_true')
+	parser.add_argument('-hapmap', action='store_true')
+	parser.add_argument('-combinetest', action='store_true')
+	parser.add_argument('-c')
+	parser.add_argument('-i')
+	args = parser.parse_args()
+	print args
+	
+	if args.a:
+		print "processing array, getting snps {0}".format(args.a)
+	if args.g:
+		processgenotypes()
+	if args.hapmap:
+		processhapmap()
+	if args.combinetest:
+		snps = glob.json('Array251Msnps')
+		combinegenos(names, snps)
+	if args.c:
+		snps = glob.json('Array251Msnps')
+		combinegenos(args.c, snps)
+			
+			
+		
+	
+	
+	
 	
 
