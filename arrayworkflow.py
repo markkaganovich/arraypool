@@ -115,7 +115,7 @@ def processgenotypes():
 		parsegenotypes.flipGeno(n+'Geno', c[0])
 			
 def main(argv):
-	opts, args = getopt.getopt(argv,"a:ghc",["report="])
+	opts, args = getopt.getopt(argv,"a:ghc:",["report=", "genonames="])
 	for opt, arg in opts:
 		if opt == '-a':
 			report = arg
@@ -131,8 +131,11 @@ def main(argv):
 		elif opt == '-h':
 			processhapmap()
 		elif opt == '-c':
-			genofiles = names.append('hapmap')
 			snps = glob.json('Array251Msnps')
+			if arg ='':
+				genofiles = names
+			else:
+				genofiles = arg
 			combinegenos(genofiles, snps)
 			
 		elif opt == "-i":
