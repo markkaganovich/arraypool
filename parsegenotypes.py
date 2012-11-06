@@ -71,8 +71,11 @@ def flipGeno(genofile, flip):
 	lines = open(genofile).readlines()
 	newgeno = open(genofile+'flipped', 'w')
 	newgeno.write(lines[0])
+	i=0
 	for l in lines[1:]:
 		t = l.split('\t')
+		i+=1
+		print i
 		if t[0] in flip:
 			newg = map(lambda x: 2-int(x), t[1].strip('\n').strip(',').split(','))
 			newl = t[0] +'\t' 
