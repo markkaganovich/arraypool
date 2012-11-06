@@ -148,7 +148,7 @@ if __name__ == "__main__":
 	#if len(args) > 0:
 	#	main(args)
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-a', action = 'store_true', help='Extract snps from this Array')
+	parser.add_argument('-a', help='Extract snps from this Array')
 	parser.add_argument('-g', action='store_true')
 	parser.add_argument('-hapmap', action='store_true')
 	parser.add_argument('-combinetest', action='store_true')
