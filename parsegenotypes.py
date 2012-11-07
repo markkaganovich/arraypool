@@ -84,6 +84,7 @@ def flipGeno(genofile, flip, errors):
 			newl = t[0] +'\t' 
 			newl = reduce(lambda x,y: x+str(y) + ',', [newl]+newg)
 			newgeno.write(newl.strip(',') + '\n')
+			print newl
 			#newlines.append(newl)
 		elif t[0] not in errors:
 			#newlines.append(l)
