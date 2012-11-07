@@ -69,7 +69,7 @@ def flipGeno(genofile, flip, errors):
 	"""	
 	
 	lines = open(genofile).readlines()
-	newgeno = open(genofile+'flipped', 'w')
+	newgeno = open(genofile+'flippedfast', 'w')
 	newgeno.write(lines[0])
 	newlines = []
 	i=0
