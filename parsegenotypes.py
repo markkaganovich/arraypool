@@ -80,6 +80,7 @@ def flipGeno(genofile, flip, errors):
 		i+=1
 		print i
 		if t[0] in flipset:
+			print t[0]
 			newg = map(lambda x: 2-int(x), t[1].strip('\n').strip(',').split(','))
 			newl = t[0] +'\t' 
 			newl = reduce(lambda x,y: x+str(y) + ',', [newl]+newg)
