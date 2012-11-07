@@ -81,9 +81,16 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 			
 def combinegenos(names, chosenSNPs, out = 'combGenosfile'):			
 	genos = {}
-	files = map(lambda x: Genotypes(x), names)
-	genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
-	glob.dump(genos, 'Genos')
+	
+	if type(names) is str:
+		file = Genotypes(names)
+		genos = getsnpgenos(genos, names, chosenSNPs)
+
+	if type(names) is list:
+		files = map(lambda x: Genotypes(x), names)
+		genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
+	
+	glob.dump(genos, out+'.json')
 		
 	output = open(out, 'w')
 	output.write(genos['lines']+ '\n')
@@ -171,10 +178,10 @@ if __name__ == "__main__":
 		processhapmap()
 	if args.init1KG:
 		snps = glob.json('Array251Msnps')
-		combinegenos(names1KG, snps)
+		combinegenos(names1KG, snps, 'Genos1kgArray25M')
 	if args.inithapmap:
 		snps = glob.json('Array251Msnps')
-		combinegenos('hapmap', snps)
+		combinegenos('hapmap', snps, 'hapmapGenosArray25M')
 		
 	if args.c:
 		snps = glob.json('Array251Msnps')

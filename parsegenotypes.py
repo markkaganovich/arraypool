@@ -105,11 +105,11 @@ def filterzeros(arrayname):
 		
 	"""
 	
-	freq = globals.json(arrayname+'freq')
+	freq = glob.json(arrayname+'freq')
 	for snp in freq.keys():
 		if freq[snp] == 0:
 			del freq[snp]
-	globals.dump(freq, arrayname+'freq')
+	glob.dump(freq, arrayname+'freq')
 
 def printtabarray(arrayname):
 	"""output will be analyzed by R to find cell line frequencies
