@@ -231,7 +231,7 @@ if __name__ == "__main__":
 		
 	if args.c:
 		snps = glob.json('Array25M1snps')
-		combinegenos(args.c, snps)
+		combinegenos(names1KG, snps)
 	
 	if args.int:
 		intercomb(['Genos1kgArray25M, hapmapGenosArray25M'])		
