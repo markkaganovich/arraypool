@@ -71,6 +71,7 @@ def flipGeno(genofile, flip, errors):
 	lines = open(genofile).readlines()
 	newgeno = open(genofile+'flipped', 'w')
 	newgeno.write(lines[0])
+	newlines = []
 	i=0
 	for l in lines[1:]:
 		t = l.split('\t')
@@ -80,9 +81,12 @@ def flipGeno(genofile, flip, errors):
 			newg = map(lambda x: 2-int(x), t[1].strip('\n').strip(',').split(','))
 			newl = t[0] +'\t' 
 			newl = reduce(lambda x,y: x+str(y) + ',', [newl]+newg)
-			newgeno.write(newl.strip('\n'))
+			#newgeno.write(newl.strip('\n'))
+			newlines.append(newl)
 		elif t[0] not in errors:
-			newgeno.write(l)
+			newlines.append(l)
+	for l in newlines:
+		newgeno.write(l)
 		
 def flipArray(arrayname, flip, error):
 	"""flip array snp frequencies (hash)
@@ -120,25 +124,6 @@ def printtabarray(arrayname):
 	for snp in freq.keys():
 		output.write(snp + '\t')
 		output.write(str(freq[snp]) + '\n') 
-		
-def interset(genotypes):
-	"""the combine genos stuff is predicated on the idea that if a SNP isn't mentioned
-	it's genotype is 0
-	in reality, if the snps are genotypes as part of different projects (like 1KG vs. HapMap)
-	then if a SNP is not present it may be because it was never tested
-	
-	This functions finds the intersecting set of snps between two genotype files, which can then be
-	used as part of the "chosen SNPs" to select the ultimate final combined Genos file
-	"""
-	snplist = map(lambda x: getsnps(x), genotypes)
-	ineverything = reduce(lambda x,y: set(x) & set(y))
-	return ineverything
-	
-def getsnps(genotypefile):
-	lines = genotypefile.readlines()
-	snppos = map(lambda x: x.split('\t')[0], lines[1:])
-	return snppos 		
-		
 			
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
