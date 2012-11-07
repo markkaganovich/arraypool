@@ -205,7 +205,7 @@ if __name__ == "__main__":
 	parser.add_argument('-init1KG', action='store_true')
 	parser.add_argument('-inithapmap', action='store_true')
 	parser.add_argument('-int', action='store_true')
-	parser.add_argument('-c')
+	parser.add_argument('-c', action='store_true')
 	parser.add_argument('-i')
 	args = parser.parse_args()
 	print args
