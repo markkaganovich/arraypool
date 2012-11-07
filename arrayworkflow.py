@@ -148,10 +148,11 @@ def processhapmap():
 	print "now filtering SNPs"
 	b = parsegenotypes.filterSNPs('../genotypes/hapmap')
 	print "{0} SNPs filtered out".format(len(b))
-	c = parsegenotypes.checkRef('../genotypes/hapmap')
-	print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
+	[flips, errors] = parsegenotypes.checkRef('../genotypes/hapmap')
+	print "{0} flips and {1} errors".format(len(flips),len(errors))
 	#flips = glob.json('../genotypes/hapmapflips')
-	parsegenotypes.flipGeno('hapmapGeno', c[0], c[1])
+	#errors = glob.json('../genotypes/hapmaperrors')
+	parsegenotypes.flipGeno('hapmapGeno', flips, errors)
 
 def processgenotypes():
 	"""parse genotype files and flip them around according to hg19
