@@ -69,28 +69,28 @@ def flipGeno(genofile, flip, errors):
 	"""	
 	
 	file = open(genofile)
-	lines = file.readlines(100000)
+	lines = file.readlines()
 	newgeno = open(genofile+'flippedfast', 'w')
 	newgeno.write(lines[0])
-	newlines = []
+	#newlines = []
 	i=0
-	while(lines != []):
-		for l in lines[1:]:
-			t = l.split('\t')
-			i+=1
-			print i
-			if t[0] in flip:
-				newg = map(lambda x: 2-int(x), t[1].strip('\n').strip(',').split(','))
-				newl = t[0] +'\t' 
-				newl = reduce(lambda x,y: x+str(y) + ',', [newl]+newg)
-				#newgeno.write(newl.strip('\n'))
-				newlines.append(newl)
-			elif t[0] not in errors:
-				newlines.append(l)
-		lines = file.readlines(100000)
+	flipset = set(flip)
+	for l in lines[1:]:
+		t = l.split('\t')
+		i+=1
+		print i
+		if t[0] in flipset:
+			newg = map(lambda x: 2-int(x), t[1].strip('\n').strip(',').split(','))
+			newl = t[0] +'\t' 
+			newl = reduce(lambda x,y: x+str(y) + ',', [newl]+newg)
+			newgeno.write(newl.strip('\n'))
+			#newlines.append(newl)
+		elif t[0] not in errors:
+			#newlines.append(l)
+			newgeno.write(l)
 	
-	for l in newlines:
-		newgeno.write(l)
+	#for l in newlines:
+	#	newgeno.write(l)
 		
 def flipArray(arrayname, flip, error):
 	"""flip array snp frequencies (hash)
