@@ -116,7 +116,7 @@ def printtabarray(arrayname):
 	"""
 	
 	output = open(arrayname+'Rinput', 'w')
-	freq = glob.load(arrayname+'freq')
+	freq = glob.json(arrayname+'freq')
 	for snp in freq.keys():
 		output.write(snp + '\t')
 		output.write(str(freq[snp]) + '\n') 
