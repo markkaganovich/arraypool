@@ -4,8 +4,8 @@ import argparse
 import glob
 
 homedir = '/srv/gs1/projects/snyder/mark/genotypes/'
-names = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
-homedirnames = map(lambda x: homedir+x, names)	
+names1KG = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
+homedirnames = map(lambda x: homedir+x, names1KG)	
 
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
@@ -107,8 +107,8 @@ def processgenotypes():
 	
 	"""
 	for i, n in enumerate(homedirnames):
-		parsegenotypes.parse1KGvcf(vcffiles[i], names[i])
-		b = parsegenotypes.filterSNPs(names[i])
+		parsegenotypes.parse1KGvcf(vcffiles[i], names1KG[i])
+		b = parsegenotypes.filterSNPs(names1KG[i])
 		print "{0} SNPs filtered out".format(len(b))
 		c = parsegenotypes.checkRef(n)
 		print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
@@ -151,7 +151,7 @@ if __name__ == "__main__":
 	parser.add_argument('-a', help='Extract snps from this Array')
 	parser.add_argument('-g', action='store_true')
 	parser.add_argument('-hapmap', action='store_true')
-	parser.add_argument('-combinetest', action='store_true')
+	parser.add_argument('-init1KG', action='store_true')
 	parser.add_argument('-c')
 	parser.add_argument('-i')
 	args = parser.parse_args()
@@ -169,14 +169,20 @@ if __name__ == "__main__":
 		processgenotypes()
 	if args.hapmap:
 		processhapmap()
-	if args.combinetest:
+	if args.init1KG:
 		snps = glob.json('Array251Msnps')
-		combinegenos(names, snps)
+		combinegenos(names1KG, snps)
+	if args.inithapmap:
+		snps = glob.json('Array251Msnps')
+		combinegenos('hapmap', snps)
+		
 	if args.c:
 		snps = glob.json('Array251Msnps')
 		combinegenos(args.c, snps)
-			
-			
+	
+	if args.int:
+		snpsingenos = parsegenotypes.intersect(['Genos1kgArray25M, hapmapGenosArray25M'])		
+		combinegenos(['Genos1kgArray25M, hapmapGenosArray25M'], snpsingenos)
 		
 	
 	

@@ -84,7 +84,7 @@ def flipGeno(genofile, flip, errors):
 		elif t[0] not in errors:
 			newgeno.write(l)
 		
-def flipArray(arrayname, flip):
+def flipArray(arrayname, flip, error):
 	"""flip array snp frequencies (hash)
 	1-freq for those in snp list inputed as flip
 	input is constructed in the original getarraysnps() function
@@ -95,7 +95,9 @@ def flipArray(arrayname, flip):
 	except:
 		"No array snp frequency file"
 	for snp in flip:
-		arrayfreq[flip] = 1 - arrayfreq[flip]
+		arrayfreq[snp] = 1 - arrayfreq[snp]
+	for snp in error:
+		del arrayfreq[snp]
 	glob.dump(arrayfreq, arrayname+'freq')
 
 def filterzeros(arrayname):
