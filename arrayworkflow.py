@@ -83,8 +83,8 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile'):
 	genos = {}
 	
 	if type(names) is str:
-		file = Genotypes(names)
-		genos = getsnpgenos(genos, names, chosenSNPs)
+		f = Genotypes(names)
+		genos = getsnpgenos(genos, f, chosenSNPs)
 
 	if type(names) is list:
 		files = map(lambda x: Genotypes(x), names)
