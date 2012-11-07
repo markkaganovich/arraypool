@@ -185,7 +185,7 @@ def main(argv):
 		elif opt == '-c':
 			snps = glob.json('Array251Msnps')
 			if arg == '':
-				genofiles = names
+				genofiles = names1KG
 			else:
 				genofiles = arg
 			combinegenos(genofiles, snps)
