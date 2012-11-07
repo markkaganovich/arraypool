@@ -44,9 +44,9 @@ def getarraysnps(report):
 	
 ### get genotype
 class Genotypes:
-	def __init__(self, name):
+	def __init__(self, name, ext = "Geno"):
 		self.name = name
-		self.genofile = open('./' + name + 'Geno')
+		self.genofile = open('./' + name + ext)
 		self.__genolen__()
 	def __genolen__(self):
 		l = self.genofile.readline()
@@ -97,7 +97,51 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile'):
 	for g in genos.keys():
 		if g != 'lines':
 			output.write(g + '\t' + genos[g] + '\n')				
+			
+def interset(genotypes):
+	"""the combine genos stuff is predicated on the idea that if a SNP isn't mentioned
+	it's genotype is 0
+	in reality, if the snps are genotypes as part of different projects (like 1KG vs. HapMap)
+	then if a SNP is not present it may be because it was never tested
+
+	This functions finds the intersecting set of snps between two genotype files, which can then be
+	used as part of the "chosen SNPs" to select the ultimate final combined Genos file
+	"""
+	snplist = map(lambda x: getsnps(x), genotypes)
+	ineverything = reduce(lambda x,y: set(x) & set(y), snplist)
+	return ineverything
+
+def getsnps(genotypefile):
+	lines = genotypefile.readlines()
+	snppos = map(lambda x: x.split('\t')[0], lines[1:])
+	return snppos			
+			
+def intercomb(genotypes, out = 'intercomb'):
+	"""the purpose of this function is to do a simple genotype file combine, based on select snps, the
+	assumption is that the files are from two different categories of genotyping projects, so the snps
+	used are an output of the interset() function
+	"""
+	snps = interset(genotypes)
+	combinedgenos = {}
+	combinedgenos['lines'] = []
+	for g in genotypes:
+		lines = open(g).readlines()
+		combinedgenos['lines'] = combinedgenos['lines'].append(lines[0])
+		for l in lines[1:]:
+			t = l.split('\t')
+			snp = t[0]	
+			try:
+				combinedgenos[snp] = combinedgenos[snp].strip(',') + ','+t[1].strip('\n')
+			except KeyError:
+				combinedgenos[snp] = t[1].strip('\n')
+		
+	output = open(out, 'w')
+	output.write(combinedgenos['lines']+ '\n')
+	for g in combinedgenos.keys():
+		if g != 'lines':
+			output.write(g + '\t' + combinedgenos[g] + '\n')
 	
+		
 def processhapmap():
 	print "parsing hapmap genotypes chrom files"
 	parsegenotypes.parsehapmap()
@@ -159,6 +203,8 @@ if __name__ == "__main__":
 	parser.add_argument('-g', action='store_true')
 	parser.add_argument('-hapmap', action='store_true')
 	parser.add_argument('-init1KG', action='store_true')
+	parser.add_argument('-inithapmap', action='store_true')
+	parser.add_argument('-int', action='store_true')
 	parser.add_argument('-c')
 	parser.add_argument('-i')
 	args = parser.parse_args()
@@ -188,8 +234,7 @@ if __name__ == "__main__":
 		combinegenos(args.c, snps)
 	
 	if args.int:
-		snpsingenos = parsegenotypes.intersect(['Genos1kgArray25M, hapmapGenosArray25M'])		
-		combinegenos(['Genos1kgArray25M, hapmapGenosArray25M'], snpsingenos)
+		intercomb(['Genos1kgArray25M, hapmapGenosArray25M'])		
 		
 	
 	
