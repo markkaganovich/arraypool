@@ -99,7 +99,7 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile', incarray = 0):
 	output.write('\t' + linenames +'\n')
 	for g in genos.keys():
 		if g != 'lines':
-			output.write(g + '\t' + genos[g] + '\n')				
+			output.write(g + '\t' + genos[g].strip(',') + '\n')				
 			
 def interset(genotypes):
 	"""the combine genos stuff is predicated on the idea that if a SNP isn't mentioned
@@ -200,7 +200,7 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 			newg = []
 			for i in range(0, len(gs)):
 				if i in poolinds:
-					newg.append(g[i])
+					newg.append(gs[i])
 			newg = reduce(lambda x,y: x + ',' + y, newg)
 			newl = newl + newg + '\n'
 			output.write(newl)					
