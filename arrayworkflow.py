@@ -187,6 +187,9 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 	linenames = lines[0]
 	ln = linenames.split('\t')[1].split(',')
 	ln = map(lambda x: x.strip('\n'), ln)
+	print pool
+	for p in pool:
+		print ln.index(p)
 	poolinds = map(lambda x: ln.index(x), pool)
 	
 	for l in lines[1:]:
