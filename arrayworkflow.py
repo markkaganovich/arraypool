@@ -53,7 +53,7 @@ class Genotypes:
 		self.ln = len(l.split(','))
 		self.genofile.seek(0)
 
-def getsnpgenos(genos, filestruc, chosenSNPs, af = 0):
+def getsnpgenos(genos, filestruc, chosenSNPs, incarray = 0):
 	lines = filestruc.genofile.readlines()
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
@@ -71,11 +71,12 @@ def getsnpgenos(genos, filestruc, chosenSNPs, af = 0):
 				genos[snp] = genos[snp].strip(',') + ','+t[1].strip('\n')
 			except KeyError:
 				genos[snp] = t[1].strip('\n')
-	for s in notingeno and af == 0:
-		try:
-			genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
-		except KeyError:
-			genos[s] = '0,' * filestruc.ln
+	if incarray ==:
+		for s in notingeno:
+			try:
+				genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
+			except KeyError:
+				genos[s] = '0,' * filestruc.ln
 	glob.dump(genos, 'tempgenos')				
 	return genos
 			
