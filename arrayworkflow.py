@@ -71,7 +71,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs, incarray = 0):
 				genos[snp] = genos[snp].strip(',') + ','+t[1].strip('\n')
 			except KeyError:
 				genos[snp] = t[1].strip('\n')
-	if incarray ==:
+	if incarray == 0:
 		for s in notingeno:
 			try:
 				genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
