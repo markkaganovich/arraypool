@@ -108,6 +108,7 @@ def interset(genotypes):
 	used as part of the "chosen SNPs" to select the ultimate final combined Genos file
 	"""
 	snplist = map(lambda x: getsnps(x), genotypes)
+	print len(snplist)
 	ineverything = reduce(lambda x,y: set(x) & set(y), snplist)
 	return ineverything
 
