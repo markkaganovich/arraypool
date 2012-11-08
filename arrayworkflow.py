@@ -128,7 +128,7 @@ def intercomb(genotypes, out = 'intercomb'):
 	combinedgenos['lines'] = []
 	for g in genotypes:
 		lines = open(g).readlines()
-		combinedgenos['lines'] = combinedgenos['lines'].append(lines[0])
+		combinedgenos['lines'].append(lines[0])
 		for l in lines[1:]:
 			t = l.split('\t')
 			snp = t[0]	
