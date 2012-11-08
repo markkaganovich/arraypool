@@ -144,6 +144,7 @@ def intercomb(genotypes, out = 'intercomb'):
 					combinedgenos[snp] = t[1].strip('\n')
 		
 	output = open(out, 'w')
+	combinedgenos['lines'] = map(lambda x: x.strip('\n'), combinedgenos['lines'])
 	linenames = reduce(lambda x,y: x +',' + y, combinedgenos['lines'])
 	output.write('\t' +linenames)
 	for g in combinedgenos.keys():
