@@ -112,7 +112,9 @@ def interset(genotypes):
 	return ineverything
 
 def getsnps(genotypefile):
+	f = open(genotypefile)
 	lines = genotypefile.readlines()
+	f.close()
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	return snppos			
 			
