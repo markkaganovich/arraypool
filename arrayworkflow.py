@@ -93,8 +93,7 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile', incarray = 0):
 	
 	glob.dump(genos, out+'.json')
 		
-	for g in genos['lines']:
-		g.strip('\n')
+	genos['lines'] = map(lambda x: x.strip('\n'), genos['lines'])
 	output = open(out, 'w')
 	linenames = reduce(lambda x,y: x +',' + y, genos['lines'])
 	output.write('\t' + linenames +'\n')
@@ -176,6 +175,34 @@ def processgenotypes():
 		print "{0} errors and {1} flipped".format(len(c[1]),len(c[0]))
 		#parsegenotypes.corrRef(c[0], n)
 		parsegenotypes.flipGeno(n+'Geno', c[0], c[1])
+		
+def getpoollines(genofile, pool.json, out = "poolgenotype"):
+	output = open(out, 'w')
+	
+	pool = glob.json(pool.json)
+	g = open(genofile)
+	lines = g.readlines()
+	g.close()
+	
+	linenames = lines[0]
+	ln = linesnames.split('\t')[1].split(',')
+	ln = map(lambda x: x.strip('\n'), ln)
+	poolinds = map(lambda x: ln.index(x), pool)
+	
+	for l in lines[1:]:
+		t = l.split('\t')
+		
+		gs = t[1].split(',')
+		if len(filter(lambda x: int(x)!=0, gs)) >0:
+			newl = t[0] + '\t'
+			newg = []
+			for i in range(0, len(gs)):
+				if i in poolinds:
+					newg.append(g[i])
+			newg = reduce(lambda x,y: x + ',' + y, newg)
+			newl = newl + newg + '\n'
+			output.write(newl)					
+			
 			
 def main(argv):
 	opts, args = getopt.getopt(argv,"a:ghc:i",["report=", "genonames="])
