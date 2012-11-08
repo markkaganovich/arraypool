@@ -185,7 +185,7 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 	g.close()
 	
 	linenames = lines[0]
-	ln = linesnames.split('\t')[1].split(',')
+	ln = linenames.split('\t')[1].split(',')
 	ln = map(lambda x: x.strip('\n'), ln)
 	poolinds = map(lambda x: ln.index(x), pool)
 	
@@ -243,7 +243,7 @@ if __name__ == "__main__":
 	parser.add_argument('-init1KG', action='store_true')
 	parser.add_argument('-inithapmap', action='store_true')
 	parser.add_argument('-int', action='store_true')
-	parser.add_argument('-c', action='store_true')
+	parser.add_argument('-pool', action='store_true')
 	parser.add_argument('-i')
 	args = parser.parse_args()
 	print args
@@ -267,9 +267,8 @@ if __name__ == "__main__":
 		snps = glob.json('Array25M1snps')
 		combinegenos('hapmap', snps, 'hapmapGenosArray25M', 1)
 		
-	if args.c:
-		snps = glob.json('Array25M1snps')
-		combinegenos(names1KG, snps)
+	if args.pool:
+		getpoollines('intercomb','pool2', 'intercombpool2')
 	
 	if args.int:
 		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
