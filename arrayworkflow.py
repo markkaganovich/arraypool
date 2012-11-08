@@ -84,6 +84,7 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile', incarray = 0):
 	
 	if type(names) is str:
 		f = Genotypes(names)
+		print incarray
 		genos = getsnpgenos(genos, f, chosenSNPs, incarray)
 
 	if type(names) is list:
