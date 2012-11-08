@@ -53,7 +53,7 @@ class Genotypes:
 		self.ln = len(l.split(','))
 		self.genofile.seek(0)
 
-def getsnpgenos(genos, filestruc, chosenSNPs):
+def getsnpgenos(genos, filestruc, chosenSNPs, incarray = 0):
 	lines = filestruc.genofile.readlines()
 	snppos = map(lambda x: x.split('\t')[0], lines[1:])
 	inboth = set(snppos) & set(chosenSNPs)
@@ -71,7 +71,7 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 				genos[snp] = genos[snp].strip(',') + ','+t[1].strip('\n')
 			except KeyError:
 				genos[snp] = t[1].strip('\n')
-	for s in notingeno:
+	for s in notingeno and incarray == 0:
 		try:
 			genos[s] = genos[s].strip(',') + ','+('0,' * filestruc.ln)
 		except KeyError:
@@ -79,16 +79,16 @@ def getsnpgenos(genos, filestruc, chosenSNPs):
 	glob.dump(genos, 'tempgenos')				
 	return genos
 			
-def combinegenos(names, chosenSNPs, out = 'combGenosfile'):			
+def combinegenos(names, chosenSNPs, out = 'combGenosfile', incarray = 0):			
 	genos = {}
 	
 	if type(names) is str:
 		f = Genotypes(names)
-		genos = getsnpgenos(genos, f, chosenSNPs)
+		genos = getsnpgenos(genos, f, chosenSNPs, incarray)
 
 	if type(names) is list:
 		files = map(lambda x: Genotypes(x), names)
-		genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs), [genos]+files)
+		genos = reduce(lambda x,y: getsnpgenos(x, y, chosenSNPs, incarray), [genos]+files)
 	
 	glob.dump(genos, out+'.json')
 		
@@ -232,7 +232,7 @@ if __name__ == "__main__":
 		combinegenos(names1KG, snps, 'Genos1kgArray25M')
 	if args.inithapmap:
 		snps = glob.json('Array25M1snps')
-		combinegenos('hapmap', snps, 'hapmapGenosArray25M')
+		combinegenos('hapmap', snps, 'hapmapGenosArray25M', 1)
 		
 	if args.c:
 		snps = glob.json('Array25M1snps')
