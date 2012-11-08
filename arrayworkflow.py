@@ -149,7 +149,7 @@ def intercomb(genotypes, out = 'intercomb'):
 	output.write('\t' +linenames + '\n')
 	for g in combinedgenos.keys():
 		if g != 'lines':
-			output.write(g + '\t' + combinedgenos[g] + '\n')
+			output.write(g + '\t' + combinedgenos[g].strip(',') + '\n')
 	
 		
 def processhapmap():
@@ -189,8 +189,6 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 	ln = linenames.split('\t')[1].split(',')
 	ln = map(lambda x: x.strip('\n'), ln)
 	print pool
-	for p in pool:
-		print ln.index(p)
 	poolinds = map(lambda x: ln.index(x), pool)
 	
 	for l in lines[1:]:
