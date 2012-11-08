@@ -94,10 +94,8 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile', incarray = 0):
 	glob.dump(genos, out+'.json')
 		
 	output = open(out, 'w')
-	print genos['lines']
-	ln = ['']
-	linenames = reduce(lambda x,y: x +',' + y, ln.extend(genos['lines']))
-	output.write(linenames + '\n')
+	linenames = reduce(lambda x,y: x +',' + y, genos['lines'])
+	output.write('\t' + linenames)
 	for g in genos.keys():
 		if g != 'lines':
 			output.write(g + '\t' + genos[g] + '\n')				
