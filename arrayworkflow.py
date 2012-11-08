@@ -237,7 +237,7 @@ if __name__ == "__main__":
 		combinegenos(names1KG, snps)
 	
 	if args.int:
-		intercomb(['Genos1kgArray25M, hapmapGenosArray25M'])		
+		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
 		
 	
 	
