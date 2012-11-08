@@ -135,10 +135,11 @@ def intercomb(genotypes, out = 'intercomb'):
 		for l in lines[1:]:
 			t = l.split('\t')
 			snp = t[0]	
-			try:
-				combinedgenos[snp] = combinedgenos[snp].strip(',') + ','+t[1].strip('\n')
-			except KeyError:
-				combinedgenos[snp] = t[1].strip('\n')
+			if snp in snps:
+				try:
+					combinedgenos[snp] = combinedgenos[snp].strip(',') + ','+t[1].strip('\n')
+				except KeyError:
+					combinedgenos[snp] = t[1].strip('\n')
 		
 	output = open(out, 'w')
 	output.write(str(combinedgenos['lines'])+ '\n')
