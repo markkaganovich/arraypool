@@ -176,10 +176,10 @@ def processgenotypes():
 		#parsegenotypes.corrRef(c[0], n)
 		parsegenotypes.flipGeno(n+'Geno', c[0], c[1])
 		
-def getpoollines(genofile, pool.json, out = "poolgenotype"):
+def getpoollines(genofile, pool, out = "poolgenotype"):
 	output = open(out, 'w')
 	
-	pool = glob.json(pool.json)
+	pool = glob.json(pool)
 	g = open(genofile)
 	lines = g.readlines()
 	g.close()
