@@ -94,7 +94,9 @@ def combinegenos(names, chosenSNPs, out = 'combGenosfile', incarray = 0):
 	glob.dump(genos, out+'.json')
 		
 	output = open(out, 'w')
-	output.write("".join(genos['lines'])+ '\n')
+	linenames = ""
+	reduce(lambda x,y: x +',' + y, list(linenames).append(genos['lines']))
+	output.write(linenames + '\n')
 	for g in genos.keys():
 		if g != 'lines':
 			output.write(g + '\t' + genos[g] + '\n')				
@@ -142,7 +144,7 @@ def intercomb(genotypes, out = 'intercomb'):
 					combinedgenos[snp] = t[1].strip('\n')
 		
 	output = open(out, 'w')
-	output.write(str(combinedgenos['lines'])+ '\n')
+	output.write("".join(combinedgenos['lines'])+ '\n')
 	for g in combinedgenos.keys():
 		if g != 'lines':
 			output.write(g + '\t' + combinedgenos[g] + '\n')
