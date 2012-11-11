@@ -209,7 +209,22 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 					newg.append(gs[i])
 			newg = reduce(lambda x,y: x + ',' + y, newg)
 			newl = newl + newg + '\n'
-			output.write(newl)					
+			output.write(newl)		
+			
+def mergearraypool(poolgenotypefile, arrayfreqfile):
+	pfile = open(poolgenotypefile)
+	plines = pfile.readlines()
+	pfile.close()
+	afile = open(arrayfreqfile)
+	alines = afile.readlines()
+	afile.close()
+	asnps = map(lambda x: x.split('\t')[0], alines[1:])
+	asnpsset = set(asnps)
+	
+	output = open("mergedarraypool.Rinput",'w')
+	for g in plines:
+		if g.split('\t')[0] in asnpsset:
+			output.write(g)	
 			
 			
 def main(argv):
