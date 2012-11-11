@@ -221,8 +221,6 @@ def mergearraypool(poolgenotypefile, arrayfreqfile):
 	asnps = map(lambda x: x.split('\t')[0], alines[1:])
 	asnpsset = set(asnps)
 	
-	print asnpsset[0]
-	
 	output = open("mergedarraypool.Rinput",'w')
 	for g in plines[1:]:
 		if g.split('\t')[0] in asnpsset:
