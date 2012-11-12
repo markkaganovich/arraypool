@@ -234,6 +234,11 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	uarraysnps = set(uarray.snps)
 	
 	arrayobj = map(lambda x: Array(x), arrays)
+	map(lambda x: x.makedic(), arrayobj)
+	snpsincommon = reduce(lambda x,y: set(x.snps) & set(y.snps), [uarray].extend(arrayobj))
+	len(snpsincommon)
+	
+    # need to write something that excludes snps that aren't present everywhere
 	
 	output = open("G.Rinput",'w')
 	output.write(plines[0])
