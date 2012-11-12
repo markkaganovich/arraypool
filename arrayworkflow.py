@@ -242,7 +242,7 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 		if g.split(',')[0] in uarraysnps:
 			output.write(g)	
 			
-	output = open("Uarray.Rinput", 'w')
+	output = open("Uarray.poolRinput", 'w')
 	for g in plines[1:]:
 		snp = g.split(',')[0]
 		if snp in uarraysnps:
@@ -250,7 +250,7 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 			
 	for a in arrayobj:
 		a.makedic()
-		output = open(a.name+'.Rinput', 'w')
+		output = open(a.name+'.poolRinput', 'w')
 		for g in plines[1:]:
 			snp = g.split(',')[0]
 			if snp in uarraysnps:
