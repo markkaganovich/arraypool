@@ -215,7 +215,7 @@ class Array:
 	def __init__(self, name):
 		self.name = name
 	def makedic(self):
-		afile = open(self.name)
+		afile = open(self.name+'Rinput')
 		alines = afile.readlines()
 		afile.close()
 		self.dic = {}
