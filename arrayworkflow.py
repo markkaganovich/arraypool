@@ -235,7 +235,9 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	
 	arrayobj = map(lambda x: Array(x), arrays)
 	map(lambda x: x.makedic(), arrayobj)
-	snpsincommon = reduce(lambda x,y: set(x.snps) & set(y.snps), [uarray].extend(arrayobj))
+	allarrays = [uarray]
+	allarrays.extend(arrayobj)
+	snpsincommon = reduce(lambda x,y: set(x.snps) & set(y.snps), allarrays)
 	len(snpsincommon)
 	
     # need to write something that excludes snps that aren't present everywhere
