@@ -210,22 +210,55 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 			newg = reduce(lambda x,y: x + ',' + y, newg)
 			newl = newl + newg + '\n'
 			output.write(newl)		
+
+class Array:
+	def init(self, name):
+		self.name = name
+	def makedic(self):
+		afile = open(name)
+		alines = afile.readlines()
+		afile.close()
+		self.dic = {}
+		for l in alines[1:]:
+			self.dic[a.split('\t')[0]] = int(a.split('\t')[1])
+		self.snps = self.dic.keys()  
+
 			
-def mergearraypool(poolgenotypefile, arrayfreqfile):
+def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	pfile = open(poolgenotypefile)
 	plines = pfile.readlines()
 	pfile.close()
-	afile = open(arrayfreqfile)
-	alines = afile.readlines()
-	afile.close()
-	asnps = map(lambda x: x.split('\t')[0], alines[1:])
-	asnpsset = set(asnps)
 	
-	output = open("mergedarraypool.Rinput",'w')
+	uarray = Array(uniformarray)
+	uarray.makedic()
+	uarraysnps = set(uarray.snps)
+	
+	arrayobj = map(lambda x: Array(x), arrays)
+	
+	output = open("G.Rinput",'w')
 	output.write(plines[0])
+	
 	for g in plines[1:]:
-		if g.split(',')[0] in asnpsset:
+		if g.split(',')[0] in uarraysnps:
 			output.write(g)	
+			
+	output = open("Uarray.Rinput", 'w')
+	for g in plines[1:]:
+		snp = g.split(',')[0]
+		if snp in uarraysnps:
+			output.write(snp +',' + uarray.dic[snp] + '\n')
+			
+	for a in arrayobj:
+		a.makedic()
+		output = open(a.name+'.Rinput', 'w')
+		for g in plines[1:]:
+			snp = g.split(',')[0]
+			if snp in uarraysnps:
+				try:
+					output.write(snp + ',' + a.dic[snp] + '\n')
+				except KeyError:
+					"Snp not in this array"
+					
 			
 			
 def main(argv):
