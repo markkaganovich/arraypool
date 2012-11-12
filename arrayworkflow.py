@@ -220,7 +220,7 @@ class Array:
 		afile.close()
 		self.dic = {}
 		for l in alines[1:]:
-			self.dic[a.split('\t')[0]] = int(a.split('\t')[1])
+			self.dic[l.split('\t')[0]] = int(l.split('\t')[1])
 		self.snps = self.dic.keys()  
 
 			
