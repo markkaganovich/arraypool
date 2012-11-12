@@ -254,10 +254,10 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 		for g in plines[1:]:
 			snp = g.split(',')[0]
 			if snp in uarraysnps:
-				try:
-					output.write(snp + ',' + str(a.dic[snp]) + '\n')
-				except KeyError:
-					"Snp not in this array"
+				#try:
+				output.write(snp + ',' + str(a.dic[snp]) + '\n')
+				#except KeyError:
+				#	"Snp not in this array"
 					
 			
 			
