@@ -1,6 +1,7 @@
 from pygr import worldbase
 import glob
 import os
+import math
 
 def filterSNPs(name):
 	reffile = name +'Ref'
@@ -115,7 +116,7 @@ def filterzeros(arrayname):
 	
 	freq = glob.json(arrayname+'freq')
 	for snp in freq.keys():
-		if freq[snp] == 0:
+		if freq[snp] == 0 or math.isnan(freq[snp]):
 			del freq[snp]
 	glob.dump(freq, arrayname+'freq')
 
