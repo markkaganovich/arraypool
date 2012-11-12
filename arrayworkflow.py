@@ -238,7 +238,7 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	allarrays = [uarray]
 	allarrays.extend(arrayobj)
 	snpsincommon = reduce(lambda x,y: set(x.snps) & set(y.snps), allarrays)
-	len(snpsincommon)
+	print len(snpsincommon)
 	
     # need to write something that excludes snps that aren't present everywhere
 	
@@ -246,13 +246,13 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	output.write(plines[0])
 	
 	for g in plines[1:]:
-		if g.split(',')[0] in uarraysnps:
+		if g.split(',')[0] in snpsincommon:
 			output.write(g)	
 			
 	output = open("Uarray.poolRinput", 'w')
 	for g in plines[1:]:
 		snp = g.split(',')[0]
-		if snp in uarraysnps:
+		if snp in snpsincommon:
 			output.write(snp +',' + str(uarray.dic[snp]) + '\n')
 			
 	for a in arrayobj:
@@ -260,7 +260,7 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 		output = open(a.name+'.poolRinput', 'w')
 		for g in plines[1:]:
 			snp = g.split(',')[0]
-			if snp in uarraysnps:
+			if snp in snpsincommon:
 				#try:
 				output.write(snp + ',' + str(a.dic[snp]) + '\n')
 				#except KeyError:
