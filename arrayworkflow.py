@@ -240,8 +240,6 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	snpsincommon = reduce(lambda x,y: set(x.snps) & set(y.snps), allarrays)
 	print len(snpsincommon)
 	
-    # need to write something that excludes snps that aren't present everywhere
-	
 	output = open("G.Rinput",'w')
 	output.write(plines[0])
 	
