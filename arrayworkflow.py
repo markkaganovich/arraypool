@@ -246,7 +246,7 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	for g in plines[1:]:
 		snp = g.split(',')[0]
 		if snp in uarraysnps:
-			output.write(snp +',' + uarray.dic[snp] + '\n')
+			output.write(snp +',' + str(uarray.dic[snp]) + '\n')
 			
 	for a in arrayobj:
 		a.makedic()
@@ -255,7 +255,7 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 			snp = g.split(',')[0]
 			if snp in uarraysnps:
 				try:
-					output.write(snp + ',' + a.dic[snp] + '\n')
+					output.write(snp + ',' + str(a.dic[snp]) + '\n')
 				except KeyError:
 					"Snp not in this array"
 					
