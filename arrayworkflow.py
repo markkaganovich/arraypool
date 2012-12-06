@@ -212,8 +212,10 @@ def getpoollines(genofile, pool, out = "poolgenotype"):
 			output.write(newl)		
 
 class Array:
+	
 	def __init__(self, name):
 		self.name = name
+	
 	def makedic(self):
 		afile = open(self.name+'Rinput')
 		alines = afile.readlines()
