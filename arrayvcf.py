@@ -3,6 +3,9 @@ import gl
 
 poollines = ['NA19211', 'NA18943', 'NA19209', 'NA18526' ,'NA19161' , 'NA11920', 'NA11995' , 'NA18564' , 'NA18499' , 'NA12003']
 names1KG = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
+vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
+'../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
+
 
 def in1kg(poollines, names):
 	lines = []
@@ -32,7 +35,7 @@ def parse1KGvcf(vcffile, outputname):
 	while(lines != []):
 		for l in lines:
 			if l.startswith('#CHROM'):
-				g = reduce(lambda x,y: x+','+y, l.strip('\n').split('\t')[9:])
+					g = reduce(lambda x,y: x+','+y, l.strip('\n').split('\t')[9:])
 				outputfile.write('\t'+str(g) +'\n')
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
