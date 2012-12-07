@@ -16,6 +16,7 @@ def getlines(name):
 	vfile = open(name, 'r')
 	vcf_reader = vcf.Reader(vfile)
 	lines = vcf_reader.samples
+	return lines
 
 #modified to the 19 version
 def parse1KGvcf(vcffile, outputname):
