@@ -16,9 +16,9 @@ def in1kg(poollines, names):
 		if l in lines:
 			result.append(True)
 		else:
-			results.append(False)
+			result.append(False)
 	return result
-	
+
 def getlines(name):
 	vfile = open(name, 'r')
 	vcf_reader = vcf.Reader(vfile)
