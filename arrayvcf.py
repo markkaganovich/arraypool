@@ -26,8 +26,6 @@ def parse1KGvcf(vcffile, outputname):
 		chrom = record.INFO['GP'].split(':')[0]
 		pos = record.INFO['GP'].split(':')[1]	
 		
-
-
 	outputfile = open(outputname+'Geno', 'w')
 	ref = {}
 	alt = {}
