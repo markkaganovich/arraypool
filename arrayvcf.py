@@ -33,7 +33,7 @@ def parse1KGvcf(vcffile, outputname):
 	while(lines != []):
 		for l in lines:
 			if l.startswith('#CHROM'):
-					g = reduce(lambda x,y: x+','+y, l.strip('\n').split('\t')[9:])
+				g = reduce(lambda x,y: x+','+y, l.strip('\n').split('\t')[9:])
 				outputfile.write('\t'+str(g) +'\n')
 			if not l.startswith('#'):
 				tokens = l.strip('\n').split('\t')
