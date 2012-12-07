@@ -22,7 +22,7 @@ def getarraysnps(report):
 	chri = h.index("Chr")
 	posi = h.index("Position")
 	Yi = h.index("Y")
-	Ri = h.index("R")
+	Xi = h.index("X")
 	snplist = []
 	ref = {}
 	alt = {}
@@ -36,7 +36,7 @@ def getarraysnps(report):
 			snplist.append(snppos)
 			ref[snppos] = t[snpi].split('/')[0][1] 
 			alt[snppos] = t[snpi].split('/')[1][0]
-			freq[snppos] = float(t[Yi])/float(t[Ri])
+			freq[snppos] = float(t[Yi])/(float(t[Yi])+float(t[Xi]))
 		
 	glob.dump(snplist, report+'snps')
 	glob.dump(ref, report+'RefT')
