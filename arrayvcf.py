@@ -11,6 +11,7 @@ def in1kg(poollines, names):
 	lines = []
 	for n in names:
 		lines.extend(getlines(n))
+	return lines
 
 def getlines(name):
 	vfile = open(name, 'r')
