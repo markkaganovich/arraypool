@@ -60,7 +60,7 @@ def parse1KGvcf(vcffile, outputname):
 	glob.dump(alt, outputname+'Alt')
 
 
-def splitreport(f):
+def splitreport(f, dir):
 	r = open(f)
 	header = None
 	for l in r:
@@ -70,7 +70,7 @@ def splitreport(f):
 		if header:
 			i = header.index('Sample ID')
 			outputfile = '25M' + l.split('\t')[i]
-			if outputfile in os.listdir('./'):
+			if outputfile in os.listdir(dir):
 				out.write(l)
 			else:
 				out = open(outputfile, 'w')
