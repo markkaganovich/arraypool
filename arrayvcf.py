@@ -65,7 +65,7 @@ def splitreport(f, dir):
 	header = None
 	for l in r:
 		if "[Data]" in l:
-			header = f.next().split('\t')
+			header = r.next().split('\t')
 			continue
 		if header:
 			i = header.index('Sample ID')
