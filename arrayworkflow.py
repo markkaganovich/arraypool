@@ -333,7 +333,7 @@ if __name__ == "__main__":
 		combinegenos('hapmap', snps, 'hapmapGenosArray25M', 1)
 		
 	if args.pool:
-		getpoollines('intercomb','pool2', 'intercombpool2')
+		getpoollines('intercomb','pool1', 'pool1genotype')
 	
 	if args.int:
 		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
