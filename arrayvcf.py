@@ -1,5 +1,6 @@
 import vcf
 import gl
+import os
 
 poollines = ['NA19211', 'NA18943', 'NA19209', 'NA18526' ,'NA19161' , 'NA11920', 'NA11995' , 'NA18564' , 'NA18499' , 'NA12003']
 names1KG = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
@@ -57,5 +58,25 @@ def parse1KGvcf(vcffile, outputname):
 		lines = file.readlines(1000000)
 	glob.dump(ref, outputname+'Ref')
 	glob.dump(alt, outputname+'Alt')
+
+
+def splitreport(f):
+	r = open(f)
+	header = None
+	for l in r:
+		if "[Data]" in l:
+			header = f.next().split('\t')
+			continue
+		if header:
+			i = header.index('Sample ID')
+			outputfile = '25M' + l.split('\t')[i]
+			if outputfile in os.listdir('./'):
+				out.write(l)
+			else:
+				out = open(outputfile, 'w')
+
+	
+
+
 
 
