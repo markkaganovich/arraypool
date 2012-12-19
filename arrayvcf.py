@@ -2,7 +2,8 @@ import vcf
 import gl
 import os
 
-poollines = ['NA19211', 'NA18943', 'NA19209', 'NA18526' ,'NA19161' , 'NA11920', 'NA11995' , 'NA18564' , 'NA18499' , 'NA12003']
+#poollines = ['NA19211', 'NA18943', 'NA19209', 'NA18526' ,'NA19161' , 'NA11920', 'NA11995' , 'NA18564' , 'NA18499' , 'NA12003']
+poollines = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA19238", "NA19239", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
 names1KG = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
 vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
 '../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
@@ -34,7 +35,8 @@ def parse1KGvcf(vcffile, outputname):
 	for record in vcf_reader:
 		chrom = record.INFO['GP'].split(':')[0]
 		pos = record.INFO['GP'].split(':')[1]	
-		
+	
+		#checkRef
 	outputfile = open(outputname+'Geno', 'w')
 	ref = {}
 	alt = {}
@@ -66,6 +68,7 @@ def splitreport(f, dir):
 	for l in r:
 		if "[Data]" in l:
 			header = r.next().split('\t')
+			print header
 			continue
 		if header:
 			i = header.index('Sample ID')
@@ -74,6 +77,8 @@ def splitreport(f, dir):
 				out.write(l)
 			else:
 				out = open(outputfile, 'w')
+				out.write(l)
+				print out
 
 	
 
