@@ -31,14 +31,17 @@ def getarraysnps(report):
 	freq = {}
 	for l in lines:
 		t = l.split('\t')
-		if t[chri] not in map(lambda x: str(x), range(1,23)):
+		try:
+			if t[chri] not in map(lambda x: str(x), range(1,23)):
+				continue
+			else:
+				snppos = 'chr'+t[chri]+'pos'+t[posi]
+				snplist.append(snppos)
+				ref[snppos] = t[snpi].split('/')[0][1] 
+				alt[snppos] = t[snpi].split('/')[1][0]
+				freq[snppos] = float(t[Yi])/(float(t[Yi])+float(t[Xi]))
+		except:
 			continue
-		else:
-			snppos = 'chr'+t[chri]+'pos'+t[posi]
-			snplist.append(snppos)
-			ref[snppos] = t[snpi].split('/')[0][1] 
-			alt[snppos] = t[snpi].split('/')[1][0]
-			freq[snppos] = float(t[Yi])/(float(t[Yi])+float(t[Xi]))
 		
 	glob.dump(snplist, report+'snps')
 	glob.dump(ref, report+'RefT')
