@@ -18,7 +18,8 @@ def getarraysnps(report):
 	#header = "SNP Name,Sample ID,Allele1 - Top,Allele2 - Top,GC Score,Allele1 - Plus,Allele2 - Plus,Chr,Position,SNP,Theta,R,X,Y,X Raw,Y Raw,B Allele Freq"
 	#header = "SNP Name,Sample ID,Allele1 - Top,Allele2 - Top,GC Score,Allele1 - Forward,Allele2 - Forward,Allele1 - Plus,Allele2 - Plus,Chr,Position,GT Score,Cluster Sep,SNP,X,Y,X Raw,Y Raw,B Allele,Freq,Log R Ratio,CNV Value,CNV Confidence"
 	#h = header.split(',')
-	h = ['SNP Name', 'Sample ID', 'Allele1 - Top', 'Allele2 - Top', 'GC Score', 'Allele1 - Forward', 'Allele2 - Forward', 'Allele1 - Plus', 'Allele2 - Plus', 'Chr', 'Position', 'GT Score', 'Cluster Sep', 'SNP', 'X', 'Y', 'X Raw', 'Y Raw', 'B Allele Freq', 'Log R Ratio', 'CNV Value', 'CNV Confidence', 'Top Genomic Sequence', 'Plus/Minus Strand', 'Theta', 'R\r\n']
+	#h = ['SNP Name', 'Sample ID', 'Allele1 - Top', 'Allele2 - Top', 'GC Score', 'Allele1 - Forward', 'Allele2 - Forward', 'Allele1 - Plus', 'Allele2 - Plus', 'Chr', 'Position', 'GT Score', 'Cluster Sep', 'SNP', 'X', 'Y', 'X Raw', 'Y Raw', 'B Allele Freq', 'Log R Ratio', 'CNV Value', 'CNV Confidence', 'Top Genomic Sequence', 'Plus/Minus Strand', 'Theta', 'R\r\n']
+	h = 'SNP Name\tSample ID\tAllele1 - Top\tAllele2 - Top\tGC Score\tSNP Index\tAllele1 - Forward\tAllele2 - Forward\tAllele1 - AB\tAllele2 - AB\tAllele1 - Plus\tAllele2 - Plus\tChr\tPosition\tSNP\tILMN Strand\tTop Genomic Sequence\tPlus/Minus Strand\tTheta\tR\tX\tY\tX Raw\tY Raw\tB Allele Freq\r\n'.split('\t')
 	snpi = h.index("SNP")
 	chri = h.index("Chr")
 	posi = h.index("Position")
@@ -336,6 +337,7 @@ if __name__ == "__main__":
 	if args.pool:
 		#getpoollines('intercomb','pool1', 'pool1genotype')
 		getpoollines('Genos1kgArray25M', 'pool1', 'pool1genotype')
+
 	if args.int:
 		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
 		
