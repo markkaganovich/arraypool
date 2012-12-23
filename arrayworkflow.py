@@ -232,7 +232,7 @@ class Array:
 		self.snps = self.dic.keys()  
 
 			
-def mergearraypool(poolgenotypefile, uniformarray, Goutput = 'G.Rinput', *arrays,):
+def mergearraypool(poolgenotypefile, uniformarray, Goutput = 'G.Rinput', *arrays):
 	pfile = open(poolgenotypefile)
 	plines = pfile.readlines()
 	pfile.close()
