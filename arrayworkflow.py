@@ -232,7 +232,7 @@ class Array:
 		self.snps = self.dic.keys()  
 
 			
-def mergearraypool(poolgenotypefile, uniformarray, *arrays, Goutput = 'G.Rinput'):
+def mergearraypool(poolgenotypefile, uniformarray, Goutput = 'G.Rinput', *arrays,):
 	pfile = open(poolgenotypefile)
 	plines = pfile.readlines()
 	pfile.close()
@@ -351,7 +351,7 @@ if __name__ == "__main__":
 		getpoollines('Genos1kgArrayOmni', 'pool1', 'pool1genotypeOmni')
 
 	if args.merge:
-		mergearraypool('pool1genotypeOmni', 'MKReportbySNP1.txt', 'MKReportbySNP3.txt')
+		mergearraypool('pool1genotypeOmni', 'MKReportbySNP1.txt', 'Gomni.Rinput', 'MKReportbySNP3.txt')
 
 	if args.int:
 		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
