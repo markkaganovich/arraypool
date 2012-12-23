@@ -342,7 +342,12 @@ if __name__ == "__main__":
 		
 	if args.pool:
 		#getpoollines('intercomb','pool1', 'pool1genotype')
-		getpoollines('Genos1kgArray25M', 'pool1', 'pool1genotype')
+		
+		# new arrays 
+		#getpoollines('Genos1kgArray25M', 'pool1', 'pool1genotype')
+
+		#old arrays
+		getpoollines('Genos1kgArrayOmni', 'pool1', 'pool1genotypeOmni')
 
 	if args.int:
 		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
