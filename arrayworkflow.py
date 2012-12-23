@@ -232,7 +232,7 @@ class Array:
 		self.snps = self.dic.keys()  
 
 			
-def mergearraypool(poolgenotypefile, uniformarray, *arrays):
+def mergearraypool(poolgenotypefile, uniformarray, *arrays, Goutput = 'G.Rinput'):
 	pfile = open(poolgenotypefile)
 	plines = pfile.readlines()
 	pfile.close()
@@ -248,14 +248,14 @@ def mergearraypool(poolgenotypefile, uniformarray, *arrays):
 	snpsincommon = reduce(lambda x,y: set(x.snps) & set(y.snps), allarrays)
 	print len(snpsincommon)
 	
-	output = open("G.Rinput",'w')
+	output = open(Goutput,'w')
 	output.write(plines[0])
 	
 	for g in plines[1:]:
 		if g.split(',')[0] in snpsincommon:
 			output.write(g)	
 			
-	output = open("Uarray.poolRinput", 'w')
+	output = open(uniformarray+".Uarray.poolRinput", 'w')
 	for g in plines[1:]:
 		snp = g.split(',')[0]
 		if snp in snpsincommon:
@@ -314,6 +314,7 @@ if __name__ == "__main__":
 	parser.add_argument('-inithapmap', action='store_true')
 	parser.add_argument('-int', action='store_true')
 	parser.add_argument('-pool', action='store_true')
+	parser.add_argument('-merge', action='store_true')
 	parser.add_argument('-i')
 	args = parser.parse_args()
 	print args
@@ -348,6 +349,9 @@ if __name__ == "__main__":
 
 		#old arrays
 		getpoollines('Genos1kgArrayOmni', 'pool1', 'pool1genotypeOmni')
+
+	if args.merge:
+		mergearraypool('pool1genotypeOmni', 'MKReportbySNP1.txt', 'MKReportbySNP3.txt')
 
 	if args.int:
 		intercomb(['Genos1kgArray25M', 'hapmapGenosArray25M'])		
