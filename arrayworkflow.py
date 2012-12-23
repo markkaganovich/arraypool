@@ -331,8 +331,11 @@ if __name__ == "__main__":
 	if args.hapmap:
 		processhapmap()
 	if args.init1KG:
-		snps = glob.json('25M1.1snps')
-		combinegenos(names1KG, snps, 'Genos1kgArray25M')
+		#snps = glob.json('25M1.1snps')
+		snps = glob.json('MKReportbySNP1.txtsnps')
+		#combinegenos(names1KG, snps, 'Genos1kgArray25M')
+		combinegenos(names1KG, snps, 'Genos1kgArrayOmni')
+
 	if args.inithapmap:
 		snps = glob.json('Array25M1snps')
 		combinegenos('hapmap', snps, 'hapmapGenosArray25M', 1)
