@@ -28,38 +28,151 @@ def getlines(name):
 	return lines
 
 #modified to the 19 version
-def parse1KGvcf(vcffile, outputname):
+'''
+order: 1) run parse1KGvcf to find out Ref / Alt stuff, and get genotype matrix from pool lines and .vcf file
+		2) run getarraysnps using above Ref / Alt distinction with
+			a) Uniform array 
+			b) experiment array
+			get final array snp list from this	
+		3) use snp list from getarraysnps to remake genotype file for linear regression next step 
+
+'''
+
+def runeverything(uniformarray, exparray, vcffile, poollines, output):
+	'''
+	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'CHBJPTpreview', p1lines, 'testoutput')
+		returns all .Rinput files: uniformarray.Rinput, exparray.Rinput, poolgenotype.Rinput
+	
+	'''
+	#parse1KGvcf(vcffile , output, poollines)
+	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
+	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
+	
+	jointsnplist = list(set(usnplist) & set(esnplist))
+
+	printtabarray(jointsnplist,uniformarray)
+	printtabarray(jointsnplist, exparray)
+
+	reshapegenotype(output+'Geno', jointsnplist)
+
+
+
+def parse1KGvcf(vcffile, outputname, poollines):
+	'''
+	parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , 'testoutput', p1lines)
+	
+	'''
 	vfile = open(vcffile, 'r')
 	vcf_reader = vcf.Reader(vfile)
-
-	for record in vcf_reader:
-		chrom = record.INFO['GP'].split(':')[0]
-		pos = record.INFO['GP'].split(':')[1]	
 	
-		#checkRef
 	outputfile = open(outputname+'Geno', 'w')
 	ref = {}
 	alt = {}
-	lines = file.readlines(1000000)
-	while(lines != []):
-		for l in lines:
-			if l.startswith('#CHROM'):
-				g = reduce(lambda x,y: x+','+y, l.strip('\n').split('\t')[9:])
-				outputfile.write('\t'+str(g) +'\n')
-			if not l.startswith('#'):
-				tokens = l.strip('\n').split('\t')
-				f = filter(lambda x: 'GP' in x, tokens[7].split(';'))
-				if f != []:
-					pos = 'chr'+f[0].split('=')[1].split(':')[0]+'pos'+f[0].split('=')[1].split(':')[1]
-					ref[pos] = tokens[3]
-					alt[pos] = tokens[4]
-					m=pos +'\t'
-					for t in tokens[9:]:
-						m = m + str(int(t[0]) + int(t[2])) + ','
-					outputfile.write(m.strip(',')+'\n')
-		lines = file.readlines(1000000)
-	glob.dump(ref, outputname+'Ref')
-	glob.dump(alt, outputname+'Alt')
+	
+	for record in vcf_reader:
+		try:
+			chrom = record.INFO['GP'].split(':')[0]
+			pos = record.INFO['GP'].split(':')[1]	
+		except KeyError:
+			continue
+		ref[chrom+':'+pos] = str(record.REF) 
+		alt[chrom+':'+pos] = str(record.ALT[0])
+		poolsamples = filter(lambda x: x.sample in poollines, record.samples)
+		m = chrom+':'+pos+'\t'
+		for s in poolsamples:
+			if '|' in s['GT']:
+				g = s['GT'].split('|')
+			if '\\' in s['GT']:
+				 g = s['GT'].split('\\')
+			if '/' in s['GT']:
+				g = s['GT'].split('/')
+			m = m + str(int(g[0]) + int(g[1])) + ','
+		outputfile.write(m.strip(',') + '\n')
+
+	gl.jsondump(ref, outputname+'Ref')
+	gl.jsondump(alt, outputname+'Alt')
+	
+	#checkRef
+	
+def getarraysnps(report, fgenoref, fgenoalt):
+	'''
+	test this with MKReport1bysnps.txt and output of parse1KGvcf function
+
+	getarraysnps('MKReport1bysnps.txt', 'testoutputRef', 'testoutputAlt')
+
+	In this version we totally ignore compliments
+	'''
+
+	print report
+	file = open(report)
+	lines = file.readlines()
+	file.close()
+
+	genoref = gl.jsonload(fgenoref)  # later can make this in-memory
+	genoalt = gl.jsonload(fgenoalt)
+	#header = "SNP Name,Sample ID,Allele1 - Top,Allele2 - Top,GC Score,Allele1 - Plus,Allele2 - Plus,Chr,Position,SNP,Theta,R,X,Y,X Raw,Y Raw,B Allele Freq"
+	#header = "SNP Name,Sample ID,Allele1 - Top,Allele2 - Top,GC Score,Allele1 - Forward,Allele2 - Forward,Allele1 - Plus,Allele2 - Plus,Chr,Position,GT Score,Cluster Sep,SNP,X,Y,X Raw,Y Raw,B Allele,Freq,Log R Ratio,CNV Value,CNV Confidence"
+	#h = header.split(',')
+	#h = ['SNP Name', 'Sample ID', 'Allele1 - Top', 'Allele2 - Top', 'GC Score', 'Allele1 - Forward', 'Allele2 - Forward', 'Allele1 - Plus', 'Allele2 - Plus', 'Chr', 'Position', 'GT Score', 'Cluster Sep', 'SNP', 'X', 'Y', 'X Raw', 'Y Raw', 'B Allele Freq', 'Log R Ratio', 'CNV Value', 'CNV Confidence', 'Top Genomic Sequence', 'Plus/Minus Strand', 'Theta', 'R\r\n']
+	h = 'SNP Name\tSample ID\tAllele1 - Top\tAllele2 - Top\tGC Score\tSNP Index\tAllele1 - Forward\tAllele2 - Forward\tAllele1 - AB\tAllele2 - AB\tAllele1 - Plus\tAllele2 - Plus\tChr\tPosition\tSNP\tILMN Strand\tTop Genomic Sequence\tPlus/Minus Strand\tTheta\tR\tX\tY\tX Raw\tY Raw\tB Allele Freq\r\n'.split('\t')
+	snpi = h.index("SNP")
+	chri = h.index("Chr")
+	posi = h.index("Position")
+	Yi = h.index("Y")
+	Xi = h.index("X")
+	snplist = []
+	freq = {}
+	for l in lines:
+		t = l.split('\t')
+		try:
+			if t[chri] not in map(lambda x: str(x), range(1,23)):
+				continue
+			else:
+				snppos = t[chri]+':'+t[posi]
+				ref = t[snpi].split('/')[0][1] 
+				alt = t[snpi].split('/')[1][0]
+				#f = 0
+				if genoref[snppos] == ref and genoalt[snppos] == alt:
+					f = float(t[Yi])/(float(t[Yi])+float(t[Xi])) 
+				elif genoref[snppos] == alt and genoalt[snppos] == ref:
+					f = 1 - (float(t[Yi])/(float(t[Yi])+float(t[Xi])))
+				else:
+					continue
+				if f != 0:
+					freq[snppos] = f
+					snplist.append(snppos)
+		except:
+			continue
+		
+	gl.jsondump(snplist, report+'snps')
+	gl.jsondump(freq, report+'freq')
+
+	return snplist
+
+def printtabarray(jointsnplist, arrayname):
+		"""output will be analyzed by R to find cell line frequencies
+		"""	
+		output = open(arrayname+'.Rinput', 'w')
+		freq = gl.jsonload(arrayname+'freq')
+		for snp in jointsnplist:
+			output.write(snp + '\t')
+			output.write(str(freq[snp]) + '\n') 
+ 
+
+def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype.Rinput'):
+	'''
+	reshapegenotype('testoutputGeno', 'MKReportbySNP1.txtsnps', 'testgenotype.Rinput')
+	
+	'''
+	genof = open(genofile, 'r')
+	arraysnpset = set(arraysnps)
+	out = open(outputname, 'w')
+
+	for l in genof:
+		snppos = l.split('\t')[0]
+		if snppos in arraysnpset:
+			out.write(l)
+
 
 
 def splitreport(f, dir):
