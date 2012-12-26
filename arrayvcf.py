@@ -1,6 +1,7 @@
 import vcf
 import gl
 import os
+import argparse
 
 #poollines = ['NA19211', 'NA18943', 'NA19209', 'NA18526' ,'NA19161' , 'NA11920', 'NA11995' , 'NA18564' , 'NA18499' , 'NA12003']
 poollines = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA19238", "NA19239", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
@@ -38,12 +39,13 @@ order: 1) run parse1KGvcf to find out Ref / Alt stuff, and get genotype matrix f
 
 '''
 
-def runeverything(uniformarray, exparray, vcffile, poollines, output):
+def runeverything(uniformarray, exparray, vcffile, pool, output):
 	'''
-	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'CHBJPTpreview', p1lines, 'testoutput')
+	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', p1lines, 'testoutput')
 		returns all .Rinput files: uniformarray.Rinput, exparray.Rinput, poolgenotype.Rinput
 vc
 	'''
+	poollines = gl.jsonload(pool)
 	parse1KGvcf(vcffile , output, poollines)
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
@@ -195,7 +197,13 @@ def splitreport(f, dir):
 				print out
 
 	
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+	parser.add_argument('-runeverything', action='store_true')
+	args = parser.parse_args()
 
+	if args.runeverything:
+		runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', 'testoutput')
 
 
 
