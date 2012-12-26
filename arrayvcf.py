@@ -42,9 +42,9 @@ def runeverything(uniformarray, exparray, vcffile, poollines, output):
 	'''
 	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'CHBJPTpreview', p1lines, 'testoutput')
 		returns all .Rinput files: uniformarray.Rinput, exparray.Rinput, poolgenotype.Rinput
-	
+vc
 	'''
-	#parse1KGvcf(vcffile , output, poollines)
+	parse1KGvcf(vcffile , output, poollines)
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
 	
@@ -80,13 +80,14 @@ def parse1KGvcf(vcffile, outputname, poollines):
 		poolsamples = filter(lambda x: x.sample in poollines, record.samples)
 		m = chrom+':'+pos+'\t'
 		for s in poolsamples:
-			if '|' in s['GT']:
-				g = s['GT'].split('|')
-			if '\\' in s['GT']:
-				 g = s['GT'].split('\\')
-			if '/' in s['GT']:
-				g = s['GT'].split('/')
-			m = m + str(int(g[0]) + int(g[1])) + ','
+			if s['GT']:
+				if '|' in s['GT']:
+					g = s['GT'].split('|')
+				if '\\' in s['GT']:
+				 	g = s['GT'].split('\\')
+				if '/' in s['GT']:
+					g = s['GT'].split('/')
+				m = m + str(int(g[0]) + int(g[1])) + ','
 		outputfile.write(m.strip(',') + '\n')
 
 	gl.jsondump(ref, outputname+'Ref')
