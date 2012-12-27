@@ -90,6 +90,8 @@ def parse1KGvcf(vcffile, outputname, poollines):
 				if '/' in s['GT']:
 					g = s['GT'].split('/')
 				m = m + str(int(g[0]) + int(g[1])) + ','
+			else:
+				m = m+str(0) + ','
 		outputfile.write(m.strip(',') + '\n')
 
 	gl.jsondump(ref, outputname+'Ref')
