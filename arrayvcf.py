@@ -143,6 +143,8 @@ def getarraysnps(report, fgenoref, fgenoalt):
 					f = float(t[Yi])/(float(t[Ri]) 
 				elif genoref[snppos] == alt and genoalt[snppos] == ref:
 					f = 1 - (float(t[Yi])/(float(t[Ri])))
+				else:
+					continue
 				if f != 0 and f != 1:
 					freq[snppos] = f
 					snplist.append(snppos)
