@@ -166,7 +166,7 @@ def printtabarray(jointsnplist, arrayname):
 			output.write(str(freq[snp]) + '\n') 
  
 
-def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype.Rinput'):
+def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype2.Rinput'):
 	'''
 	reshapegenotype('testoutputGeno', 'MKReportbySNP1.txtsnps', 'testgenotype.Rinput')
 	
@@ -207,7 +207,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	if args.runeverything:
-		runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', 'testoutput')
+		runeverything('MKReportbySNP1.txt', 'MKReportbySNP2.txt', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', 'testoutputreport2')
 
 
 
