@@ -46,7 +46,7 @@ def runeverything(uniformarray, exparray, vcffile, pool, output):
 vc
 	'''
 	poollines = gl.jsonload(pool)
-	parse1KGvcf(vcffile , output, poollines)
+	#parse1KGvcf(vcffile , output, poollines)
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
 	
