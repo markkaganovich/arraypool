@@ -70,7 +70,8 @@ def parse1KGvcf(vcffile, outputname, poollines):
 	outputfile = open(outputname+'Geno', 'w')
 	ref = {}
 	alt = {}
-	
+
+	psamples = filter(lambda x: x in poollines, vcf_reader.samples)
 	for record in vcf_reader:
 		try:
 			chrom = record.INFO['GP'].split(':')[0]
@@ -79,16 +80,16 @@ def parse1KGvcf(vcffile, outputname, poollines):
 			continue
 		ref[chrom+':'+pos] = str(record.REF) 
 		alt[chrom+':'+pos] = str(record.ALT[0])
-		poolsamples = filter(lambda x: x.sample in poollines, record.samples)
 		m = chrom+':'+pos+'\t'
-		for s in poolsamples:
-			if s['GT']:
-				if '|' in s['GT']:
-					g = s['GT'].split('|')
-				if '\\' in s['GT']:
-				 	g = s['GT'].split('\\')
-				if '/' in s['GT']:
-					g = s['GT'].split('/')
+		for s in psamples:
+			geno = record.genotype(s)['GT']
+			if geno:
+				if '|' in geno:
+					g = geno.split('|')
+				if '\\' in geno:
+				 	g = geno.split('\\')
+				if '/' in geno:
+					g = geno.split('/')
 				m = m + str(int(g[0]) + int(g[1])) + ','
 			else:
 				m = m+str(0) + ','
@@ -125,6 +126,7 @@ def getarraysnps(report, fgenoref, fgenoalt):
 	posi = h.index("Position")
 	Yi = h.index("Y")
 	Xi = h.index("X")
+	Ri = h.index("R")
 	snplist = []
 	freq = {}
 	for l in lines:
@@ -138,12 +140,12 @@ def getarraysnps(report, fgenoref, fgenoalt):
 				alt = t[snpi].split('/')[1][0]
 				#f = 0
 				if genoref[snppos] == ref and genoalt[snppos] == alt:
-					f = float(t[Yi])/(float(t[Yi])+float(t[Xi])) 
+					f = float(t[Yi])/(float(t[Ri]) 
 				elif genoref[snppos] == alt and genoalt[snppos] == ref:
-					f = 1 - (float(t[Yi])/(float(t[Yi])+float(t[Xi])))
+					f = 1 - (float(t[Yi])/(float(t[Ri])))
 				else:
 					continue
-				if f != 0:
+				if f != 0 and f != 1:
 					freq[snppos] = f
 					snplist.append(snppos)
 		except:
