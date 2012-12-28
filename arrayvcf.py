@@ -140,7 +140,7 @@ def getarraysnps(report, fgenoref, fgenoalt):
 				alt = t[snpi].split('/')[1][0]
 				#f = 0
 				if genoref[snppos] == ref and genoalt[snppos] == alt:
-					f = float(t[Yi])/(float(t[Ri]) 
+					f = float(t[Yi])/(float(t[Ri])) 
 				elif genoref[snppos] == alt and genoalt[snppos] == ref:
 					f = 1 - (float(t[Yi])/(float(t[Ri])))
 				else:
