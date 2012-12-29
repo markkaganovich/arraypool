@@ -46,7 +46,7 @@ def runeverything(uniformarray, exparray, vcffile, pool, output):
 vc
 	'''
 	poollines = gl.jsonload(pool)
-	#parse1KGvcf(vcffile , output, poollines)
+	parse1KGvcf(vcffile , output, poollines)
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
 	
@@ -71,7 +71,8 @@ def parse1KGvcf(vcffile, outputname, poollines):
 	ref = {}
 	alt = {}
 
-	psamples = filter(lambda x: x in poollines, vcf_reader.samples)
+	#psamples = filter(lambda x: x in poollines, vcf_reader.samples)
+	#print psamples
 	for record in vcf_reader:
 		try:
 			chrom = record.INFO['GP'].split(':')[0]
@@ -81,7 +82,7 @@ def parse1KGvcf(vcffile, outputname, poollines):
 		ref[chrom+':'+pos] = str(record.REF) 
 		alt[chrom+':'+pos] = str(record.ALT[0])
 		m = chrom+':'+pos+'\t'
-		for s in psamples:
+		for s in poollines:
 			geno = record.genotype(s)['GT']
 			if geno:
 				if '|' in geno:
@@ -127,6 +128,7 @@ def getarraysnps(report, fgenoref, fgenoalt):
 	Yi = h.index("Y")
 	Xi = h.index("X")
 	Ri = h.index("R")
+	thetai = h.index("Theta")
 	snplist = []
 	freq = {}
 	for l in lines:
@@ -140,9 +142,11 @@ def getarraysnps(report, fgenoref, fgenoalt):
 				alt = t[snpi].split('/')[1][0]
 				#f = 0
 				if genoref[snppos] == ref and genoalt[snppos] == alt:
-					f = float(t[Yi])/(float(t[Ri])) 
+					#f = float(t[Yi])/(float(t[Ri])) 
+					f = float(t[thetai])
 				elif genoref[snppos] == alt and genoalt[snppos] == ref:
-					f = 1 - (float(t[Yi])/(float(t[Ri])))
+					#f = 1 - (float(t[Yi])/(float(t[Ri])))
+					 f = 1 - float(t[thetai])
 				else:
 					continue
 				if f != 0 and f != 1:
@@ -166,7 +170,7 @@ def printtabarray(jointsnplist, arrayname):
 			output.write(str(freq[snp]) + '\n') 
  
 
-def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype2.Rinput'):
+def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
 	'''
 	reshapegenotype('testoutputGeno', 'MKReportbySNP1.txtsnps', 'testgenotype.Rinput')
 	
@@ -207,7 +211,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	if args.runeverything:
-		runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', 'testoutputreport2')
+		runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', 'testoutputreport3')
 
 
 
