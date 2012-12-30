@@ -189,7 +189,7 @@ def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
 	for l in genof:
 		snppos = l.split('\t')[0]
 		if snppos in arraysnpset:
-			out.write(l)
+			out.write(snppos+','+l.split('\t')[1])
 			jointlist.append(snppos)
 	return jointlist
 
