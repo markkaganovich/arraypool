@@ -46,17 +46,18 @@ def runeverything(uniformarray, exparray, vcffile, pool, output):
 vc
 	'''
 	poollines = gl.jsonload(pool)
-	parse1KGvcf(vcffile , output, poollines)
+	#parse1KGvcf(vcffile , output, poollines)
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
 	
 	jointsnplist = sorted(list(set(usnplist) & set(esnplist)), key = lambda x: (int(x.split(':')[0]), int(x.split(':')[1])))
 
+	finalsnplist = reshapegenotype(output+'Geno', jointsnplist)
 
-	printtabarray(jointsnplist,uniformarray)
-	printtabarray(jointsnplist, exparray)
+	printtabarray(finalsnplist,uniformarray)
+	printtabarray(finalsnplist, exparray)
 
-	reshapegenotype(output+'Geno', jointsnplist)
+	
 
 
 
@@ -183,11 +184,15 @@ def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
 	genof = open(genofile, 'r')
 	arraysnpset = set(arraysnps)
 	out = open(outputname, 'w')
+	jointlist = []
 
 	for l in genof:
 		snppos = l.split('\t')[0]
 		if snppos in arraysnpset:
 			out.write(l)
+			jointlist.append(snppos)
+	return jointlist
+
 
 
 
