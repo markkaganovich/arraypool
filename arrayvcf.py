@@ -46,7 +46,7 @@ def runeverything(uniformarray, exparray, vcffile, pool, output):
 vc
 	'''
 	poollines = gl.jsonload(pool)
-	#parse1KGvcf(vcffile , output, poollines)
+	parse1KGvcf(vcffile , output, poollines)
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
 	
@@ -221,7 +221,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	if args.runeverything:
-		runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', 'testoutputreport3')
+		runeverything('25M1.1', '25M1.3', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', '25Marrays1230')
 
 
 
