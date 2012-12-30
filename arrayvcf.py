@@ -50,7 +50,8 @@ vc
 	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
 	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
 	
-	jointsnplist = list(set(usnplist) & set(esnplist))
+	jointsnplist = sorted(list(set(usnplist) & set(esnplist)), key = lambda x: (int(x.split(':')[0]), int(x.split(':')[1])))
+
 
 	printtabarray(jointsnplist,uniformarray)
 	printtabarray(jointsnplist, exparray)
@@ -82,6 +83,7 @@ def parse1KGvcf(vcffile, outputname, poollines):
 		ref[chrom+':'+pos] = str(record.REF) 
 		alt[chrom+':'+pos] = str(record.ALT[0])
 		m = chrom+':'+pos+'\t'
+		sm = 0
 		for s in poollines:
 			geno = record.genotype(s)['GT']
 			if geno:
@@ -91,10 +93,13 @@ def parse1KGvcf(vcffile, outputname, poollines):
 				 	g = geno.split('\\')
 				if '/' in geno:
 					g = geno.split('/')
-				m = m + str(int(g[0]) + int(g[1])) + ','
+				an = int(g[0]) + int(g[1])
+				sm = sm + an
+				m = m + str(an) + ','
 			else:
 				m = m+str(0) + ','
-		outputfile.write(m.strip(',') + '\n')
+		if sm > 0:
+			outputfile.write(m.strip(',') + '\n')
 
 	gl.jsondump(ref, outputname+'Ref')
 	gl.jsondump(alt, outputname+'Alt')
