@@ -135,6 +135,7 @@ def getarraysnps(report, fgenoref, fgenoalt):
 	Xi = h.index("X")
 	Ri = h.index("R")
 	thetai = h.index("Theta")
+	print thetai
 	snplist = []
 	freq = {}
 	for l in lines:
@@ -155,6 +156,7 @@ def getarraysnps(report, fgenoref, fgenoalt):
 					 f = 1 - float(t[thetai])
 				else:
 					continue
+				print snppos
 				if f != 0 and f != 1:
 					freq[snppos] = f
 					snplist.append(snppos)
