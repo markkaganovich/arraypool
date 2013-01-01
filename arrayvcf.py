@@ -174,46 +174,37 @@ def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
 			jointlist.append(snppos)
 	return jointlist
 
-
-
-def splitreport(f, dir):
-	r = open(f)
-	header = None
-	for l in r:
-		if "[Data]" in l:
-			header = r.next().split('\t')
-			print header
-			continue
-		if header:
-			i = header.index('Sample ID')
-			outputfile = '25M' + l.split('\t')[i]
-			if outputfile in os.listdir(dir):
-				out.write(l)
-			else:
-				out = open(outputfile, 'w')
-				out.write(l)
-				print out
-
 	
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-runeverything', action='store_true')
-	parser.add_argument('arrays', nargs='+', help="Process arrays: uniform array, experiment array, refdb, altdb, genotypedb, genooutputname")
+	parser.add_argument('arrays', nargs='+', help="Process arrays: uniform array, experiment array, refdb, altdb, genotypedb, genooutputname, vcffile, poollines")
 	parser.add_argument('--parse1KGvcf', action='store_true')
 	args = parser.parse_args()
 
-	if args.runeverything:
-		runeverything('25M1.1', '25M1.3', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', '25Marrays1230', '25Marrays1230Ref', '25Marrays1230Alt')
+	#if args.runeverything:
+	#	runeverything('25M1.1', '25M1.3', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', '25Marrays1230', '25Marrays1230Ref', '25Marrays1230Alt')
+	
+	controlarray = args.arrays[0]
+	print "control array: {0}".format(controlarray)
+	exparray = args.arrays[1]
+	print "experiment array: {0}".format(exparray)
+	refdb = args.arrays[2]
+	print "refdb: {0}".format(refdb)
+	altdb = args.arrays[3]
+	print "altdb: {0}".format(altdb)
+	genotypedb = args.arrays[4]
+	print "genotypedb: {0}".format(genotypedb)
+	genooutputname = args.arrays[5]
+	print "outputname for genotype Rinput: {0}".format(genooutputname)
+
 	if args.parse1KGvcf:
-		parse1KGvcf(args.arrays[7])
-
-	print "control array: {0}".format(args.arrays[0])
-	print "experiment array: {0}".format(args.arrays[1])
-	print "refdb: {0}".format(args.arrays[2])
-	print "altdb: {0}".format(args.arrays[3])
-	print "genotypedb: {0}".format(args.arrays[4])
-	print "outputname for genotype Rinput: {0}".format(args.arrays[5])	
-
+		vcffile = args.arrays[6]
+		print "vcf file: {0}".format(vcffile)
+		poollines = args.arrays[7]
+		print "pool lines: {0}".format(poollines)
+		parse1KGvcf(vcffile, poollines, genotypedb, refdb, altdb)
+	
 	arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.arrays[4], args.arrays[5])
 
 
