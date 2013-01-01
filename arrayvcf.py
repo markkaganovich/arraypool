@@ -233,6 +233,13 @@ if __name__ == "__main__":
 		parse1KGvcf(args.arrays[7])
 	print args.arrays
 	print reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6])
+	print "control array: {0}".format(args.arrays[0])
+	print "experiment array: {0}".format(args.arrays[1])
+	print "refdb: {0}".format(args.arrays[2])
+	print "altdb: {0}".format(args.arrays[3])
+	print "genotypedb: {0}".format(args.arrays[4])
+	print "outputname for genotype Rinput: {0}".format(args.arrays[5])	
+
 	arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.arrays[4], args.arrays[5])
 	#arrays(reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6]))
 
