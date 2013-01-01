@@ -4,10 +4,10 @@ import os
 import argparse
 
 #poollines = ['NA19211', 'NA18943', 'NA19209', 'NA18526' ,'NA19161' , 'NA11920', 'NA11995' , 'NA18564' , 'NA18499' , 'NA12003']
-poollines = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA19238", "NA19239", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
-names1KG = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
-vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
-'../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
+#poollines = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA19238", "NA19239", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
+#names1KG = ['CEUlowcov','YRIlowcov','CHBJPTlowcov','YRItrio', 'CEUtrio']	
+#vcffiles = ['../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf','../1000GenomesData/YRI.low_coverage.2010_09.genotypes.vcf', '../1000GenomesData/CHBJPT.low_coverage.2010_09.genotypes.vcf', 
+#'../1000GenomesData/YRI.trio.2010_09.genotypes.vcf', '../1000GenomesData/CEU.trio.2010_09.genotypes.vcf']
 
 
 def in1kg(poollines, names):
@@ -39,42 +39,44 @@ order: 1) run parse1KGvcf to find out Ref / Alt stuff, and get genotype matrix f
 
 '''
 
-def runeverything(uniformarray, exparray, vcffile, pool, output):
+def runeverything(uniformarray, exparray, vcffile, pool, refdb, altdb, genotypedb):
 	'''
-	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', p1lines, 'testoutput')
+	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', p1lines, 'testoutputRef', 'testoutputAlt', 'testoutput')
 		returns all .Rinput files: uniformarray.Rinput, exparray.Rinput, poolgenotype.Rinput
-vc
+
 	'''
 	poollines = gl.jsonload(pool)
-	#parse1KGvcf(vcffile , output, poollines)
-	usnplist = getarraysnps(uniformarray, 'testoutputRef', 'testoutputAlt')
-	esnplist = getarraysnps(exparray, 'testoutputRef', 'testoutputAlt')
-	
+	parse1KGvcf(vcffile, poollines, genotypedb, refdb, altdb)
+	arrays(uniformarray, exparray, refdb, altdb, genotypedb)
+
+def arrays(uniformarray, exparray, refdb, altdb, genotypedb, genooutputname):
+	'''
+	array('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'testoutputRef', 'testoutputAlt','testoutput')
+		returns processed *.Rinput files for each array (control and experiment)
+		the input is a genotypedb file extracted from 1kg population .vcf and the refdb altdb from that same .vcf
+	'''
+
+	usnplist = getarraysnps(uniformarray, refdb, altdb)
+	esnplist = getarraysnps(exparray, refdb, altdb)
 	jointsnplist = sorted(list(set(usnplist) & set(esnplist)), key = lambda x: (int(x.split(':')[0]), int(x.split(':')[1])))
-
-	finalsnplist = reshapegenotype(output+'Geno', jointsnplist)
-
+	finalsnplist = reshapegenotype(genotypedb, jointsnplist, output=genooutputname)
 	printtabarray(finalsnplist,uniformarray)
 	printtabarray(finalsnplist, exparray)
 
-	
 
 
-
-def parse1KGvcf(vcffile, outputname, poollines):
+def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 	'''
-	parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , 'testoutput', p1lines)
+	parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , p1lines, 'testoutput', 'testoutputRef', 'testoutputAlt')
 	
 	'''
 	vfile = open(vcffile, 'r')
 	vcf_reader = vcf.Reader(vfile)
 	
-	outputfile = open(outputname+'Geno', 'w')
+	outputfile = open(genotypedboutput, 'w')
 	ref = {}
 	alt = {}
 
-	#psamples = filter(lambda x: x in poollines, vcf_reader.samples)
-	#print psamples
 	for record in vcf_reader:
 		try:
 			chrom = record.INFO['GP'].split(':')[0]
@@ -86,7 +88,10 @@ def parse1KGvcf(vcffile, outputname, poollines):
 		m = chrom+':'+pos+'\t'
 		sm = 0
 		for s in poollines:
-			geno = record.genotype(s)['GT']
+			try:				
+				geno = record.genotype(s)['GT']
+			except KeyError:
+				continue
 			if geno:
 				if '|' in geno:
 					g = geno.split('|')
@@ -102,10 +107,9 @@ def parse1KGvcf(vcffile, outputname, poollines):
 		if sm > 0:
 			outputfile.write(m.strip(',') + '\n')
 
-	gl.jsondump(ref, outputname+'Ref')
-	gl.jsondump(alt, outputname+'Alt')
+	gl.jsondump(ref, refdboutput)
+	gl.jsondump(alt, altdboutput)
 	
-	#checkRef
 	
 def getarraysnps(report, fgenoref, fgenoalt):
 	'''
@@ -131,9 +135,9 @@ def getarraysnps(report, fgenoref, fgenoalt):
 	snpi = h.index("SNP")
 	chri = h.index("Chr")
 	posi = h.index("Position")
-	Yi = h.index("Y")
-	Xi = h.index("X")
-	Ri = h.index("R")
+	#Yi = h.index("Y")
+	#Xi = h.index("X")
+	#Ri = h.index("R")
 	thetai = h.index("Theta")
 	print thetai
 	snplist = []
@@ -219,10 +223,20 @@ def splitreport(f, dir):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('-runeverything', action='store_true')
+	parser.add_argument('arrays', nargs='+', help="Process arrays: uniform array, experiment array, refdb, altdb, genotypedb, genooutputname")
+	parser.add_argument('--parse1KGvcf', action='store_true')
 	args = parser.parse_args()
 
 	if args.runeverything:
-		runeverything('25M1.1', '25M1.3', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', '25Marrays1230')
+		runeverything('25M1.1', '25M1.3', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', '25Marrays1230', '25Marrays1230Ref', '25Marrays1230Alt')
+	if args.parse1KGvcf:
+		parse1KGvcf(args.arrays[7])
+	print args.arrays
+	print reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6])
+	#arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.arrays[4], args.arrays[5])
+	arrays(reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6]))
+
+		#parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , p1lines, 'testoutput', 'testoutputRef', 'testoutputAlt')
 
 
 
