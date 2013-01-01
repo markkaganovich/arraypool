@@ -233,8 +233,8 @@ if __name__ == "__main__":
 		parse1KGvcf(args.arrays[7])
 	print args.arrays
 	print reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6])
-	#arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.arrays[4], args.arrays[5])
-	arrays(reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6]))
+	arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.arrays[4], args.arrays[5])
+	#arrays(reduce(lambda x,y: x+' '+ y, [''] +args.arrays[0:6]))
 
 		#parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , p1lines, 'testoutput', 'testoutputRef', 'testoutputAlt')
 
