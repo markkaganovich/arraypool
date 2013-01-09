@@ -1,10 +1,10 @@
-import simplejson
+import json
 import os
 import re
 
 def jsonload(filename):
 	file = open(filename)
-	result = simplejson.load(file)
+	result = json.load(file)
 	file.close()
 	return result
 
@@ -18,7 +18,7 @@ def jsondump(data, filename, ds='./'):
 	if n > 0:
 		os.rename(ds +filename, ds +filename+ str(n+1))	  
 	file = open(filename,'w')
-	simplejson.dump(data, file)
+	json.dump(data, file)
 	file.close()
 
 compl = {'G' :'C', 'C' : 'G', 'A' : 'T', 'T':'A'}

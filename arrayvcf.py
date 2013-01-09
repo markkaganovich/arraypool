@@ -177,13 +177,9 @@ def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
 	
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-runeverything', action='store_true')
 	parser.add_argument('arrays', nargs='+', help="Process arrays: uniform array, experiment array, refdb, altdb, genotypedb, genooutputname, vcffile, poollines")
 	parser.add_argument('--parse1KGvcf', action='store_true')
 	args = parser.parse_args()
-
-	#if args.runeverything:
-	#	runeverything('25M1.1', '25M1.3', '../1000GenomesData/low_coverage.merged.vcf', 'pool1', '25Marrays1230', '25Marrays1230Ref', '25Marrays1230Alt')
 	
 	controlarray = args.arrays[0]
 	print "control array: {0}".format(controlarray)
