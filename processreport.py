@@ -15,7 +15,7 @@ def splitreport(f, dir):
 				outputfile = '25M' + l.split('\t')[i]
 			except IndexError:
 				continue
-			if l.split('\t')[i] != '3.3':
+			if l.split('\t')[i] != '3.17':
 				continue
 			else:
 				if outputfile in os.listdir(dir):
