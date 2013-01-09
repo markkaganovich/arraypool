@@ -11,11 +11,13 @@ def splitreport(f, dir):
 			continue
 		if header:
 			i = header.index('Sample ID')
-			outputfile = '25M' + l.split('\t')[i]
-			if l.split('\t')[i] != '3.1':
+			try:
+				outputfile = '25M' + l.split('\t')[i]
+			except IndexError:
+				continue
+			if l.split('\t')[i] != '3.3':
 				continue
 			else:
-				print l
 				if outputfile in os.listdir(dir):
 					out.write(l)
 				else:
