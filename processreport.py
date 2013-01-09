@@ -1,3 +1,5 @@
+import os
+
 #process report
 def splitreport(f, dir):
 	r = open(f)
