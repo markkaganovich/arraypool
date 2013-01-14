@@ -27,11 +27,8 @@ def comparearrays(array1, array2):
 	a2 = open(array2)
 	out = open(array1+array2 +'.diff.theta.R', 'w')
 	for l1, l2 in zip(a1, a2):
-		try:
 			t1 = l1.split('\t')
 			t2 = l2.split('\t')
 			if t1[snpidi] == t2[snpidi] and t1[thetai] != 0:
 				out.write(str((float(t1[thetai]) - float(t2[thetai]))/sum(float(t1[thetai]), float(t2[thetai]))/2) +'\n')
-		except:
-			continue
 	out.close()
