@@ -1,7 +1,8 @@
-import vcf
+#import vcf
 import gl
 import os
 import argparse
+import sys
 
 '''
 the .vcf genotype here is assumed to have an INFO field with hg19 positions encoded, for later vcf files for 1kg
@@ -13,14 +14,18 @@ order of implementation:
 		3) in R: use snp list from getarraysnps to remake genotype file for linear regression next step 
 
 '''
-
-def arrays(array, refdb, altdb, output_ext = '.Rinput', **kwargs):
+def arrays(*args):
 	'''
 	array('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'testoutputRef', 'testoutputAlt','testoutput')
 		returns processed *.Rinput files for each array (control and experiment)
 		the input is a genotypedb file extracted from 1kg population .vcf and the refdb altdb from that same .vcf
 	'''
-
+	array = args[0]
+	refdb = args[1]
+	altdb = args[2]
+	output_ext = args[3]
+	kwargs = args[4]
+	print kwargs
 	getarraysnps(array, refdb, altdb, array+output_ext, kwargs)
 
 
@@ -69,7 +74,7 @@ def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 	gl.jsondump(alt, altdboutput)
 	
 	
-def getarraysnps(report, fgenoref, fgenoalt, output, **kwargs):
+def getarraysnps(report, fgenoref, fgenoalt, output, kwargs):
 	'''
 	test this with MKReport1bysnps.txt and output of parse1KGvcf function
 	getarraysnps('MKReport1bysnps.txt', 'testoutputRef', 'testoutputAlt')
@@ -136,6 +141,8 @@ def getarraysnps(report, fgenoref, fgenoalt, output, **kwargs):
 
 	
 if __name__ == "__main__":
+	
+	'''
 	parser = argparse.ArgumentParser()
 	parser.add_argument('arrays', nargs='+', help="Process arrays: arrays, refdb, altdb, output_ext")
 	parser.add_argument('-chr')
@@ -161,8 +168,31 @@ if __name__ == "__main__":
 		print "altdb: {0}".format(altdb)
 		genotypedb = args.arrays[3]
 		print "output_ext: {0}".format(genotypedb)
+		if args.chr:
 
-		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.kargs)
+
+		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], chr=args.chr)
+
+		'''
+	args = sys.argv[1:]
+	print args 
+	if '-parse1KGvcf' in args:
+		vcffile = args[1]
+		poollines = args[2]
+		genotypedb = args[3]
+		parse1KGvcf(vcffile, poollines, genotypedb, genotypedb+'Ref', genotypedb+'Alt')
+	if 'arrays' in args:
+		#array = args[1]
+		#refdb = args[2]
+		#altdb = args[3]
+		#output_ext = args[4]
+		kwargs = args[5:]
+		k = dict(map(lambda x: x.split('='), kwargs))
+		print k
+
+		#arrays(array, refdb, altdb, output_ext, k)
+		arrays(args[1], args[2], args[3], args[4], k)
+
 
 
 
