@@ -35,3 +35,62 @@ def comparearrays(array1, array2):
 				except ZeroDivisionError:
 					continue
 	out.close()
+
+
+
+def runeverything(uniformarray, exparray, vcffile, pool, refdb, altdb, genotypedb):
+	'''
+	runeverything('MKReportbySNP1.txt', 'MKReportbySNP3.txt', '../1000GenomesData/low_coverage.merged.vcf', p1lines, 'testoutputRef', 'testoutputAlt', 'testoutput')
+		returns all .Rinput files: uniformarray.Rinput, exparray.Rinput, poolgenotype.Rinput
+
+	'''
+	poollines = gl.jsonload(pool)
+	parse1KGvcf(vcffile, poollines, genotypedb, refdb, altdb)
+	arrays(uniformarray, exparray, refdb, altdb, genotypedb)
+
+
+
+def arrays(uniformarray, exparray, refdb, altdb, genotypedb, genooutputname):
+	'''
+	array('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'testoutputRef', 'testoutputAlt','testoutput')
+		returns processed *.Rinput files for each array (control and experiment)
+		the input is a genotypedb file extracted from 1kg population .vcf and the refdb altdb from that same .vcf
+	'''
+
+	usnplist = getarraysnps(uniformarray, refdb, altdb)
+	esnplist = getarraysnps(exparray, refdb, altdb)
+	jointsnplist = sorted(list(set(usnplist) & set(esnplist)), key = lambda x: (int(x.split(':')[0]), int(x.split(':')[1])))
+	finalsnplist = reshapegenotype(genotypedb, jointsnplist, outputname=genooutputname)
+	printtabarray(finalsnplist,uniformarray)
+	printtabarray(finalsnplist, exparray)
+
+
+
+
+def printtabarray(jointsnplist, arrayname):
+		"""output will be analyzed by R to find cell line frequencies
+		"""	
+		output = open(arrayname+'.Rinput', 'w')
+		freq = gl.jsonload(arrayname+'freq')
+		for snp in jointsnplist:
+			output.write(snp + '\t')
+			output.write(str(freq[snp]) + '\n') 
+
+
+
+def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
+	'''
+	reshapegenotype('testoutputGeno', 'MKReportbySNP1.txtsnps', 'testgenotype.Rinput')
+	
+	'''
+	genof = open(genofile, 'r')
+	arraysnpset = set(arraysnps)
+	out = open(outputname, 'w')
+	jointlist = []
+
+	for l in genof:
+		snppos = l.split('\t')[0]
+		if snppos in arraysnpset:
+			out.write(snppos+','+l.split('\t')[1])
+			jointlist.append(snppos)
+	return jointlist	
