@@ -99,6 +99,7 @@ def getarraysnps(report, fgenoref, fgenoalt, output, kwargs):
 	try:
 		header = kwargs['header']
 		h = header.split('\t')
+		print h
 		snpi = h.index("SNP")
 		chri = h.index("Chr")
 		posi = h.index("Position")
