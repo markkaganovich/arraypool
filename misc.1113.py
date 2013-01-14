@@ -30,7 +30,9 @@ def comparearrays(array1, array2):
 		try:
 			t1 = l1.split('\t')
 			t2 = l2.split('\t')
-			if t1[snpidi] == t2[snpidi] and t1[snpidi] != 0:
+			print t1[snpidi]
+			print t2[snpidi]
+			if t1[snpidi] == t2[snpidi] and t1[thetai] != 0:
 				out.write(str((t1[thetai] - t2[thetai])/mean(t1[thetai], t2[thetai])) +'\n')
 		except:
 			continue
