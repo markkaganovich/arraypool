@@ -25,7 +25,6 @@ def arrays(*args):
 	altdb = args[2]
 	output_ext = args[3]
 	kwargs = args[4]
-	print kwargs
 	getarraysnps(array, refdb, altdb, array+output_ext, kwargs)
 
 
@@ -74,7 +73,7 @@ def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 	gl.jsondump(alt, altdboutput)
 	
 	
-def getarraysnps(report, fgenoref, fgenoalt, output, kwargs):
+def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 	'''
 	test this with MKReport1bysnps.txt and output of parse1KGvcf function
 	getarraysnps('MKReport1bysnps.txt', 'testoutputRef', 'testoutputAlt')
@@ -95,6 +94,8 @@ def getarraysnps(report, fgenoref, fgenoalt, output, kwargs):
 
 	genoref = gl.jsonload(fgenoref)  
 	genoalt = gl.jsonload(fgenoalt)
+
+	output = open(outname, 'w')
 
 	try:
 		header = kwargs['header']
@@ -189,7 +190,6 @@ if __name__ == "__main__":
 		#output_ext = args[4]
 		kwargs = args[5:]
 		k = dict(map(lambda x: x.split('='), kwargs))
-		print k
 
 		#arrays(array, refdb, altdb, output_ext, k)
 		arrays(args[1], args[2], args[3], args[4], k)
