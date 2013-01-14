@@ -14,14 +14,14 @@ order of implementation:
 
 '''
 
-def arrays(array, refdb, altdb, output_ext = '.Rinput'):
+def arrays(array, refdb, altdb, **kwargs, output_ext = '.Rinput'):
 	'''
 	array('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'testoutputRef', 'testoutputAlt','testoutput')
 		returns processed *.Rinput files for each array (control and experiment)
 		the input is a genotypedb file extracted from 1kg population .vcf and the refdb altdb from that same .vcf
 	'''
 
-	getarraysnps(array, refdb, altdb, array+output_ext)
+	getarraysnps(array, refdb, altdb, array+output_ext, kwargs)
 
 
 def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
@@ -138,6 +138,7 @@ def getarraysnps(report, fgenoref, fgenoalt, output, **kwargs):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('arrays', nargs='+', help="Process arrays: arrays, refdb, altdb, output_ext")
+	parser.add_argument('header', nargs=1)
 	parser.add_argument('--parse1KGvcf', action='store_true', help="Make genotypedb matrix: vcffile, poollines, genotpedbname")
 	args = parser.parse_args()
 	
@@ -157,7 +158,7 @@ if __name__ == "__main__":
 		print "altdb: {0}".format(altdb)
 		genotypedb = args.arrays[3]
 		print "output_ext: {0}".format(genotypedb)
-		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3] )
+		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], header=header )
 
 
 
