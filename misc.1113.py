@@ -30,5 +30,5 @@ def comparearrays(array1, array2):
 			t1 = l1.split('\t')
 			t2 = l2.split('\t')
 			if t1[snpidi] == t2[snpidi] and t1[thetai] != 0:
-				out.write(str((float(t1[thetai]) - float(t2[thetai]))/sum(float(t1[thetai]), float(t2[thetai]))/2) +'\n')
+				out.write(str((float(t1[thetai]) - float(t2[thetai]))/sum([float(t1[thetai]), float(t2[thetai])])/2) +'\n')
 	out.close()
