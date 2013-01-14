@@ -32,8 +32,5 @@ def comparearrays(array1, array2):
 			t2 = l2.split('\t')
 			if t1[snpidi] == t2[snpidi] and t1[snpidi] != 0:
 				out.write(str((t1[thetai] - t2[thetai])/mean(t1[thetai], t2[thetai])) +'\n')
-
-
-
-
-
+		except:
+			continue
