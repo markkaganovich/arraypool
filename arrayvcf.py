@@ -138,9 +138,12 @@ def getarraysnps(report, fgenoref, fgenoalt, output, **kwargs):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('arrays', nargs='+', help="Process arrays: arrays, refdb, altdb, output_ext")
-	parser.add_argument('-header', nargs=1)
+	parser.add_argument('-kargs', action='append')
+
 	parser.add_argument('--parse1KGvcf', action='store_true', help="Make genotypedb matrix: vcffile, poollines, genotpedbname")
 	args = parser.parse_args()
+
+	print args
 	
 	if args.parse1KGvcf:
 		vcffile = args.arrays[0]
@@ -158,7 +161,8 @@ if __name__ == "__main__":
 		print "altdb: {0}".format(altdb)
 		genotypedb = args.arrays[3]
 		print "output_ext: {0}".format(genotypedb)
-		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], header=header )
+
+		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], args.kargs)
 
 
 
