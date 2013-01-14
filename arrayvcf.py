@@ -14,7 +14,7 @@ order of implementation:
 
 '''
 
-def arrays(array, refdb, altdb, **kwargs, output_ext = '.Rinput'):
+def arrays(array, refdb, altdb, output_ext = '.Rinput', **kwargs):
 	'''
 	array('MKReportbySNP1.txt', 'MKReportbySNP3.txt', 'testoutputRef', 'testoutputAlt','testoutput')
 		returns processed *.Rinput files for each array (control and experiment)
@@ -138,7 +138,7 @@ def getarraysnps(report, fgenoref, fgenoalt, output, **kwargs):
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('arrays', nargs='+', help="Process arrays: arrays, refdb, altdb, output_ext")
-	parser.add_argument('header', nargs=1)
+	parser.add_argument('-header', nargs=1)
 	parser.add_argument('--parse1KGvcf', action='store_true', help="Make genotypedb matrix: vcffile, poollines, genotpedbname")
 	args = parser.parse_args()
 	
