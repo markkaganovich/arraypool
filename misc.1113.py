@@ -26,7 +26,7 @@ def comparearrays(array1, array2):
 	a1 = open(array1)
 	a2 = open(array2)
 	out = open(array1+array2 +'.diff.theta.R', 'w')
-	for l1, l2 in a1, a2:
+	for l1, l2 in zip(a1, a2):
 		try:
 			t1 = l1.split('\t')
 			t2 = l2.split('\t')
