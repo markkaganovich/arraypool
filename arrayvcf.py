@@ -36,7 +36,7 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 	vfile = open(vcffile, 'r')
 	vcf_reader = vcf.Reader(vfile)
 	
-	poollines = gl.jsonload('plines')
+	poollines = gl.jsonload(plines)
 	outputfile = open(genotypedboutput, 'w')
 	ref = {}
 	alt = {}
