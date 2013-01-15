@@ -93,4 +93,40 @@ def reshapegenotype(genofile, arraysnps, outputname = 'poolgenotype3.Rinput'):
 		if snppos in arraysnpset:
 			out.write(snppos+','+l.split('\t')[1])
 			jointlist.append(snppos)
-	return jointlist	
+	return jointlist
+
+
+
+
+'''
+	parser = argparse.ArgumentParser()
+	parser.add_argument('arrays', nargs='+', help="Process arrays: arrays, refdb, altdb, output_ext")
+	parser.add_argument('-chr')
+
+	parser.add_argument('--parse1KGvcf', action='store_true', help="Make genotypedb matrix: vcffile, poollines, genotpedbname")
+	args = parser.parse_args()
+
+	print args
+	
+	if args.parse1KGvcf:
+		vcffile = args.arrays[0]
+		print "vcf file: {0}".format(vcffile)
+		poollines = args.arrays[1]
+		print "pool lines: {0}".format(poollines)
+		genotypedb = args.arrays[2]
+		parse1KGvcf(vcffile, poollines, genotypedb, genotypedb+'Ref', genotypedb+'Alt')
+	else:
+		array = args.arrays[0]
+		print "control array: {0}".format(array)
+		refdb = args.arrays[1]
+		print "refdb: {0}".format(refdb)
+		altdb = args.arrays[2]
+		print "altdb: {0}".format(altdb)
+		genotypedb = args.arrays[3]
+		print "output_ext: {0}".format(genotypedb)
+		if args.chr:
+
+
+		arrays(args.arrays[0], args.arrays[1], args.arrays[2], args.arrays[3], chr=args.chr)
+
+'''	
