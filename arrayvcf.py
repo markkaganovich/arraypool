@@ -53,6 +53,7 @@ def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 			try:				
 				geno = record.genotype(s)['GT']
 			except KeyError:
+				print "no genotype"
 				continue
 			if geno:
 				if '|' in geno:
