@@ -51,7 +51,6 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 		m = chrom+':'+pos+'\t'
 		sm = 0
 		for s in poollines:
-			print s
 			record.genotype(s)
 			try:				
 				geno = record.genotype(s)['GT']
@@ -70,7 +69,6 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 				m = m + str(an) + ','
 			else:
 				m = m+str(0) + ','
-		print sm
 		if sm > 0:
 			outputfile.write(m.strip(',') + '\n')
 
