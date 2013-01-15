@@ -66,6 +66,7 @@ def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 				m = m + str(an) + ','
 			else:
 				m = m+str(0) + ','
+		print sm
 		if sm > 0:
 			outputfile.write(m.strip(',') + '\n')
 
