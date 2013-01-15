@@ -50,6 +50,8 @@ def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 		m = chrom+':'+pos+'\t'
 		sm = 0
 		for s in poollines:
+			print s
+			record.genotype(s)
 			try:				
 				geno = record.genotype(s)['GT']
 			except KeyError:
