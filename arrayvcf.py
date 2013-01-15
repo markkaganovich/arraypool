@@ -28,7 +28,7 @@ def arrays(*args):
 	getarraysnps(array, refdb, altdb, array+output_ext, kwargs)
 
 
-def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
+def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 	'''
 	parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , p1lines, 'testoutput', 'testoutputRef', 'testoutputAlt')
 	'''
@@ -36,6 +36,7 @@ def parse1KGvcf(vcffile, poollines, genotypedboutput, refdboutput, altdboutput):
 	vfile = open(vcffile, 'r')
 	vcf_reader = vcf.Reader(vfile)
 	
+	poollines = gl.jsonload('plines')
 	outputfile = open(genotypedboutput, 'w')
 	ref = {}
 	alt = {}
