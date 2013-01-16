@@ -96,8 +96,9 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 	print report
 	print kwargs
 	file = open(report)
-	lines = file.readlines()
+	olines = file.readlines()
 	file.close()
+	lines =olines.reverse()
 
 	genoref = gl.jsonload(fgenoref)  
 	genoalt = gl.jsonload(fgenoalt)
@@ -121,7 +122,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 		except KeyError:
 			print "No header or column numbers provided provided"
 
-	#snplist = []
+	snps = set([])
 	freq = {}
 	for l in lines:
 		t = l.split('\t')
@@ -139,14 +140,17 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 				else:
 					continue
 				if f != 0 and f != 1:
-					freq[snppos] = f
-					#snplist.append(snppos)
-					#output.write(snppos + '\t' + str(f) + '\n')
+					#freq[snppos] = f
+					if snppos not in snps:
+						snps.add(snppos)
+						output.write(snppos + '\t' + str(f) + '\n')
+					else:
+						continue
 		except:
 			continue
-		
-	for s in freq.keys():
-		output.write(s + '\t' + str(freq[s]) + '\n')
+	#freqset = set(freq.keys())	
+	#for s in freqset:
+	#	output.write(s + '\t' + str(freq[s]) + '\n')
 
 	#gl.jsondump(snplist, report+'snps')
 	#gl.jsondump(freq, report+'freq')
