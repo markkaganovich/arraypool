@@ -5,6 +5,7 @@ print(args)
 gfile = args[1]
 controlsnpfile = args[2]
 expsnpsfile = args[3]
+output = args[4]
 
 #gfile = '30/poolgenotype.Rinput'
 #controlsnpfile = '30/newtheta1'
@@ -21,4 +22,5 @@ csnp = csnp.raw[snps,]
 esnp = esnp.raw[snps,]
 
 d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
+save(d, output)
 
