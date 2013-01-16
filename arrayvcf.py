@@ -118,6 +118,9 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 		except KeyError:
 			print "No header or column numbers provided provided"
 
+	print snpi
+	print chri
+
 	snplist = []
 	freq = {}
 	for l in lines:
