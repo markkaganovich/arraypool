@@ -91,6 +91,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 	'''
 
 	print report
+	print kwargs
 	file = open(report)
 	lines = file.readlines()
 	file.close()
