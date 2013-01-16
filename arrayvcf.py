@@ -96,13 +96,12 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 	print report
 	print kwargs
 	file = open(report)
-	olines = file.readlines()
+	lines = file.readlines()
+	lines.reverse()
 	file.close()
-	lines =olines.reverse()
-
+	
 	genoref = gl.jsonload(fgenoref)  
 	genoalt = gl.jsonload(fgenoalt)
-
 	output = open(outname, 'w')
 
 	try:
