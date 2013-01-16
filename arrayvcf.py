@@ -82,6 +82,9 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 	getarraysnps('MKReport1bysnps.txt', 'testoutputRef', 'testoutputAlt')
 	In this version we totally ignore compliments
 
+	Array can't have duplicates (it does). We take the last one mentioned in the array 
+	report, because those are the 1kg ones rather than rsid
+
 	kwargs:
 	snp
 	chr
@@ -136,9 +139,6 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 				else:
 					continue
 				if f != 0 and f != 1:
-					if snppos in freq.keys():
-						print "duplicate"
-						print snppos
 					freq[snppos] = f
 					#snplist.append(snppos)
 					#output.write(snppos + '\t' + str(f) + '\n')
