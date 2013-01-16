@@ -143,6 +143,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 					snplist.append(snppos)
 					output.write(snppos + '\t' + str(f) + '\n')
 		except:
+			print sys.exc_info()[0]
 			continue
 		
 	gl.jsondump(snplist, report+'snps')
