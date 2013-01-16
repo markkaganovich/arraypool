@@ -136,6 +136,9 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 				else:
 					continue
 				if f != 0 and f != 1:
+					if snppos in freq.keys():
+						print "duplicate"
+						print snppos
 					freq[snppos] = f
 					snplist.append(snppos)
 					output.write(snppos + '\t' + str(f) + '\n')
