@@ -119,8 +119,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 			print "No header or column numbers provided provided"
 
 	#snplist = []
-	#freq = {}
-	snpset = set([])
+	freq = {}
 	for l in lines:
 		t = l.split('\t')
 		try:
@@ -137,17 +136,18 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 				else:
 					continue
 				if f != 0 and f != 1:
-					print snppos
-					if snppos in snpset:
+					if snppos in freq.keys():
 						print "duplicate"
 						print snppos
-					#freq[snppos] = f
-					snpset.add(snppos)
+					freq[snppos] = f
 					#snplist.append(snppos)
-					output.write(snppos + '\t' + str(f) + '\n')
+					#output.write(snppos + '\t' + str(f) + '\n')
 		except:
 			continue
 		
+	for s in freq.keys():
+		output.write(s + '\t' + str(freq[s]) + '\n')
+
 	#gl.jsondump(snplist, report+'snps')
 	#gl.jsondump(freq, report+'freq')
 
