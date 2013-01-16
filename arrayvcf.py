@@ -111,39 +111,36 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 		thetai = h.index("Theta")
 	except KeyError:
 		try:
-			snpi = kwargs['snp']
-			chri = kwargs['chr']
-			posi = kwargs['pos']
-			thetai = kwargs['theta']
+			snpi = int(kwargs['snp'])
+			chri = int(kwargs['chr'])
+			posi = int(kwargs['pos'])
+			thetai = int(kwargs['theta'])
 		except KeyError:
 			print "No header or column numbers provided provided"
-
-	print snpi
-	print chri
 
 	snplist = []
 	freq = {}
 	for l in lines:
 		t = l.split('\t')
-		#try:
-		if t[chri] not in map(lambda x: str(x), range(1,23)):
-			continue
-		else:
-			snppos = t[chri]+':'+t[posi]
-			ref = t[snpi].split('/')[0][1] 
-			alt = t[snpi].split('/')[1][0]
-			if genoref[snppos] == ref and genoalt[snppos] == alt:
-				f = float(t[thetai])
-			elif genoref[snppos] == alt and genoalt[snppos] == ref:
-				 f = 1 - float(t[thetai])
-			else:
+		try:
+			if t[chri] not in map(lambda x: str(x), range(1,23)):
 				continue
-			if f != 0 and f != 1:
-				freq[snppos] = f
-				snplist.append(snppos)
-				output.write(snppos + '\t' + str(f) + '\n')
-		#except:
-		#	continue
+			else:
+				snppos = t[chri]+':'+t[posi]
+				ref = t[snpi].split('/')[0][1] 
+				alt = t[snpi].split('/')[1][0]
+				if genoref[snppos] == ref and genoalt[snppos] == alt:
+					f = float(t[thetai])
+				elif genoref[snppos] == alt and genoalt[snppos] == ref:
+					 f = 1 - float(t[thetai])
+				else:
+					continue
+				if f != 0 and f != 1:
+					freq[snppos] = f
+					snplist.append(snppos)
+					output.write(snppos + '\t' + str(f) + '\n')
+		except:
+			continue
 		
 	gl.jsondump(snplist, report+'snps')
 	gl.jsondump(freq, report+'freq')
