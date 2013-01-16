@@ -137,6 +137,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 				else:
 					continue
 				if f != 0 and f != 1:
+					print snppos
 					if snppos in snpset:
 						print "duplicate"
 						print snppos
@@ -147,7 +148,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 		except:
 			continue
 		
-	gl.jsondump(snplist, report+'snps')
+	#gl.jsondump(snplist, report+'snps')
 	#gl.jsondump(freq, report+'freq')
 
 	
