@@ -15,7 +15,7 @@ g.raw <- read.table(gfile,sep='\t', header=F, row.names=1)
 csnp.raw <- read.table(controlsnpfile, sep = '\t', header = F, row.names = 1)
 esnp.raw <- read.table(expsnpsfile, sep = '\t', header = F, row.names = 1)
 
-snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.cor)))
+snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
 
 g = as.matrix(g.raw[snps,])
 csnp = csnp.raw[snps,]
