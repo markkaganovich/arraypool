@@ -173,7 +173,7 @@ if __name__ == "__main__":
 		vcffile = args[1]
 		poollines = args[2]
 		genotypedb = args[3]
-		parse1KGvcf(vcffile, poollines, array, genotypedb, genotypedb+'Ref', genotypedb+'Alt')
+		parse1KGvcf(vcffile, poollines, genotypedb, genotypedb+'Ref', genotypedb+'Alt')
 	if 'arrays' in args:
 		#array = args[1]
 		#refdb = args[2]
