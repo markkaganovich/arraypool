@@ -20,12 +20,12 @@ csnp.raw <- read.table(controlsnpfile, sep = '\t', header = F, row.names = 1)
 		esnp.raw <- read.table(ef, sep = '\t', header = F, row.names = 1)
 		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
 		isnps = intersect(snps, row.names(g.raw))
-		ind = rownames(g.raw) %in% snps 
+		ind = rownames(g.raw) %in% isnps 
 		g = g.raw[ind,]
 		g = as.matrix(g)
-		ind.c = rownames(csnp.raw) %in% snps
+		ind.c = rownames(csnp.raw) %in% isnps
 		csnp = csnp.raw[ind.c,]
-		ind.e = rownames(esnp.raw) %in% snps
+		ind.e = rownames(esnp.raw) %in% isnps
 		esnp = esnp.raw[ind.e,]
 
 		d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
