@@ -41,7 +41,7 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 	for l in lines:
 		asnps.add(l.split('\t')[9] + ':' + l.split('\t')[10])
 
-	print length(asnps)
+	print len(asnps)
 
 	vfile = open(vcffile, 'r')
 	vcf_reader = vcf.Reader(vfile)
