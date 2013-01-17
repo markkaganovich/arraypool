@@ -16,7 +16,7 @@ csnp.raw <- read.table(controlsnpfile, sep = '\t', header = F, row.names = 1)
 if (length(expsnpsfiles) > 1){
 	for( ef in expsnpsfiles){
 		esnp.raw <- read.table(ef, sep = '\t', header = F, row.names = 1)
-		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw))
+		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
 		ind = rownames(g.raw) %in% snps 
 		g = g.raw[ind,]
 		ind.c = rownames(csnp.raw) %in% snps
