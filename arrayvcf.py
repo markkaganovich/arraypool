@@ -34,6 +34,9 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 
 	DEFAULT: only take Illumina 2.5M snps from genotype, assume they are consistant enough
 	'''
+
+	#>>> for l in lines:
+	#	newg.write(l.split('\t')[0]+','+l.split('\t')[1])
 	afile = open('mark/arraypool/25M1.1', 'r')
 	lines = afile.readlines()
 	afile.close()
@@ -59,7 +62,7 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 		if chrom+':'+pos in asnps:
 			ref[chrom+':'+pos] = str(record.REF) 
 			alt[chrom+':'+pos] = str(record.ALT[0])
-			m = chrom+':'+pos+'\t'
+			m = chrom+':'+pos+','
 			sm = 0
 			for s in poollines:
 				record.genotype(s)

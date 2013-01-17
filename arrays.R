@@ -9,6 +9,11 @@ expsnpsfiles = args[4:length(args)]
 outputext = args[3]
 
 g.raw <- read.table(gfile,sep='\t', header=F, row.names=1)
+V2 = g.raw$V2
+V2 = levels(V2)[V2]
+V2 = as.matrix(V2)
+row.names(V2) = row.names(g.raw)
+
 csnp.raw <- read.table(controlsnpfile, sep = '\t', header = F, row.names = 1)
 
 
@@ -16,7 +21,7 @@ if (length(expsnpsfiles) > 1){
 	for( ef in expsnpsfiles){
 		esnp.raw <- read.table(ef, sep = '\t', header = F, row.names = 1)
 		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
-		g = as.matrix(g.raw[snps,])
+		g = g.m[snps,]
 		csnp = csnp.raw[snps,]
 		esnp = esnp.raw[snps,]
 
