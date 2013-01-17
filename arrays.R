@@ -18,7 +18,8 @@ csnp.raw <- read.table(controlsnpfile, sep = '\t', header = F, row.names = 1)
 #	for( ef in expsnpsfiles){
 
 		esnp.raw <- read.table(ef, sep = '\t', header = F, row.names = 1)
-		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)), row.names(g.raw))
+		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
+		isnps = intersect(snps, row.names(g.raw))
 		ind = rownames(g.raw) %in% snps 
 		g = g.raw[ind,]
 		g = as.matrix(g)
