@@ -19,6 +19,7 @@ if (length(expsnpsfiles) > 1){
 		snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
 		ind = rownames(g.raw) %in% snps 
 		g = g.raw[ind,]
+		g = as.matrix(g)
 		ind.c = rownames(csnp.raw) %in% snps
 		csnp = csnp.raw[ind.c,]
 		ind.e = rownames(esnp.raw) %in% snps
