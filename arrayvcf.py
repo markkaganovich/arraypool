@@ -31,7 +31,16 @@ def arrays(*args):
 def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 	'''
 	parse1KGvcf('../1000GenomesData/CEU.low_coverage.2010_09.genotypes.vcf' , p1lines, 'testoutput', 'testoutputRef', 'testoutputAlt')
+
+	DEFAULT: only take Illumina 2.5M snps from genotype, assume they are consistant enough
 	'''
+
+	afile = open('mark/arraypool/25M11.1', 'r')
+	lines = afile.readlines()
+	afile.close()
+	asnps = set([])
+	for l in lines:
+		asnps.add(l.split('\t')[9] + ':' + l.split('\t')[10])
 
 	vfile = open(vcffile, 'r')
 	vcf_reader = vcf.Reader(vfile)
@@ -46,31 +55,32 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 			pos = record.INFO['GP'].split(':')[1]	
 		except KeyError:
 			continue
-		ref[chrom+':'+pos] = str(record.REF) 
-		alt[chrom+':'+pos] = str(record.ALT[0])
-		m = chrom+':'+pos+'\t'
-		sm = 0
-		for s in poollines:
-			record.genotype(s)
-			try:				
-				geno = record.genotype(s)['GT']
-			except KeyError:
-				print "no genotype"
-				continue
-			if geno:
-				if '|' in geno:
-					g = geno.split('|')
-				if '\\' in geno:
-				 	g = geno.split('\\')
-				if '/' in geno:
-					g = geno.split('/')
-				an = int(g[0]) + int(g[1])
-				sm = sm + an
-				m = m + str(an) + ','
-			else:
-				m = m+str(0) + ','
-		if sm > 0:
-			outputfile.write(m.strip(',') + '\n')
+		if chrom+':'+pos in asnps:
+			ref[chrom+':'+pos] = str(record.REF) 
+			alt[chrom+':'+pos] = str(record.ALT[0])
+			m = chrom+':'+pos+'\t'
+			sm = 0
+			for s in poollines:
+				record.genotype(s)
+				try:				
+					geno = record.genotype(s)['GT']
+				except KeyError:
+					print "no genotype"
+					continue
+				if geno:
+					if '|' in geno:
+						g = geno.split('|')
+					if '\\' in geno:
+					 	g = geno.split('\\')
+					if '/' in geno:
+						g = geno.split('/')
+					an = int(g[0]) + int(g[1])
+					sm = sm + an
+					m = m + str(an) + ','
+				else:
+					m = m+str(0) + ','
+			if sm > 0:
+				outputfile.write(m.strip(',') + '\n')
 
 	gl.jsondump(ref, refdboutput)
 	gl.jsondump(alt, altdboutput)
@@ -99,7 +109,7 @@ def getarraysnps(report, fgenoref, fgenoalt, outname, kwargs):
 	lines = file.readlines()
 	lines.reverse()
 	file.close()
-	
+
 	genoref = gl.jsonload(fgenoref)  
 	genoalt = gl.jsonload(fgenoalt)
 	output = open(outname, 'w')
@@ -163,7 +173,7 @@ if __name__ == "__main__":
 		vcffile = args[1]
 		poollines = args[2]
 		genotypedb = args[3]
-		parse1KGvcf(vcffile, poollines, genotypedb, genotypedb+'Ref', genotypedb+'Alt')
+		parse1KGvcf(vcffile, poollines, array, genotypedb, genotypedb+'Ref', genotypedb+'Alt')
 	if 'arrays' in args:
 		#array = args[1]
 		#refdb = args[2]
