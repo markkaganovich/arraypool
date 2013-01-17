@@ -34,8 +34,7 @@ def parse1KGvcf(vcffile, plines, genotypedboutput, refdboutput, altdboutput):
 
 	DEFAULT: only take Illumina 2.5M snps from genotype, assume they are consistant enough
 	'''
-	print "here"
-	afile = open('mark/arraypool/25M11.1', 'r')
+	afile = open('mark/arraypool/25M1.1', 'r')
 	lines = afile.readlines()
 	afile.close()
 	asnps = set([])
