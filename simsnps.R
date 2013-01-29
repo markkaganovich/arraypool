@@ -1,5 +1,7 @@
 
-
+gfile = 'poolgenotype3.Rinput'
+ef = '25M1.3.Rinput'
+controlsnpfile = '25M1.1.Rinput'
 
 spiked <- c(8,4,8,.25,32,8,8,8,8,4,4,4,4,32,16,2,2,2,2,2,32,16,32,1,16,4,1,1)
 spiked1 = spiked/sum(spiked)
@@ -13,28 +15,30 @@ isnps = intersect(snps, row.names(g.raw))
 
 meanscores = c()
 
-for (size in range(1000:1000:10000)){
+for (size in seq(1000,1000000, by = 10000)){
 	
 	scores = c()
-	for (sim in range(1:100)){
+	for (sim in seq(1,100)){
 
-	isnps.s = isnps[sample(1:length(isnps), size, ,replacement=FALSE)]
+	isnps.s = isnps[sample(length(isnps), size, ,replace=FALSE)]
 
-	ind = rownames(g.raw) %in% isnps 
-	g = g.raw[ind.s,]
+	ind = rownames(g.raw) %in% isnps.s 
+	g = g.raw[ind,]
 	g = as.matrix(g)		
-	ind.c = rownames(csnp.raw) %in% isnps
+	ind.c = rownames(csnp.raw) %in% isnps.s
 	csnp = csnp.raw[ind.c,]
-	ind.e = rownames(esnp.raw) %in% isnps
+	ind.e = rownames(esnp.raw) %in% isnps.s
 	esnp = esnp.raw[ind.e,]
 
 	d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
 
-	reald = (d+1/28)/sum(d)
-	scores[sim] = reald^2 - d^2
+	reald = (d+1/28)/sum(d+1/28)
+	scores[sim] = sum(reald^2 - spiked1^2)
 }
 
 print(mean(scores))
 
 meanscores[length(meanscores)+1] = mean(scores)
 }
+
+save(meanscores, file='simoutputmeanscores')

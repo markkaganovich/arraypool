@@ -1,4 +1,4 @@
-# R --no-restore --no-save --args pool2inlowcov.lowcov.geno Array25M3.Rinput .d34 Array25M4.Rinput Array25M5.Rinput < arrays.R
+# R --no-restore --no-save --args pool2inlowcov.lowcov.genocomma Array25M3.Rinput .d34 Array25M4.Rinput Array25M5.Rinput < arrays.R
 #setwd('/Users/markkaganovich/arraypool/')
 args <- commandArgs(trailingOnly = TRUE)
 print(args)
