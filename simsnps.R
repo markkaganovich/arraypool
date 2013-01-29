@@ -33,7 +33,7 @@ for (size in seq(1000,1000000, by = 10000)){
 	d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
 
 	reald = (d+1/28)/sum(d+1/28)
-	scores[sim] = sum(reald^2 - spiked1^2)
+	scores[sim] = sum((reald - spiked1)^2)
 }
 
 print(mean(scores))
