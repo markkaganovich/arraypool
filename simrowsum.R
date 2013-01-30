@@ -14,7 +14,7 @@ isnps = intersect(snps, row.names(g.raw))
 scores = c()
 
 for (size in seq(1,50)){
-	s = which(rowSums(g.raw) == size)
+	s = names(which(rowSums(g.raw) == size))
 	isnps.s = intersect(isnps, s)
 	ind = rownames(g.raw) %in% isnps.s
 	ind.c = rownames(csnp.raw) %in% isnps.s
@@ -27,6 +27,7 @@ for (size in seq(1,50)){
 
 	reald = (d+1/28)/sum(d+1/28)
 	scores[size] = sum((reald - spiked1)^2)
+	print(sum((reald - spiked1)^2))
 
 
 }
