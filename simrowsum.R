@@ -27,6 +27,7 @@ for (size in seq(1,50)){
 
 	reald = (d+1/28)/sum(d+1/28)
 	scores[size] = sum((reald - spiked1)^2)
+	print(size)
 	print(sum((reald - spiked1)^2))
 
 
