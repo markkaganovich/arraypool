@@ -13,7 +13,7 @@ isnps = intersect(snps, row.names(g.raw))
 
 scores = c()
 
-for (size in seq(1,50)){
+for (size in seq(1,59)){
 	s = names(which(rowSums(g.raw) >= size))
 	isnps.s = intersect(isnps, s)
 	ind = rownames(g.raw) %in% isnps.s
