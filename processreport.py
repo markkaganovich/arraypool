@@ -1,7 +1,8 @@
 import os
 
 #process report
-def splitreport(f, dir):
+def splitreport(f, arrayname):
+	dir = './'
 	r = open(f)
 	header = None
 	for l in r:
@@ -12,15 +13,12 @@ def splitreport(f, dir):
 		if header:
 			i = header.index('Sample ID')
 			try:
-				outputfile = '25M' + l.split('\t')[i]
+				outputfile = arrayname + l.split('\t')[i]
 			except IndexError:
 				continue
-			if l.split('\t')[i] != '3.19':
-				continue
+			if outputfile in os.listdir(dir):
+				out.write(l)
 			else:
-				if outputfile in os.listdir(dir):
-					out.write(l)
-				else:
-					out = open(outputfile, 'w')
-					out.write(l)
-					print out
+				out = open(outputfile, 'w')					
+				out.write(l)
+				print out
