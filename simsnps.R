@@ -15,7 +15,7 @@ isnps = intersect(snps, row.names(g.raw))
 
 meanscores = c()
 
-for (size in seq(1000,1000000, by = 10000)){
+for (size in seq(1000,10000, by = 1000)){
 	
 	scores = c()
 	for (sim in seq(1,100)){
@@ -41,4 +41,34 @@ print(mean(scores))
 meanscores[length(meanscores)+1] = mean(scores)
 }
 
-save(meanscores, file='simoutputmeanscores')
+save(meanscores, file='simoutputmeanscores1000')
+
+for (size in seq(10000,100000, by = 10000)){
+	
+	scores = c()
+	for (sim in seq(1,100)){
+
+	isnps.s = isnps[sample(length(isnps), size, ,replace=FALSE)]
+
+	ind = rownames(g.raw) %in% isnps.s 
+	g = g.raw[ind,]
+	g = as.matrix(g)		
+	ind.c = rownames(csnp.raw) %in% isnps.s
+	csnp = csnp.raw[ind.c,]
+	ind.e = rownames(esnp.raw) %in% isnps.s
+	esnp = esnp.raw[ind.e,]
+
+	d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
+
+	reald = (d+1/28)/sum(d+1/28)
+	scores[sim] = sum((reald - spiked1)^2)
+}
+
+print(mean(scores))
+
+meanscores[length(meanscores)+1] = mean(scores)
+}
+
+save(meanscores, file='simoutputmeanscores10000')
+
+
