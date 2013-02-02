@@ -12,9 +12,11 @@ snps = intersect(row.names(na.omit(csnp.raw)), row.names(na.omit(esnp.raw)))
 isnps = intersect(snps, row.names(g.raw))
 
 size = 47
+number = 500
 
 s = names(which(rowSums(g.raw) >= size))
 isnps.s = intersect(isnps, s)
+isnps.s = isnps[sample(length(isnps.s), number, ,replace=FALSE)]
 ind = rownames(g.raw) %in% isnps.s
 ind.c = rownames(csnp.raw) %in% isnps.s
 ind.e = rownames(esnp.raw) %in% isnps.s

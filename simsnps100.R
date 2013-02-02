@@ -37,6 +37,7 @@ for (size in seq(100,1000, by = 100)){
 }
 
 print(mean(scores))
+print(var(scores))
 
 meanscores[length(meanscores)+1] = mean(scores)
 }
