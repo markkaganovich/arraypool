@@ -16,6 +16,9 @@ number = 500
 
 s = names(which(rowSums(g.raw) >= size))
 isnps.s = intersect(isnps, s)
+meand = c()
+
+for(sim in seq(1,100)){
 isnps.s = isnps[sample(length(isnps.s), number, ,replace=FALSE)]
 ind = rownames(g.raw) %in% isnps.s
 ind.c = rownames(csnp.raw) %in% isnps.s
@@ -25,11 +28,14 @@ g = as.matrix(g)
 csnp = csnp.raw[ind.c,]
 esnp = esnp.raw[ind.e,]
 
-d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
+meand[sim] <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
 
+}
+d = mean(meand)
 reald = (d+1/28)/sum(d+1/28)
 score = sum((reald - spiked1)^2)
 print(sum((reald - spiked1)^2))
+
 
 save(d, file="1.3vs1.1D.40snps")
 save(spiked1, file="spiked1")
