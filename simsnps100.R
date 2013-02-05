@@ -33,7 +33,7 @@ for (size in seq(100,1000, by = 100)){
 	d <- solve(t(g) %*% g, t(g) %*% (esnp - csnp))
 
 	reald = (d+1/28)/sum(d+1/28)
-	scores[sim] = sum((reald - spiked1)^2)
+	scores[sim] = cor(d, spiked1)
 }
 
 print(mean(scores))
