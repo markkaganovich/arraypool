@@ -9,7 +9,7 @@ import commands
 import os
 import csv 
 
-db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = True)
+db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = False)
 
 Session = sessionmaker(db)
 session = Session()
@@ -17,6 +17,16 @@ metadata = MetaData(db)
 
 kg_table_name = "1kg_lowcov_1.0"
 hapmap_table_name = "hapmap_raw_1.0"
+
+def copy_my_table(name, table):
+    args = []
+    for c in table.columns:
+        args.append(c.copy())
+    for c in table.constraints:
+        args.append(c.copy())
+    return Table(name, table.metadata, *args)
+
+
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
