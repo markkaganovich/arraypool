@@ -43,8 +43,13 @@ print "post-table"
 
 
 hapmap_rsids = set([])
-for row in session.query(hapmap_table):
-    print getattr(row, 'rs#')
+#for row in session.query(hapmap_table):
+#    print getattr(row, 'rs#')
+#    hapmap_rsids.add(getattr(row, 'rs#'))
+
+hm = hapmap_table.select()
+rs = hm.execute()
+for row in rs:
     hapmap_rsids.add(getattr(row, 'rs#'))
 
 
