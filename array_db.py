@@ -10,13 +10,20 @@ import os
 import csv 
 
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = False)
+db_array = create_engine('sqlite:///../arraydata/arrays.db')
+
 
 Session = sessionmaker(db)
 session = Session()
 metadata = MetaData(db)
 
+Session_array = sessionmaker(db_array)
+session_array = Session_array()
+metadata_array = MetaData(db_array)
+
 kg_table_name = "1kg_lowcov_1.0"
 hapmap_table_name = "hapmap_raw_1.0"
+array_table_name = "Array1S_finalreport"
 
 def copy_my_table(name, table):
     args = []
@@ -30,6 +37,7 @@ def copy_my_table(name, table):
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
+array_table = Table(array_table_name, metadata_array, autoload = True)
 
 afile = open('mark/arraypool/25M1.1', 'r')
 lines = afile.readlines()
