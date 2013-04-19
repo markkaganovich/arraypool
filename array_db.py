@@ -22,7 +22,7 @@ session_array = Session_array()
 metadata_array = MetaData(db_array)
 
 kg_table_name = "kg_lowcov"
-hapmap_table_name = "hapmap_raw_1.0"
+hapmap_table_name = "hapmap_raw"
 array_table_name = "Array1S_finalreport"
 
 def copy_my_table(name, table):
