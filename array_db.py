@@ -21,7 +21,7 @@ Session_array = sessionmaker(db_array)
 session_array = Session_array()
 metadata_array = MetaData(db_array)
 
-kg_table_name = "1kg_lowcov_1.0"
+kg_table_name = "kg_lowcov"
 hapmap_table_name = "hapmap_raw_1.0"
 array_table_name = "Array1S_finalreport"
 
@@ -39,6 +39,13 @@ kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
 array_table = Table(array_table_name, metadata_array, autoload = True)
 
+
+hapmap_rsids = set([])
+for row in session.query(hapmap_table):
+    hapmap_rsids.add(getattr(row, 'rs#'))
+
+
+'''
 afile = open('mark/arraypool/25M1.1', 'r')
 lines = afile.readlines()
 afile.close()
@@ -47,4 +54,7 @@ for l in lines:
     asnps.add(l.split('\t')[9] + ':' + l.split('\t')[10])
 
 json.dump(list(asnps), open('array_snps', 'w'))
+'''
+
+json.dump(list(hapmap_rsids), open('hapmap_rsids', 'w'))
 
