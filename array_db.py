@@ -37,7 +37,7 @@ def copy_my_table(name, table):
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
-array_table = Table(array_table_name, metadata_array, autoload = True)
+#array_table = Table(array_table_name, metadata_array, autoload = True)
 
 
 hapmap_rsids = set([])
