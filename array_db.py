@@ -8,7 +8,7 @@ import json
 import commands
 import os
 import csv 
-import headers
+
 
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = True)
 
