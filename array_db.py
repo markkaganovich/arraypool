@@ -33,7 +33,7 @@ def copy_my_table(name, table):
         args.append(c.copy())
     return Table(name, table.metadata, *args)
 
-
+print "here"
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
