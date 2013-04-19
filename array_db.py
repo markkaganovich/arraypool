@@ -52,7 +52,7 @@ for row in rs:
 
 
 kg_rsids = set([])
-kg = hapmap_table.select()
+kg = kg_table.select()
 rs = kg.execute()
 for row in rs:
     kg_rsids.add(getattr(row, 'rs#'))
