@@ -41,28 +41,21 @@ hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
 
 print "post-table"
 
-
+'''
 hapmap_rsids = set([])
-#for row in session.query(hapmap_table):
-#    print getattr(row, 'rs#')
-#    hapmap_rsids.add(getattr(row, 'rs#'))
 
 hm = hapmap_table.select()
 rs = hm.execute()
 for row in rs:
     hapmap_rsids.add(getattr(row, 'rs#'))
-
-
-'''
-afile = open('mark/arraypool/25M1.1', 'r')
-lines = afile.readlines()
-afile.close()
-asnps = set([])
-for l in lines:
-    asnps.add(l.split('\t')[9] + ':' + l.split('\t')[10])
-
-json.dump(list(asnps), open('array_snps', 'w'))
 '''
 
-json.dump(list(hapmap_rsids), open('hapmap_rsids', 'w'))
 
+kg_rsids = set([])
+kg = hapmap_table.select()
+rs = kg.execute()
+for row in rs:
+    kg_rsids.add(getattr(row, 'rs#'))
+
+#json.dump(list(hapmap_rsids), open('hapmap_rsids', 'w'))
+json.dump(list(kg_rsids), open('kg_rsids', 'w'))
