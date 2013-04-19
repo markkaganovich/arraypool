@@ -19,5 +19,5 @@ asnps = set([])
 for l in lines:
     asnps.add(l.split('\t')[9] + ':' + l.split('\t')[10])
 
-json.dump(asnps, open('array_snps'))
+json.dump(asnps, open('array_snps', 'w'))
 
