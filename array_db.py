@@ -42,6 +42,7 @@ array_table = Table(array_table_name, metadata_array, autoload = True)
 
 hapmap_rsids = set([])
 for row in session.query(hapmap_table):
+    print getattr(row, 'rs#')
     hapmap_rsids.add(getattr(row, 'rs#'))
 
 
