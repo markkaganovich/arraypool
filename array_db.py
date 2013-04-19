@@ -39,6 +39,8 @@ kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
 #array_table = Table(array_table_name, metadata_array, autoload = True)
 
+print "post-table"
+
 
 hapmap_rsids = set([])
 for row in session.query(hapmap_table):
