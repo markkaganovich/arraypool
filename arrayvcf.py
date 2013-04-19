@@ -193,3 +193,8 @@ if __name__ == "__main__":
 
 
 
+import solve
+solve.select(proteins)
+
+
+

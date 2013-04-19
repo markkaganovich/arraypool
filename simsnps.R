@@ -3,7 +3,7 @@ gfile = 'poolgenotype3.Rinput'
 ef = '25M1.3.Rinput'
 controlsnpfile = '25M1.1.Rinput'
 
-spiked <- c(8,4,8,.25,32,8,8,8,8,4,4,4,4,32,16,2,2,2,2,2,32,16,32,1,16,4,1,1)
+spiked <- c(8,4,8,.25,328,8,8,8,4,4,4,4,32,16,2,2,2,2,2,32,16,32,1,16,4,1,1)
 spiked1 = spiked/sum(spiked)
 
 g.raw <- read.table(gfile,sep=',', header=F, row.names=1)
