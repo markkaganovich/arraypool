@@ -53,8 +53,12 @@ array_table = Table(array_table_name, metadata_array, autoload = True)
 print "post-table"
 #inboth = kg_rsids.intersection(hapmap_rsids)
 
-s = select([kg_table, hapmap_table, array_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')) and (getattr(kg_table.c, 'rs#') == getattr(array_table.c, 'snp name')) )
+array_rsids = get_rsids('array_rsids', array_table)
+
+s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')))
 rs = s.execute()
+a = filter(lambda x: getattr(x, 'rs#') in array_rsids, rs)
+
 
 #a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
 
