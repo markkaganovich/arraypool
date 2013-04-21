@@ -2,7 +2,7 @@
 
 from sqlalchemy.orm import backref, mapper, relation, sessionmaker
 from sqlalchemy.sql import and_, or_
-from sqlalchemy import create_engine, Column, String, Integer, MetaData, Table
+from sqlalchemy import create_engine, Column, String, Integer, MetaData, Table, select
 import sys
 import json
 import commands
