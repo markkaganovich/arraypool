@@ -33,37 +33,28 @@ def copy_my_table(name, table):
         args.append(c.copy())
     return Table(name, table.metadata, *args)
 
-print "here"
+def get_rsids(name, table):
+    if name in os.listdir('./'):
+        print "loading from file"
+        rsids = json.load(open(name, 'r'))
+    else:
+        rsids = set([])
+        s = table.select()
+        rs = s.execute()
+        for row in rs:
+            rsids.add(getattr(row, 'rs#'))
+        json.dump(list(rsids), open(name, 'w'))
+    return rsids
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
-#array_table = Table(array_table_name, metadata_array, autoload = True)
+array_table = Table(array_table_name, metadata_array, autoload = True)
 
 print "post-table"
+#inboth = kg_rsids.intersection(hapmap_rsids)
 
-if 'hapmap_rsids' in os.listdir('./'):
-    print "loading from file"
-    hapmap_rsids = set(json.load(open('hapmap_rsids')))
-else:
-    hapmap_rsids = set([])
-    hm = hapmap_table.select()
-    rs = hm.execute()
-    for row in rs:
-        hapmap_rsids.add(getattr(row, 'rs#'))
-    json.dump(list(hapmap_rsids), open('hapmap_rsids', 'w'))
-
-if 'kg_rsids' in os.listdir('./'):
-    print "loading from file"
-    kg_rsids = set(json.load(open('kg_rsids')))
-else:
-    kg_rsids = set([])
-    kg = kg_table.select()
-    rs = kg.execute()
-    for row in rs:
-        kg_rsids.add(getattr(row, 'rs#'))
-    json.dump(list(kg_rsids), open('kg_rsids', 'w'))
-
-inboth = kg_rsids.intersection(hg_rsids)
+s = select([kg_table, hapmap_table, array_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')) and (getattr(kg_table.c, 'rs#') == getattr(array_table.c, 'rs#')) )
+rs = s.execute()
 
 #a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
 
