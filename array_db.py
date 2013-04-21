@@ -41,21 +41,30 @@ hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
 
 print "post-table"
 
-'''
-hapmap_rsids = set([])
+if 'hapmap_rsids' in os.listdir('./'):
+    print "loading from file"
+    hapmap_rsids = set(json.load(open('hapmap_rsids')))
+else:
+    hapmap_rsids = set([])
+    hm = hapmap_table.select()
+    rs = hm.execute()
+    for row in rs:
+        hapmap_rsids.add(getattr(row, 'rs#'))
+    json.dump(list(hapmap_rsids), open('hapmap_rsids', 'w'))
 
-hm = hapmap_table.select()
-rs = hm.execute()
-for row in rs:
-    hapmap_rsids.add(getattr(row, 'rs#'))
-'''
+if 'kg_rsids' in os.listdir('./'):
+    print "loading from file"
+    kg_rsids = set(json.load(open('kg_rsids')))
+else:
+    kg_rsids = set([])
+    kg = kg_table.select()
+    rs = kg.execute()
+    for row in rs:
+        kg_rsids.add(getattr(row, 'rs#'))
+    json.dump(list(kg_rsids), open('kg_rsids', 'w'))
+
+inboth = kg_rsids.intersect(hg_rsids)
+
+#a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
 
 
-kg_rsids = set([])
-kg = kg_table.select()
-rs = kg.execute()
-for row in rs:
-    kg_rsids.add(getattr(row, 'rs#'))
-
-#json.dump(list(hapmap_rsids), open('hapmap_rsids', 'w'))
-json.dump(list(kg_rsids), open('kg_rsids', 'w'))
