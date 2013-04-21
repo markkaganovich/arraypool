@@ -63,7 +63,7 @@ else:
         kg_rsids.add(getattr(row, 'rs#'))
     json.dump(list(kg_rsids), open('kg_rsids', 'w'))
 
-inboth = kg_rsids.intersect(hg_rsids)
+inboth = kg_rsids.intersection(hg_rsids)
 
 #a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
 
