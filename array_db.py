@@ -42,7 +42,7 @@ def get_rsids(name, table):
         s = table.select()
         rs = s.execute()
         for row in rs:
-            rsids.add(getattr(row, 'rs#'))
+            rsids.add(getattr(row, 'snp name'))
         json.dump(list(rsids), open(name, 'w'))
     return rsids
 
