@@ -58,6 +58,10 @@ array_rsids = get_rsids('array_rsids', array_table)
 inboth = kg_rsids.intersection(hapmap_rsids)
 inall = list(inboth.intersection(set(inboth)))
 
+class Genotypes(object):
+        pass
+    
+Genotypes.mapper = mapper(Genotypes, table, properties={'rsid': getattr(table.c, 'rs#')})
 
 
 #s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
