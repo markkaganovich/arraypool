@@ -48,16 +48,18 @@ def get_rsids(name, table):
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
-array_table = Table(array_table_name, metadata_array, autoload = True)
+#array_table = Table(array_table_name, metadata_array, autoload = True)
 
 print "post-table"
 #inboth = kg_rsids.intersection(hapmap_rsids)
 
-array_rsids = get_rsids('array_rsids', array_table)
+#array_rsids = get_rsids('array_rsids', array_table)
 
 s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
-rs = s.execute()
-#a = filter(lambda x: getattr(x, 'kg_lowcov_rs#') in set(array_rsids), rs)
+#rs = s.execute()
+#a_set = set(array_rsids[0:100000])
+#a = filter(lambda x: getattr(x, 'kg_lowcov_rs#') in a_set, rs)
+#s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
 
 
 #a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
