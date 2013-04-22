@@ -57,7 +57,7 @@ array_rsids = get_rsids('array_rsids', array_table)
 
 s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
 rs = s.execute()
-a = filter(lambda x: getattr(x, 'kg_lowcov_rs#') in array_rsids, rs)
+a = filter(lambda x: getattr(x, 'kg_lowcov_rs#') in set(array_rsids), rs)
 
 
 #a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
