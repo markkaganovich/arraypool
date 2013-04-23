@@ -9,6 +9,8 @@ import commands
 import os
 import csv 
 
+import /Users/markkaganovich/installation/PyVCF-master/build/lib.macosx-10.5-i386-2.6/vcf/parser
+
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = False)
 db_array = create_engine('sqlite:///../arraydata/arrays.db')
 
@@ -83,6 +85,46 @@ def get_rows(attr = 'rs#', selected_attr = [], table = None):
 
 kg_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = kg_table)
 hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = hapmap_table)
+
+'''
+given list of cell line IDs, find if they are coming from hapmap or 1kg, 
+get their GENOTYPES for all the rsids 
+'''
+pool2_samples = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
+
+def get_samples(table, gtype = 'kg'):
+    if gtype == 'kg':
+        samples = table.columns.keys()[10:]
+    if gtype = 'hapmap':
+        samples = table.columns.keys()[12:]
+    return samples
+
+kg_samples = get_samples(table = kg_table, gtype = 'kg')
+hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
+
+pool_samples = pool2_samples
+sample_source = {}
+for ps in pool_samples:
+    if ps in kg_samples:
+        sample_source[ps] = kg_rsid_rows
+    if ps not in sample_source.keys() and ps in hapmap_samples:
+        sample_source[ps] = hapmap_rsid_rows
+
+def get_genotypes(sample, rows, index):
+    row = rows[index]
+    info = getattr(row, sample)
+    g = info.split(':')[0]
+    g_split = re.split('[/|\\\.|]', g)
+    if len(g_split) == 2:
+        genotype = sum(map(lambda x: int(x), g_split))
+        return genotype
+    else:
+        return None
+
+for s in sample_source.keys():
+    get_genotypes(sample = s, rows = sample_source[s], index = 1) 
+
+
 
 #s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
 #rs = s.execute()
