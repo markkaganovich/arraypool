@@ -69,11 +69,14 @@ class Hapmap(object):
     pass
 Hapmap.mapper = mapper(Hapmap, hapmap_table, properties={'rsid': getattr(hapmap_table.c, 'rs#')})
 
+
+select_rsids = set(inall[1:1000])
 rows = []
 s = kg_table.select()
 rs = s.execute()
 for r in rs:
-    rows.append(r)
+    if getattr(r, 'rsid') in select_rsids:
+        rows.append(r)
 
 
 
