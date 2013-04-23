@@ -9,8 +9,6 @@ import commands
 import os
 import csv 
 
-import /Users/markkaganovich/installation/PyVCF-master/build/lib.macosx-10.5-i386-2.6/vcf/parser
-
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = False)
 db_array = create_engine('sqlite:///../arraydata/arrays.db')
 
