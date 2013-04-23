@@ -103,10 +103,10 @@ hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 pool_samples = pool2_samples
 sample_source = {}
 for ps in pool_samples:
-    if ps in kg_samples:
-        sample_source[ps] = kg_rsid_rows
-    if ps not in sample_source.keys() and ps in hapmap_samples:
-        sample_source[ps] = hapmap_rsid_rows
+    if ps.lower() in kg_samples:
+        sample_source[ps.lower()] = kg_rsid_rows
+    if ps .lower() not in sample_source.keys() and ps.lower() in hapmap_samples:
+        sample_source[ps.lower()] = hapmap_rsid_rows
 
 def get_genotypes(sample, rows, index):
     row = rows[index]
