@@ -93,7 +93,7 @@ pool2_samples = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357
 def get_samples(table, gtype = 'kg'):
     if gtype == 'kg':
         samples = table.columns.keys()[10:]
-    if gtype = 'hapmap':
+    if gtype == 'hapmap':
         samples = table.columns.keys()[12:]
     return samples
 
