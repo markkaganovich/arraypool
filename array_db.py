@@ -75,7 +75,7 @@ rows = []
 s = kg_table.select()
 rs = s.execute()
 for r in rs:
-    if getattr(r, '#') in select_rsids:
+    if getattr(r, 'rs#') in select_rsids:
         rows.append(r)
 
 
