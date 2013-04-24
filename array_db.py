@@ -84,6 +84,13 @@ def get_rows(attr = 'rs#', selected_attr = [], table = None):
 kg_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = kg_table)
 hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = hapmap_table)
 
+kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
+hapmap_rsids_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
+
+for i in range(1,len(hapmap_rsid_rows)-1): 
+    if getattr(hapmap_rsids_sorted[i-1], 'rs#') == getattr(hapmap_rsids_sorted[i], 'rs#') \
+        or (getattr(hapmap_rsids_sorted[i+1], 'rs#') == getattr(hapmap_rsids_sorted[i], 'rs#')):
+        hapmap_rsid_rows.remove(hapmap_rsids_sorted[i])
 '''
 given list of cell line IDs, find if they are coming from hapmap or 1kg, 
 get their GENOTYPES for all the rsids 
@@ -104,23 +111,32 @@ pool_samples = pool2_samples
 sample_source = {}
 for ps in pool_samples:
     if ps.lower() in kg_samples:
-        sample_source[ps.lower()] = kg_rsid_rows
+        sample_source[ps.lower()] = 'kg_rsids_sorted'
     if ps .lower() not in sample_source.keys() and ps.lower() in hapmap_samples:
-        sample_source[ps.lower()] = hapmap_rsid_rows
+        sample_source[ps.lower()] = 'hapmap_rsids_sorted'
 
-def get_genotypes(sample, rows, index):
+def get_genotypes_vcf(sample, rows, index):
     row = rows[index]
     info = getattr(row, sample)
     g = info.split(':')[0]
     g_split = re.split('[/|\\\.|]', g)
+    print g_split
     if len(g_split) == 2:
         genotype = sum(map(lambda x: int(x), g_split))
         return genotype
     else:
         return None
 
-for s in sample_source.keys():
-    get_genotypes(sample = s, rows = sample_source[s], index = 1) 
+def get_all_genotypes(sample_source, index):
+    genotypes = []
+    for s in sample_source.keys():
+        genotypes.append(get_genotypes(sample = s, rows = sample_source[s], index = index))
+    return genotypes
+
+select_snps = sorted(list(select_rsids))
+
+for i in range(0, len(select_snps)):
+    get_all_genotypes(sample_source, index = i)
 
 
 
