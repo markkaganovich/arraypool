@@ -9,7 +9,7 @@ import commands
 import os
 import csv 
 
-db = create_engine('sqlite:///../cancergenomes/GENOTYPES.db', echo = False)
+db = create_engine('sqlite:///../cancergenomes/GENOTYPES_v2.db', echo = False)
 db_array = create_engine('sqlite:///../arraydata/arrays.db')
 
 
@@ -21,7 +21,7 @@ Session_array = sessionmaker(db_array)
 session_array = Session_array()
 metadata_array = MetaData(db_array)
 
-kg_table_name = "kg_lowcov"
+kg_table_name = "kg"
 hapmap_table_name = "hapmap"
 array_table_name = "Array1S_finalreport"
 
@@ -95,25 +95,28 @@ for i in range(1,len(hapmap_rsid_rows)-1):
 given list of cell line IDs, find if they are coming from hapmap or 1kg, 
 get their GENOTYPES for all the rsids 
 '''
-pool2_samples = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
+pool1_samples = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
 
+#!!!!!!WRONG
 def get_samples(table, gtype = 'kg'):
     if gtype == 'kg':
-        samples = table.columns.keys()[10:]
+        samples = table.columns.keys()
     if gtype == 'hapmap':
-        samples = table.columns.keys()[12:]
+        samples = table.columns.keys()
     return samples
 
 kg_samples = get_samples(table = kg_table, gtype = 'kg')
 hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 
-pool_samples = pool2_samples
+pool_samples = pool1_samples
 sample_source = {}
 for ps in pool_samples:
     if ps.lower() in kg_samples:
-        sample_source[ps.lower()] = 'kg_rsids_sorted'
-    if ps .lower() not in sample_source.keys() and ps.lower() in hapmap_samples:
-        sample_source[ps.lower()] = 'hapmap_rsids_sorted'
+        sample_source[ps.lower()] = kg_rsids_sorted
+    else:
+        print ps
+    if ps.lower() not in sample_source.keys() and ps.lower() in hapmap_samples:
+        sample_source[ps.lower()] = hapmap_rsids_sorted
 
 def get_genotypes_vcf(sample, rows, index):
     row = rows[index]
@@ -130,7 +133,7 @@ def get_genotypes_vcf(sample, rows, index):
 def get_all_genotypes(sample_source, index):
     genotypes = []
     for s in sample_source.keys():
-        genotypes.append(get_genotypes(sample = s, rows = sample_source[s], index = index))
+        genotypes.append(get_genotypes_vcf(sample = s, rows = sample_source[s], index = index))
     return genotypes
 
 select_snps = sorted(list(select_rsids))
