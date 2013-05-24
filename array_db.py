@@ -10,6 +10,7 @@ import os
 import csv 
 
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES_v2.db', echo = False)
+db_hapmap = create_engine('sqlite:///../cancergenomes/GENOTYPES.db')
 db_array = create_engine('sqlite:///../arraydata/arrays.db')
 
 
@@ -20,6 +21,8 @@ metadata = MetaData(db)
 Session_array = sessionmaker(db_array)
 session_array = Session_array()
 metadata_array = MetaData(db_array)
+
+metadata_hapmap = MetaData(db_hapmap)
 
 kg_table_name = "kg"
 hapmap_table_name = "hapmap"
@@ -47,7 +50,7 @@ def get_rsids(name, table):
     return rsids
 
 kg_table = Table(kg_table_name, metadata, autoload = True)
-hapmap_table = Table(hapmap_table_name, metadata, autoload = True)
+hapmap_table = Table(hapmap_table_name, metadata_hapmap, autoload = True)
 array_table = Table(array_table_name, metadata_array, autoload = True)
 print "post-table"
 
