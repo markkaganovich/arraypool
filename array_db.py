@@ -61,6 +61,7 @@ array_rsids = get_rsids('array_rsids', array_table)
 inboth = kg_rsids.intersection(hapmap_rsids)
 inall = list(inboth.intersection(set(inboth)))
 
+'''
 class KG(object):
     pass
     
@@ -71,7 +72,7 @@ KG.mapper = mapper(KG, kg_table, properties={'rsid': getattr(kg_table.c, 'rs#')}
 class Hapmap(object):
     pass
 Hapmap.mapper = mapper(Hapmap, hapmap_table, properties={'rsid': getattr(hapmap_table.c, 'rs#')})
-
+'''
 select_rsids = set(inall[1:1000])
 
 def get_rows(attr = 'rs#', selected_attr = [], table = None):
@@ -123,6 +124,8 @@ for ps in pool_samples:
 
 def get_genotypes_vcf(sample, rows, index):
     row = rows[index]
+    print row
+    print sample
     info = getattr(row, sample)
     g = info.split(':')[0]
     g_split = re.split('[/|\\\.|]', g)
@@ -136,6 +139,7 @@ def get_genotypes_vcf(sample, rows, index):
 def get_all_genotypes(sample_source, index):
     genotypes = []
     for s in sample_source.keys():
+        print sample_source[s]
         genotypes.append(get_genotypes_vcf(sample = s, rows = sample_source[s], index = index))
     return genotypes
 
