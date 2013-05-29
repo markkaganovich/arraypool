@@ -144,38 +144,61 @@ hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 
 def find_rs_line_kg(k_object, rs, s):
     index = k_object.rs_index[rs]
-    for l in k_object.lines:
-        if rs == l.split('\t')[k_object.header.index('ID')]:   
-            print l             
-            info = l[k_object.header.index(s)]
-            g = info.split(':')[0]
-            g_split = re.split('[/|\\\.|]', g)
-            if len(g_split) == 2:
-                genotype = sum(map(lambda x: int(x), g_split))
-                return genotype
+    l = k_object.lines[index]
+    if rs == l.split('\t')[k_object.header.index('ID')]:  
+        info = l.split('\t')[k_object.header.index(s)]
+        print info
+        g = info.split(':')[0]
+        g_split = re.split('[/|\\\.|]', g)
+        print g_split
+        if len(g_split) == 2:
+            genotype = sum(map(lambda x: int(x), g_split))
+            geno = {}
+            geno['ref'] = l.split('\t')[k_object.header.index('REF')]
+            geno['alt'] = l.split('\t')[k_object.header.index('ALT')]
+            geno['genotype'] = genotype
+            return geno
 
-    '''            
-    if source == 'hapmap':
-        for h in hapmap_rsids_rows_sorted:
+def find_rs_line_hapmap(rs, s):
+    for h in hapmap_rsids_rows_sorted:
             if getattr(h, 'rs#') == rs:
-    '''
+                geno = {}
+                geno['ref'] = h[2].split('/')[0]
+                geno['alt'] = h[2].split('/')[1]
+                s_ind = hapmap_samples.index(s.lower())
+                g = h[s_ind]
+                geno['genotype'] = len(filter(lambda x: geno['ref'] == x, g))
+                return geno
 
 
+s = array_table.select()
+r = s.execute()
+rows = filter(lambda x: getattr(x, 'snp name') in inboth, r)
 
-rs = select_rsids[0]
+def find_rs_line_array(rs, rows):
+    for r in rows:
+        if getattr(r, 'snp name') == rs:
+            return getattr(r, 'b allele freq')
+
+
+rs = list(select_rsids)[0:100]
 rs_lines = []
-genotypes = []
+genotypes = {}
+
+a_freqs = []
+for r in rs:
+    a_freqs.append(find_rs_line_array(rs, rows))
+
+
 for p in pool_samples:
     print p
     for k in kgs:
         print k
         if p in k.header:
             print "here"
-            genotypes.append(find_rs_line_kg(k, rs, p))         
-        #if p in hapmap_samples:
-        #    source = 'hapmap'
-        #    find_rs_line()
-        #print source
+            genotypes[p] = find_rs_line_kg(k, rs, p)        
+        if p in hapmap_samples:
+            genotypes[p] = find_rs_line_hapmap(rs, p)
 
 
 #!!!!!!WRONG
@@ -198,6 +221,8 @@ for ps in pool_samples:
         print ps
     if ps.lower() not in sample_source.keys() and ps.lower() in hapmap_samples:
         sample_source[ps.lower()] = hapmap_rsids_sorted
+'''
+
 '''
 def get_genotypes_vcf(sample, rows, index):
     row = rows[index]
@@ -238,3 +263,5 @@ for i in range(0, len(select_snps)):
 
 
 #s = session.query(kg_table).filter(getattr(kg_table.c, 'rs#') == inall[1])
+
+''' 
