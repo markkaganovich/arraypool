@@ -69,6 +69,7 @@ class KG:
             self.header = self.lines[17].split('\t')
             self.lines = self.lines[18:]
 
+print "loading files...."
 ceu = KG('ceu', kg_files[0], 0)
 yri = KG('yri', kg_files[1], 0)
 chbjpt = KG('chbjpt', kg_files[2], 0)
@@ -108,10 +109,12 @@ hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = 
 #kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 hapmap_rsids_rows_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 
+'''
 for i in range(1,len(hapmap_rsid_rows)-1): 
     if getattr(hapmap_rsids_sorted[i-1], 'rs#') == getattr(hapmap_rsids_sorted[i], 'rs#') \
         or (getattr(hapmap_rsids_sorted[i+1], 'rs#') == getattr(hapmap_rsids_sorted[i], 'rs#')):
         hapmap_rsid_rows.remove(hapmap_rsids_sorted[i])
+'''
 '''
 given list of cell line IDs, find if they are coming from hapmap or 1kg, 
 get their GENOTYPES for all the rsids 
@@ -124,7 +127,8 @@ hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 
 def find_rs_line_kg(k_object, rs, s):
     for l in k_object.lines:
-        if rs == l.split('\t')[k_object.header.index('ID')]:                
+        if rs == l.split('\t')[k_object.header.index('ID')]:   
+            print l             
             info = l[k_object.header.index(s)]
             g = info.split(':')[0]
             g_split = re.split('[/|\\\.|]', g)
@@ -140,17 +144,20 @@ def find_rs_line_kg(k_object, rs, s):
 
 
 
-rs = select_snps[0]
+rs = select_rsids[0]
 rs_lines = []
 for p in pool_samples:
+    print p
     for k in kgs:
+        print k
         if p in k.header:
-            source = 'kg'
+            print "here"
             find_rs_line_kg(k, rs, p)         
         #if p in hapmap_samples:
         #    source = 'hapmap'
         #    find_rs_line()
         #print source
+
 
 #!!!!!!WRONG
 def get_samples(table, gtype = 'kg'):
