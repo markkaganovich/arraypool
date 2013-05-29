@@ -8,6 +8,7 @@ import json
 import commands
 import os
 import csv 
+import re
 
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES_v2.db', echo = False)
 db_hapmap = create_engine('sqlite:///../cancergenomes/GENOTYPES.db')
@@ -144,11 +145,13 @@ hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 
 
 def find_rs_line_kg(k_object, rs, s):
+    geno = {}
     try:
         index = k_object.rs_index[rs]
     except KeyError:
         print "not in",k_object.name
-        return None
+        geno['genotype'] = 0
+        return geno
     l = k_object.lines[index]
     if rs == l.split('\t')[k_object.header.index('ID')]:  
         info = l.split('\t')[k_object.header.index(s)]
@@ -158,8 +161,7 @@ def find_rs_line_kg(k_object, rs, s):
         print g_split
         if len(g_split) == 2:
             genotype = sum(map(lambda x: int(x), g_split))
-            geno = {}
-            geno['ref'] = l.split('\t')[k_object.header.index('REF')]
+            geno['ref'] = l.split('\t')[k_object.header.index('REF')]        
             geno['alt'] = l.split('\t')[k_object.header.index('ALT')]
             geno['genotype'] = genotype
             return geno
