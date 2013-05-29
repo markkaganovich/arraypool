@@ -49,6 +49,14 @@ def get_rsids(name, table):
         json.dump(list(rsids), open(name, 'w'))
     return rsids
 
+def get_samples(table, gtype = 'kg'):
+    if gtype == 'kg':
+        samples = table.columns.keys()
+    if gtype == 'hapmap':
+        samples = table.columns.keys()
+    return samples
+
+
 #kg_table = Table(kg_table_name, metadata, autoload = True)
 hapmap_table = Table(hapmap_table_name, metadata_hapmap, autoload = True)
 array_table = Table(array_table_name, metadata_array, autoload = True)
@@ -68,9 +76,11 @@ class KG:
         else: 
             self.header = self.lines[17].split('\t')
             self.lines = self.lines[18:]
+        self.rs_index = json.load(open(name+'_rs_index'))
 
 print "loading files...."
 ceu = KG('ceu', kg_files[0], 0)
+print "ceu"
 yri = KG('yri', kg_files[1], 0)
 chbjpt = KG('chbjpt', kg_files[2], 0)
 ceu_trio = KG('ceu_trio', kg_files[3], 1)
@@ -91,6 +101,13 @@ array_rsids = get_rsids('array_rsids', array_table)
 inboth = kg_rsids.intersection(hapmap_rsids)
 inall = list(inboth.intersection(set(inboth)))
 select_rsids = set(inall[1:1000])
+
+def make_rsindex(kg_object):
+    for i,l in enumerate(kg_object.lines):
+        rs_index[l.split('\t')[kg_object.header.index('ID')]] = i
+    json.dump(rs_index, open(kg_object.name+'_rs_index', 'w'))
+
+
 
 
 
@@ -126,6 +143,7 @@ hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 
 
 def find_rs_line_kg(k_object, rs, s):
+    index = k_object.rs_index[rs]
     for l in k_object.lines:
         if rs == l.split('\t')[k_object.header.index('ID')]:   
             print l             
@@ -146,13 +164,14 @@ def find_rs_line_kg(k_object, rs, s):
 
 rs = select_rsids[0]
 rs_lines = []
+genotypes = []
 for p in pool_samples:
     print p
     for k in kgs:
         print k
         if p in k.header:
             print "here"
-            find_rs_line_kg(k, rs, p)         
+            genotypes.append(find_rs_line_kg(k, rs, p))         
         #if p in hapmap_samples:
         #    source = 'hapmap'
         #    find_rs_line()
