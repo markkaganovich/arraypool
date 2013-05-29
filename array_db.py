@@ -24,7 +24,6 @@ metadata_array = MetaData(db_array)
 
 metadata_hapmap = MetaData(db_hapmap)
 
-kg_table_name = "kg"
 hapmap_table_name = "hapmap"
 array_table_name = "Array1S_finalreport"
 
