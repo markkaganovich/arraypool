@@ -103,6 +103,7 @@ inall = list(inboth.intersection(set(inboth)))
 select_rsids = set(inall[1:1000])
 
 def make_rsindex(kg_object):
+    rs_index = {}
     for i,l in enumerate(kg_object.lines):
         rs_index[l.split('\t')[kg_object.header.index('ID')]] = i
     json.dump(rs_index, open(kg_object.name+'_rs_index', 'w'))
@@ -143,7 +144,11 @@ hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
 
 
 def find_rs_line_kg(k_object, rs, s):
-    index = k_object.rs_index[rs]
+    try:
+        index = k_object.rs_index[rs]
+    except KeyError:
+        print "not in",k_object.name
+        return None
     l = k_object.lines[index]
     if rs == l.split('\t')[k_object.header.index('ID')]:  
         info = l.split('\t')[k_object.header.index(s)]
@@ -181,7 +186,7 @@ def find_rs_line_array(rs, rows):
             return getattr(r, 'b allele freq')
 
 
-rs = list(select_rsids)[0:100]
+rs = list(inboth)[0:100]
 rs_lines = []
 genotypes = {}
 
@@ -189,16 +194,17 @@ a_freqs = []
 for r in rs:
     a_freqs.append(find_rs_line_array(rs, rows))
 
-
-for p in pool_samples:
-    print p
-    for k in kgs:
-        print k
-        if p in k.header:
-            print "here"
-            genotypes[p] = find_rs_line_kg(k, rs, p)        
+g_rs = {}
+for r in rs:
+    g_rs[r] = []
+    for p in pool_samples:
+        print p
+        for k in kgs:        
+            if p in k.header:
+                genotypes[p] = find_rs_line_kg(k, r, p)        
         if p in hapmap_samples:
-            genotypes[p] = find_rs_line_hapmap(rs, p)
+            genotypes[p] = find_rs_line_hapmap(r, p)
+        g_rs[r].append(genotypes)
 
 
 #!!!!!!WRONG
