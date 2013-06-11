@@ -9,6 +9,8 @@ import commands
 import os
 import csv 
 import re
+import np
+
 
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES_v2.db', echo = False)
 db_hapmap = create_engine('sqlite:///../cancergenomes/GENOTYPES.db')
@@ -100,7 +102,7 @@ hapmap_rsids = get_rsids('hapmap_rsids', hapmap_table)
 array_rsids = get_rsids('array_rsids', array_table)
 
 inboth = kg_rsids.intersection(hapmap_rsids)
-inall = list(inboth.intersection(set(inboth)))
+inall = list(inboth.intersection(set(array_rsids)))
 select_rsids = set(inall[1:1000])
 
 def make_rsindex(kg_object):
@@ -123,10 +125,7 @@ def get_rows(attr = 'rs#', selected_attr = [], table = None):
     return rows
 
 #kg_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = kg_table)
-hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = select_rsids, table = hapmap_table)
 
-#kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
-hapmap_rsids_rows_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 
 '''
 for i in range(1,len(hapmap_rsid_rows)-1): 
@@ -140,25 +139,27 @@ get their GENOTYPES for all the rsids
 '''
 pool1_samples = ["NA18516", "NA18517", "NA18579", "NA18592", "NA18561", "NA07357", "NA06994", "NA18526", "NA12004", "NA19141", "NA19143", "NA19147", "NA19152", "NA19153", "NA19159", "NA19171", "NA19172", "NA19190", "NA19207", "NA19209", "NA19210", "NA19225", "NA18856", "NA18858", "NA18562", "NA18563", "NA18853", "NA18861"]
 
-pool_samples = pool1_samples
+
 hapmap_samples = get_samples(table = hapmap_table, gtype = 'hapmap')
+
+
+pool2 = json.load(open('pool2'))
+pool_samples = pool2
 
 
 def find_rs_line_kg(k_object, rs, s):
     geno = {}
+    geno['source'] = k_object.name
     try:
         index = k_object.rs_index[rs]
     except KeyError:
-        print "not in",k_object.name
         geno['genotype'] = 0
         return geno
     l = k_object.lines[index]
     if rs == l.split('\t')[k_object.header.index('ID')]:  
         info = l.split('\t')[k_object.header.index(s)]
-        print info
         g = info.split(':')[0]
         g_split = re.split('[/|\\\.|]', g)
-        print g_split
         if len(g_split) == 2:
             genotype = sum(map(lambda x: int(x), g_split))
             geno['ref'] = l.split('\t')[k_object.header.index('REF')]        
@@ -167,46 +168,69 @@ def find_rs_line_kg(k_object, rs, s):
             return geno
 
 def find_rs_line_hapmap(rs, s):
-    for h in hapmap_rsids_rows_sorted:
-            if getattr(h, 'rs#') == rs:
+    geno = {}
+    for h in hapmap_rsid_rows:
+            if getattr(h, 'snp name') == rs:
                 geno = {}
+                geno['source'] = 'hapmap'
                 geno['ref'] = h[2].split('/')[0]
                 geno['alt'] = h[2].split('/')[1]
                 s_ind = hapmap_samples.index(s.lower())
                 g = h[s_ind]
-                geno['genotype'] = len(filter(lambda x: geno['ref'] == x, g))
+                geno['genotype'] = 2-len(filter(lambda x: geno['ref'] == x, g))
+                print geno
                 return geno
+    geno['genotype'] = 0
+    return geno
 
+hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = setrs, table = hapmap_table)
 
+#kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
+#hapmap_rsids_rows_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
+
+rs = list(inall)[0:10000]
+rs_lines = []
 s = array_table.select()
 r = s.execute()
-rows = filter(lambda x: getattr(x, 'snp name') in inboth, r)
+setrs = set(rs)
+rows = filter(lambda x: getattr(x, 'snp name') in setrs, r)
 
 def find_rs_line_array(rs, rows):
     for r in rows:
         if getattr(r, 'snp name') == rs:
+            print r
             return getattr(r, 'b allele freq')
 
 
-rs = list(inboth)[0:100]
-rs_lines = []
-genotypes = {}
+
 
 a_freqs = []
 for r in rs:
-    a_freqs.append(find_rs_line_array(rs, rows))
+    a_freqs.append(find_rs_line_array(r, rows))
 
 g_rs = {}
 for r in rs:
-    g_rs[r] = []
+    genotypes = {}
     for p in pool_samples:
         print p
         for k in kgs:        
             if p in k.header:
                 genotypes[p] = find_rs_line_kg(k, r, p)        
-        if p in hapmap_samples:
+        if p.lower() in hapmap_samples:
             genotypes[p] = find_rs_line_hapmap(r, p)
-        g_rs[r].append(genotypes)
+    g_rs[r]=genotypes
+
+
+
+g_freqs = []
+g = np.empty(len(rs)* len(pool_samples)).reshape(len(rs), len(pool_samples))
+for r,i in enumerate(rs):
+    #g_freqs.append(sum(map(lambda x: g_rs[r][x]['genotype'], g_rs[r].keys()))/ float(len(g_rs[r].keys()*2)))
+    for s,j in enumerate(pool_samples):
+        g[r,s] = g_rs[i][j]['genotype']
+
+
+
 
 
 #!!!!!!WRONG
