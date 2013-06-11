@@ -9,7 +9,7 @@ import commands
 import os
 import csv 
 import re
-import np
+import numpy as np
 
 
 db = create_engine('sqlite:///../cancergenomes/GENOTYPES_v2.db', echo = False)
@@ -170,7 +170,7 @@ def find_rs_line_kg(k_object, rs, s):
 def find_rs_line_hapmap(rs, s):
     geno = {}
     for h in hapmap_rsid_rows:
-            if getattr(h, 'snp name') == rs:
+            if getattr(h, 'rs#') == rs:
                 geno = {}
                 geno['source'] = 'hapmap'
                 geno['ref'] = h[2].split('/')[0]
@@ -204,7 +204,7 @@ def find_rs_line_array(rs, rows):
 
 
 
-a_freqs = []
+    a_freqs = []
 for r in rs:
     a_freqs.append(find_rs_line_array(r, rows))
 
@@ -220,6 +220,21 @@ for r in rs:
             genotypes[p] = find_rs_line_hapmap(r, p)
     g_rs[r]=genotypes
 
+needtoflip = []
+for r in rs:
+    for k in g_rs[r]:
+        if g_rs[r][k]['source'] == 'hapmap':
+            try:
+                hapmapref = g_rs[r][k]['ref']
+            except KeyError:
+                continue
+        else:
+            try:
+                kgref = g_rs[r][k]['ref']
+            except KeyError:
+                continue
+    if hapmapref != kgref:
+        needtoflip.append(r)
 
 
 g_freqs = []
