@@ -183,7 +183,7 @@ def find_rs_line_hapmap(rs, s):
     geno['genotype'] = 0
     return geno
 
-hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = setrs, table = hapmap_table)
+
 
 #kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 #hapmap_rsids_rows_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
@@ -193,6 +193,7 @@ rs_lines = []
 s = array_table.select()
 r = s.execute()
 setrs = set(rs)
+hapmap_rsid_rows = get_rows(attr = 'rs#', selected_attr = setrs, table = hapmap_table)
 rows = filter(lambda x: getattr(x, 'snp name') in setrs, r)
 
 def find_rs_line_array(rs, rows):
@@ -203,10 +204,11 @@ def find_rs_line_array(rs, rows):
 
 
 
-
-    a_freqs = []
+# will need to split this up by specific array sample
+a_freqs = []
 for r in rs:
     a_freqs.append(find_rs_line_array(r, rows))
+
 
 g_rs = {}
 for r in rs:
@@ -215,26 +217,53 @@ for r in rs:
         print p
         for k in kgs:        
             if p in k.header:
+                if p == pool_samples[3]:
+                    print "here"
                 genotypes[p] = find_rs_line_kg(k, r, p)        
         if p.lower() in hapmap_samples:
+            if p == pool_samples[3]:
+                    print "here"
             genotypes[p] = find_rs_line_hapmap(r, p)
     g_rs[r]=genotypes
 
+
 needtoflip = []
+hapmaprefs = {}
+kgrefs = {}
+
 for r in rs:
+    hapmaprefs[r] = []
+    kgrefs[r] = []
     for k in g_rs[r]:
         if g_rs[r][k]['source'] == 'hapmap':
             try:
-                hapmapref = g_rs[r][k]['ref']
+                hapmaprefs[r].append(g_rs[r][k]['ref'])
             except KeyError:
                 continue
         else:
             try:
-                kgref = g_rs[r][k]['ref']
+                kgrefs[r].append(g_rs[r][k]['ref'])
             except KeyError:
                 continue
-    if hapmapref != kgref:
-        needtoflip.append(r)
+    if len(set(hapmaprefs[r])) != 1:
+        print "error in hapmap refs"
+    else:
+        if hapmaprefs[r].values()[0] != kgrefs[r].values()[0]:
+            needtoflip.append(r)
+
+for r in needtoflip:
+    for k in g_rs[r]:
+        if g_rs[r][k]['source'] == 'hapmap':
+            tempref = g_rs[r][k]['ref']
+            g_rs[r][k]['ref'] = g_rs[r][k]['alt']
+            g_rs[r][k]['alt'] = tempref
+
+
+        tempref = hapmaprefs[r].values()[0]
+
+    
+
+
 
 
 g_freqs = []
