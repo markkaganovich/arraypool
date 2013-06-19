@@ -188,7 +188,7 @@ def find_rs_line_hapmap(rs, s):
 #kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 #hapmap_rsids_rows_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 
-rs = list(inall)[0:10000]
+rs = list(inall)[0:100000]
 rs_lines = []
 s = array_table.select()
 r = s.execute()
@@ -205,32 +205,32 @@ def find_rs_line_array(rs, rows):
 
 
 # will need to split this up by specific array sample
-a_freqs = []
-for r in rs:
-    a_freqs.append(find_rs_line_array(r, rows))
+
 
 
 g_rs = {}
 for r in rs:
     genotypes = {}
     for p in pool_samples:
-        print p
+        #print p
         for k in kgs:        
             if p in k.header:
                 if p == pool_samples[3]:
+                    print k.name
                     print "here"
                 genotypes[p] = find_rs_line_kg(k, r, p)        
         if p.lower() in hapmap_samples:
             if p == pool_samples[3]:
-                    print "here"
+                    print "hapmap"
             genotypes[p] = find_rs_line_hapmap(r, p)
+            print genotypes[p]
     g_rs[r]=genotypes
 
 
 needtoflip = []
 hapmaprefs = {}
 kgrefs = {}
-
+delete = []
 for r in rs:
     hapmaprefs[r] = []
     kgrefs[r] = []
@@ -245,11 +245,16 @@ for r in rs:
                 kgrefs[r].append(g_rs[r][k]['ref'])
             except KeyError:
                 continue
+    if len(kgrefs[r]) < 1:
+        delete.append(r)
+        continue
     if len(set(hapmaprefs[r])) != 1:
         print "error in hapmap refs"
     else:
-        if hapmaprefs[r].values()[0] != kgrefs[r].values()[0]:
+        if hapmaprefs[r][0] != kgrefs[r][0]:
             needtoflip.append(r)
+
+g_rs = {key: value for key,value in g_rs.items() if key not in delete}
 
 for r in needtoflip:
     for k in g_rs[r]:
@@ -257,9 +262,10 @@ for r in needtoflip:
             tempref = g_rs[r][k]['ref']
             g_rs[r][k]['ref'] = g_rs[r][k]['alt']
             g_rs[r][k]['alt'] = tempref
+            g_rs[r][k]['genotype'] = 2- int(g_rs[r][k]['genotype'])
 
 
-        tempref = hapmaprefs[r].values()[0]
+        #tempref = hapmaprefs[r].values()[0]
 
     
 
@@ -267,14 +273,28 @@ for r in needtoflip:
 
 
 g_freqs = []
-g = np.empty(len(rs)* len(pool_samples)).reshape(len(rs), len(pool_samples))
-for r,i in enumerate(rs):
+g = np.empty(len(g_rs.keys())* len(pool_samples)).reshape(len(g_rs.keys()), len(pool_samples))
+for r,i in enumerate(g_rs.keys()):
     #g_freqs.append(sum(map(lambda x: g_rs[r][x]['genotype'], g_rs[r].keys()))/ float(len(g_rs[r].keys()*2)))
     for s,j in enumerate(pool_samples):
         g[r,s] = g_rs[i][j]['genotype']
 
 
 
+a_freqs = []
+for r in g_rs.keys():
+    a_freqs.append(find_rs_line_array(r, rows))
+
+#a_freqs = ['0' for a in a_freqs if a == 'NaN']
+for i,a in enumerate(a_freqs):
+    if a == 'NaN':
+        a_freqs[i] = 0
+
+
+a = np.array(a_freqs)
+b = a.astype(np.float)
+
+rows_30 =filter(lambda x: getattr(x, 'sample id') =='Mark_2.30', rows)
 
 
 #!!!!!!WRONG
@@ -284,6 +304,25 @@ def get_samples(table, gtype = 'kg'):
     if gtype == 'hapmap':
         samples = table.columns.keys()
     return samples
+
+
+l_25 = np.linalg.lstsq(g,b)
+
+a_freqs = []
+for r in g_rs.keys():
+    a_freqs.append(find_rs_line_array(r, rows_30))
+
+for i,a in enumerate(a_freqs):
+    if a == None or a == 'NaN':
+        a_freqs[i] = 0
+
+a = np.array(a_freqs)
+b = a.astype(np.float)
+
+l_230 = np.linalg.lstsq(g,b)
+
+
+
 
 #kg_samples = get_samples(table = kg_table, gtype = 'kg')
 
