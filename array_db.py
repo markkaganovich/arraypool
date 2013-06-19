@@ -188,7 +188,7 @@ def find_rs_line_hapmap(rs, s):
 #kg_rsids_sorted = sorted(kg_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 #hapmap_rsids_rows_sorted = sorted(hapmap_rsid_rows, key=lambda r: getattr(r, 'rs#'))
 
-rs = list(inall)[0:100000]
+rs = list(inall)[0:20000]
 rs_lines = []
 s = array_table.select()
 r = s.execute()
