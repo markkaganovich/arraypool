@@ -297,14 +297,6 @@ b = a.astype(np.float)
 rows_30 =filter(lambda x: getattr(x, 'sample id') =='Mark_2.30', rows)
 
 
-#!!!!!!WRONG
-def get_samples(table, gtype = 'kg'):
-    if gtype == 'kg':
-        samples = table.columns.keys()
-    if gtype == 'hapmap':
-        samples = table.columns.keys()
-    return samples
-
 
 l_25 = np.linalg.lstsq(g,b)
 
@@ -321,62 +313,3 @@ b = a.astype(np.float)
 
 l_230 = np.linalg.lstsq(g,b)
 
-
-
-
-#kg_samples = get_samples(table = kg_table, gtype = 'kg')
-
-
-'''
-sample_source = {}
-for ps in pool_samples:
-    if ps.lower() in kg_samples:
-        sample_source[ps.lower()] = kg_rsids_sorted
-    else:
-        print ps
-    if ps.lower() not in sample_source.keys() and ps.lower() in hapmap_samples:
-        sample_source[ps.lower()] = hapmap_rsids_sorted
-'''
-
-'''
-def get_genotypes_vcf(sample, rows, index):
-    row = rows[index]
-    print row
-    print sample
-    info = getattr(row, sample)
-    g = info.split(':')[0]
-    g_split = re.split('[/|\\\.|]', g)
-    print g_split
-    if len(g_split) == 2:
-        genotype = sum(map(lambda x: int(x), g_split))
-        return genotype
-    else:
-        return None
-
-def get_all_genotypes(sample_source, index):
-    genotypes = []
-    for s in sample_source.keys():
-        print sample_source[s]
-        genotypes.append(get_genotypes_vcf(sample = s, rows = sample_source[s], index = index))
-    return genotypes
-
-select_snps = sorted(list(select_rsids))
-
-for i in range(0, len(select_snps)):
-    get_all_genotypes(sample_source, index = i)
-
-
-
-#s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
-#rs = s.execute()
-#a_set = set(array_rsids[0:100000])
-#a = filter(lambda x: getattr(x, 'kg_lowcov_rs#') in a_set, rs)
-#s = select([kg_table, hapmap_table], (getattr(kg_table.c, 'rs#') == getattr(hapmap_table.c, 'rs#')), use_labels = True)
-
-
-#a = filter(lambda x: x in kg_rsids, list(hapmap_rsids))
-
-
-#s = session.query(kg_table).filter(getattr(kg_table.c, 'rs#') == inall[1])
-
-''' 
